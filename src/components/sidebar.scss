@@ -1,0 +1,7 @@
+@import './colors.scss';
+
+.chat-sidebar {
+    width: 50px;
+    background-color: $bg;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}

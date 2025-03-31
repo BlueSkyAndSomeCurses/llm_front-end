@@ -18,3 +18,5 @@ function TitlePage() {
         </div>
     );
 }
+
+export default TitlePage;
