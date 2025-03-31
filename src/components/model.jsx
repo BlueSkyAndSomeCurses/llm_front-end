@@ -11,6 +11,7 @@ const ModelButton = () => {
         className="model-button"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="AI model"
+        type="button"
       >
         <span className="model-name">Model</span>
       </button>
