@@ -38,6 +38,13 @@ function Chat() {
                         <p>Start a conversation by typing a message below.</p>
                     </div>
                     <div className="chat-box">
+                        <div className="messages-area">
+                            {messages.map((msg, i) => (
+                                <div key={i} className={`message ${msg.sender}-message`}>
+                                    {msg.text}
+                                </div>
+                            ))}
+                        </div>
                         <form className="chat-input" onSubmit={handleSubmit}>
                             <input
                                 type="text"
