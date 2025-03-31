@@ -16,10 +16,14 @@ function Chat() {
         if (inputValue.trim() === "") return;
         const chatId = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
         
-        setMessages([...messages, {
+        const initialMessage = {
             text: inputValue,
             sender: "user"
-        }]);
+        };
+        
+        localStorage.setItem(`chat_${chatId}`, JSON.stringify([initialMessage]));
+        
+        setMessages([...messages, initialMessage]);
         setInputValue("");
         navigate(`/active-chat/${chatId}`);
     };
