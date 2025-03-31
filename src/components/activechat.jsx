@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { Send } from "lucide-react";
 import "./activechat.scss";
@@ -10,25 +10,10 @@ function ActiveChat() {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const hasRespondedRef = useRef(false);
     const messagesEndRef = useRef(null);
     
-    useEffect(() => {
-        const savedMessages = localStorage.getItem(`chat_${chatId}`);
-        if (savedMessages) {
-            setMessages(JSON.parse(savedMessages));
-        }
-    }, [chatId]);
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
-
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
-
     const generateMockResponse = (userMessage) => {
-        // Simple mock responses based on keywords
         const responses = [
             "I understand your question. Let me help you with that.",
             "That's an interesting point. Here's what I think...",
@@ -42,7 +27,6 @@ function ActiveChat() {
             "Here's what I've learned about this..."
         ];
         
-        // Add some delay to simulate API call
         return new Promise(resolve => {
             setTimeout(() => {
                 const randomResponse = responses[Math.floor(Math.random() * responses.length)];
@@ -50,6 +34,52 @@ function ActiveChat() {
             }, 1000);
         });
     };
+    
+    const handleAssistantResponse = useCallback(async (userMessage) => {
+        setIsLoading(true);
+        try {
+            const mockResponse = await generateMockResponse(userMessage);
+            const assistantMessage = {
+                text: mockResponse,
+                sender: "assistant"
+            };
+            
+            setMessages(prev => {
+                const updatedMessages = [...prev, assistantMessage];
+                localStorage.setItem(`chat_${chatId}`, JSON.stringify(updatedMessages));
+                return updatedMessages;
+            });
+        } catch (error) {
+            console.error("Error generating response:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [chatId]);
+    
+    useEffect(() => {
+        const savedMessages = localStorage.getItem(`chat_${chatId}`);
+        if (savedMessages) {
+            const parsedMessages = JSON.parse(savedMessages);
+            setMessages(parsedMessages);
+            
+            if (parsedMessages.length === 1 && 
+                parsedMessages[0].sender === "user" && 
+                !hasRespondedRef.current) {
+                hasRespondedRef.current = true;
+                setTimeout(() => {
+                    handleAssistantResponse(parsedMessages[0].text);
+                }, 0);
+            }
+        }
+    }, [chatId, handleAssistantResponse]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -60,24 +90,14 @@ function ActiveChat() {
             sender: "user"
         };
         
-        setMessages(prev => [...prev, userMessage]);
+        setMessages(prev => {
+            const updatedMessages = [...prev, userMessage];
+            localStorage.setItem(`chat_${chatId}`, JSON.stringify(updatedMessages));
+            return updatedMessages;
+        });
         setInputValue("");
-        setIsLoading(true);
         
-        try {
-            const mockResponse = await generateMockResponse(inputValue);
-            const assistantMessage = {
-                text: mockResponse,
-                sender: "assistant"
-            };
-            
-            setMessages(prev => [...prev, assistantMessage]);
-            localStorage.setItem(`chat_${chatId}`, JSON.stringify([...messages, userMessage, assistantMessage]));
-        } catch (error) {
-            console.error("Error generating response:", error);
-        } finally {
-            setIsLoading(false);
-        }
+        await handleAssistantResponse(inputValue);
     };
     
     return (

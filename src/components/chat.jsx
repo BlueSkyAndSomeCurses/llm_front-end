@@ -21,6 +21,7 @@ function Chat() {
             sender: "user"
         };
         
+
         localStorage.setItem(`chat_${chatId}`, JSON.stringify([initialMessage]));
         
         setMessages([...messages, initialMessage]);
