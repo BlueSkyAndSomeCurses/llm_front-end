@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Send } from "lucide-react";
 import "./activechat.scss";
@@ -9,6 +9,8 @@ function ActiveChat() {
     const { chatId } = useParams();
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const messagesEndRef = useRef(null);
     
     useEffect(() => {
         const savedMessages = localStorage.getItem(`chat_${chatId}`);
@@ -16,19 +18,66 @@ function ActiveChat() {
             setMessages(JSON.parse(savedMessages));
         }
     }, [chatId]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
+
+    const generateMockResponse = (userMessage) => {
+        // Simple mock responses based on keywords
+        const responses = [
+            "I understand your question. Let me help you with that.",
+            "That's an interesting point. Here's what I think...",
+            "I can assist you with that. Here's my analysis:",
+            "Let me break this down for you...",
+            "Based on my knowledge, here's what I can tell you...",
+            "I'll help you understand this better. Here's what you need to know:",
+            "That's a great question! Here's my response:",
+            "Let me explain this in detail...",
+            "I can provide some insights on this topic...",
+            "Here's what I've learned about this..."
+        ];
+        
+        // Add some delay to simulate API call
+        return new Promise(resolve => {
+            setTimeout(() => {
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                resolve(randomResponse + " " + userMessage.split(" ").slice(0, 5).join(" ") + "...");
+            }, 1000);
+        });
+    };
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (inputValue.trim() === "") return;
         
-        const newMessages = [...messages, {
+        const userMessage = {
             text: inputValue,
             sender: "user"
-        }];
+        };
         
-        setMessages(newMessages);
+        setMessages(prev => [...prev, userMessage]);
         setInputValue("");
-        localStorage.setItem(`chat_${chatId}`, JSON.stringify(newMessages));
+        setIsLoading(true);
+        
+        try {
+            const mockResponse = await generateMockResponse(inputValue);
+            const assistantMessage = {
+                text: mockResponse,
+                sender: "assistant"
+            };
+            
+            setMessages(prev => [...prev, assistantMessage]);
+            localStorage.setItem(`chat_${chatId}`, JSON.stringify([...messages, userMessage, assistantMessage]));
+        } catch (error) {
+            console.error("Error generating response:", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
     
     return (
@@ -43,6 +92,12 @@ function ActiveChat() {
                                     {msg.text}
                                 </div>
                             ))}
+                            {isLoading && (
+                                <div className="active-message assistant-message">
+                                    Thinking...
+                                </div>
+                            )}
+                            <div ref={messagesEndRef} />
                         </div>
                         <form className="active-chat-input" onSubmit={handleSubmit}>
                             <input
@@ -51,9 +106,10 @@ function ActiveChat() {
                                 placeholder="Type a message..."
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
+                                disabled={isLoading}
                             />
                             <div className="active-input-utils">
-                                <button type="submit" className="active-send-button">
+                                <button type="submit" className="active-send-button" disabled={isLoading}>
                                     <Send size={20} />
                                 </button>
                             </div>
