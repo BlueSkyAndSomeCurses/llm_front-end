@@ -15,16 +15,22 @@ function ActiveChat() {
     
     const generateMockResponse = (userMessage) => {
         const responses = [
-            "I understand your question. Let me help you with that.",
-            "That's an interesting point. Here's what I think...",
-            "I can assist you with that. Here's my analysis:",
-            "Let me break this down for you...",
-            "Based on my knowledge, here's what I can tell you...",
-            "I'll help you understand this better. Here's what you need to know:",
-            "That's a great question! Here's my response:",
-            "Let me explain this in detail...",
-            "I can provide some insights on this topic...",
-            "Here's what I've learned about this..."
+            "Hello! I'm excited to chat with you about this.",
+            "What an intriguing topic! Let me share my thoughts...", 
+            "I'd be happy to explore this with you in detail:",
+            "This is something I know quite a bit about...",
+            "Let me offer a different perspective on this:",
+            "I find this fascinating. Here's my take:",
+            "Thanks for bringing this up! My thoughts are:",
+            "I've given this some careful consideration...",
+            "This is an excellent discussion point. Let me elaborate:",
+            "I appreciate you asking about this. Here's what I know:",
+            "Let's dive deeper into this topic together:",
+            "I have some relevant experience to share here:",
+            "This reminds me of something interesting...",
+            "There are several ways to look at this:",
+            "I'm glad you brought this up. Let's explore it:",
+            "I'm here to help you with any questions you have.",
         ];
         
         return new Promise(resolve => {
@@ -38,6 +44,8 @@ function ActiveChat() {
     const handleAssistantResponse = useCallback(async (userMessage) => {
         setIsLoading(true);
         try {
+            setMessages(prev => [...prev, { text: "Thinking...", sender: "assistant" }]);
+
             const mockResponse = await generateMockResponse(userMessage);
             const assistantMessage = {
                 text: mockResponse,
@@ -45,7 +53,7 @@ function ActiveChat() {
             };
             
             setMessages(prev => {
-                const updatedMessages = [...prev, assistantMessage];
+                const updatedMessages = [...prev.slice(0, -1), assistantMessage];
                 localStorage.setItem(`chat_${chatId}`, JSON.stringify(updatedMessages));
                 return updatedMessages;
             });
@@ -97,6 +105,7 @@ function ActiveChat() {
         });
         setInputValue("");
         
+        await new Promise(resolve => setTimeout(resolve, 500));
         await handleAssistantResponse(inputValue);
     };
     
@@ -112,11 +121,6 @@ function ActiveChat() {
                                     {msg.text}
                                 </div>
                             ))}
-                            {isLoading && (
-                                <div className="active-message assistant-message">
-                                    Thinking...
-                                </div>
-                            )}
                             <div ref={messagesEndRef} />
                         </div>
                         <form className="active-chat-input" onSubmit={handleSubmit}>
