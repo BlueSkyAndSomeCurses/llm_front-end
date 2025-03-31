@@ -3,6 +3,8 @@ import { Send } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./chat.scss";
 import "./sidebar.scss";
+import Sidebar from "./sidebar";
+import ModelButton from "./model";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
@@ -21,13 +23,10 @@ function Chat() {
         setInputValue("");
         navigate(`/active-chat/${chatId}`);
     };
-
-    const isChatActive = messages.length > 0;
     
     return (
         <div className={`chatpage-container`}>
-            <div className="chat-sidebar">
-            </div>
+            <Sidebar />
             <div className="chat-container">
                 <div className="chatbox-container">
                     <div className="chat-header">
@@ -44,8 +43,7 @@ function Chat() {
                                 onChange={(e) => setInputValue(e.target.value)}
                             />
                             <div className="input-utils">
-                                <button className="model-button">
-                                </button>
+                                <ModelButton />
                                 <button type="submit" className="send-button">
                                     <Send size={20} />
                                 </button>

@@ -4,4 +4,58 @@
     width: 50px;
     background-color: $bg;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    border-right: 1px solid $border-color;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    transition: width 0.3s ease;
+}
+
+.sidebar-icon {
+    margin: 0;
+    padding: 5px;
+    border: none;
+    color: $illusion;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar-icon:hover {
+    border: none;
+    background-color: darken($bg, 3%);
+    transform: scale(1.1);
+    color: lighten($illusion, 15%);
+}
+
+
+.sidebar-top {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.sidebar-bottom {
+    margin-bottom: 10px;
+}
+.menu {
+    // margin-top: 5px;
+    margin-bottom: 10px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        // opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
