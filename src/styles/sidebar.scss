@@ -10,13 +10,19 @@
     align-items: center;
     transition: width 0.3s ease;
     overflow: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    height: 100vh;
 
     &.collapsed {
         width: 60px;
     }
 
     &.expanded {
-        width: 150px;
+        width: 250px;
     }
 }
 
@@ -28,9 +34,21 @@
     background-color: transparent;
     display: flex;
     align-items: center;
-    width: 100;
+    width: 100%;
     transition: all 0.2s ease-in-out;
     gap: 8px;
+    cursor: pointer;
+
+    button {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        color: inherit;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
 }
 
 .icon-text {
@@ -77,15 +95,33 @@
     margin-bottom: 10px;
 }
 
-
 .history {
-    animation: fadeIn 0.5s ease-in-out;
-    padding: 15px 10px;
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    color: $illusion;
+    gap: 8px;
+    width: 100%;
+
+    .history-item {
+        padding: 10px;
+        background-color: $bg-light;
+        border-radius: 8px;
+        cursor: pointer;
+        color: $text-dark;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+
+        &:hover {
+            background-color: darken($bg-light, 5%);
+            transform: translateX(5px);
+        }
+    }
 }
 
 .history h3 {
@@ -96,8 +132,6 @@
     margin-bottom: 10px;
     text-align: center;
 }
-
-
 
 .history-item {
     animation: slideInFade 0.4s ease-out forwards;
