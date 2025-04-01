@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Send } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./chat.scss";
-import "./sidebar.scss";
+import "../styles/chat.scss";
+import "../styles/sidebar.scss";
 import Sidebar from "./sidebar";
 import ModelButton from "./model";
 
@@ -14,7 +14,6 @@ function Chat() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Get user data from localStorage
         const userData = localStorage.getItem("user");
         if (userData) {
             setUser(JSON.parse(userData));

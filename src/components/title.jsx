@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Send } from "lucide-react";
-import "./App.css";
+
 
 function TitlePage() {
     return (

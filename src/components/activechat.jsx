@@ -2,8 +2,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { Send } from "lucide-react";
 import axios from "axios";
-import "./activechat.scss";
-import "./sidebar.scss";
+import "../styles/activechat.scss";
+import "../styles/sidebar.scss";
 import Sidebar from "./sidebar";
 
 function ActiveChat() {
@@ -16,7 +16,6 @@ function ActiveChat() {
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
-        // Get user data from localStorage
         const userData = localStorage.getItem("user");
         if (userData) {
             setUser(JSON.parse(userData));
@@ -86,9 +85,7 @@ function ActiveChat() {
                     return updatedMessages;
                 });
 
-                // Save assistant message to the database
                 try {
-                    // Get token directly from localStorage instead of relying on user state
                     const token = localStorage.getItem("token");
 
                     if (token) {
@@ -100,7 +97,7 @@ function ActiveChat() {
                             "/api/messages",
                             {
                                 messageText: mockResponse,
-                                messageType: "response", // Set type to "response" for assistant messages
+                                messageType: "response",
                                 chatId: chatId,
                             },
                             {
@@ -127,13 +124,11 @@ function ActiveChat() {
 
     useEffect(() => {
         const fetchMessages = async () => {
-            // First load from localStorage for immediate display
             const savedMessages = localStorage.getItem(`chat_${chatId}`);
             if (savedMessages) {
                 const parsedMessages = JSON.parse(savedMessages);
                 setMessages(parsedMessages);
 
-                // Check if this is a new chat with only one message
                 if (
                     parsedMessages.length === 1 &&
                     parsedMessages[0].sender === "user" &&
@@ -141,7 +136,6 @@ function ActiveChat() {
                 ) {
                     hasRespondedRef.current = true;
 
-                    // Add a delay to ensure everything is loaded before generating the first response
                     setTimeout(() => {
                         console.log("Triggering initial assistant response");
                         handleAssistantResponse(parsedMessages[0].text);
@@ -149,7 +143,6 @@ function ActiveChat() {
                 }
             }
 
-            // Then try to fetch from the database if token exists
             try {
                 const token = localStorage.getItem("token");
                 if (token) {
@@ -162,8 +155,6 @@ function ActiveChat() {
                         }
                     );
 
-                    // If we have database messages, we could update the UI or sync with localStorage
-                    // For this implementation, we'll keep using localStorage for simplicity
                     console.log(
                         "Messages from database:",
                         response.data.messages
@@ -203,7 +194,6 @@ function ActiveChat() {
             return updatedMessages;
         });
 
-        // Save user message to database
         try {
             const token = localStorage.getItem("token");
             if (token) {

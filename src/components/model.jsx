@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import "./model.scss"
+import "../styles/model.scss"
 
 const ModelButton = () => {
   const [isOpen, setIsOpen] = useState(false);

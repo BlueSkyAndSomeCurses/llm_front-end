@@ -1,0 +1,131 @@
+@import './colors.scss';
+
+.chat-sidebar {
+    background-color: $bg;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    border-right: 1px solid $border-color;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    transition: width 0.3s ease;
+    overflow: hidden;
+
+    &.collapsed {
+        width: 60px;
+    }
+
+    &.expanded {
+        width: 150px;
+    }
+}
+
+.sidebar-icon {
+    margin: 0;
+    padding: 5px;
+    border: none;
+    color: $illusion;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    width: 100;
+    transition: all 0.2s ease-in-out;
+    gap: 8px;
+}
+
+.icon-text {
+    white-space: nowrap;
+    animation: slideInFade 0.4s ease-out forwards;
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+@keyframes slideInFade {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.sidebar-icon:hover {
+    border: none;
+    background-color: darken($bg, 3%);
+    transform: scale(1.1);
+    color: lighten($illusion, 0%);
+}
+
+.sidebar-top {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.sidebar-bottom {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.menu {
+    margin-bottom: 10px;
+}
+
+
+.history {
+    animation: fadeIn 0.5s ease-in-out;
+    padding: 15px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: $illusion;
+}
+
+.history h3 {
+    margin: 0;
+    padding: 0%;
+    font-size: 16px;
+    color: $illusion;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+
+
+.history-item {
+    animation: slideInFade 0.4s ease-out forwards;
+    opacity: 0;
+    transform: translateX(-10px);
+    animation-delay: 0.25s;
+    padding: 3px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease-in-out;
+    font-weight: 600;
+}
+
+.history-item:hover {
+    background-color: darken($bg, 3%);
+    transform: scale(1.1);
+    color: lighten($illusion, 0%);
+}
+
+@keyframes fadeIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

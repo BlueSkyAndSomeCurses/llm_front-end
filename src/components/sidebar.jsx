@@ -1,10 +1,12 @@
 import { Menu, PlusCircle, MessageSquare } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
-import "./sidebar.scss";
+import "../styles/sidebar.scss";
 import { useState } from "react";
 
 function Sidebar() {
     const [expanded, setExpanded] = useState(false);
+    const navigate = useNavigate();
 
     const toggleSidebar = () => {
         setExpanded(!expanded);
@@ -17,7 +19,9 @@ function Sidebar() {
                     <Menu size={30} />
                     {expanded && <span className="icon-text">Menu</span>}
                 </button>
-                <button className="sidebar-icon">
+                <button className="sidebar-icon" onClick={() => {
+                    navigate("/chat");
+                }}>
                     <PlusCircle size={30} />
                     {expanded && <span className="icon-text">New Chat</span>}
                 </button>
@@ -34,8 +38,10 @@ function Sidebar() {
                 )}
             </div>
             <div className="sidebar-bottom">
-                <LogoutButton />
-                {expanded && <span className="icon-text">Logout</span>}
+                <button className="sidebar-icon">
+                    <LogoutButton size={30} />
+                    {expanded && <span className="icon-text">Logout</span>}
+                </button>
             </div>
         </div>
     );
