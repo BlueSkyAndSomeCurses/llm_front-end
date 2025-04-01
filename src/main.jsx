@@ -6,6 +6,7 @@ import Chat from "./components/chat.jsx";
 import ActiveChat from "./components/activechat.jsx";
 import Login from "./components/login.jsx";
 import Title from "./components/title.jsx";
+import History from "./components/history.jsx";
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
