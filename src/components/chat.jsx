@@ -60,7 +60,7 @@ function Chat() {
 
         setMessages([...messages, initialMessage]);
         setInputValue("");
-        navigate(`/active-chat/${chatId}`);
+        navigate(`/chat/${chatId}`);
     };
 
     return (
