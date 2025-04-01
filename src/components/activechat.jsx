@@ -1,13 +1,13 @@
-import {useState, useEffect, useRef, useCallback} from "react";
-import {useParams} from "react-router-dom";
-import {Send} from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useParams } from "react-router-dom";
+import { Send } from "lucide-react";
 import axios from "axios";
 import "./activechat.scss";
 import "./sidebar.scss";
 import Sidebar from "./sidebar";
 
 function ActiveChat() {
-    const {chatId} = useParams();
+    const { chatId } = useParams();
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -49,9 +49,9 @@ function ActiveChat() {
                     responses[Math.floor(Math.random() * responses.length)];
                 resolve(
                     randomResponse +
-                        " " +
-                        userMessage.split(" ").slice(0, 5).join(" ") +
-                        "..."
+                    " " +
+                    userMessage.split(" ").slice(0, 5).join(" ") +
+                    "..."
                 );
             }, 1000);
         });
@@ -65,7 +65,7 @@ function ActiveChat() {
             try {
                 setMessages((prev) => [
                     ...prev,
-                    {text: "Thinking...", sender: "assistant"},
+                    { text: "Thinking...", sender: "assistant" },
                 ]);
 
                 const mockResponse = await generateMockResponse(userMessage);
@@ -178,7 +178,7 @@ function ActiveChat() {
     }, [chatId, handleAssistantResponse]);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({behavior: "smooth"});
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     useEffect(() => {

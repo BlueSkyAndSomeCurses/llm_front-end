@@ -1,9 +1,9 @@
-import {useState} from "react";
-import {Send} from "lucide-react";
+import { useState } from "react";
+import { Send } from "lucide-react";
 import axios from "axios";
 import bcrypt from "bcryptjs";
 import "./App.css";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 

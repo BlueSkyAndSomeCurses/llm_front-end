@@ -1,6 +1,6 @@
-import {useState, useEffect} from "react";
-import {Send} from "lucide-react";
-import {useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Send } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./chat.scss";
 import "./sidebar.scss";

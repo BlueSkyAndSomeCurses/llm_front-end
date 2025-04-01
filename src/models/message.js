@@ -34,9 +34,9 @@ messageSchema.pre("save", async function (next) {
         if (this.isNew) {
             // Find the message with the highest messageNum for this userId and chatId
             const lastMessage = await this.constructor.findOne(
-                {userId: this.userId, chatId: this.chatId},
+                { userId: this.userId, chatId: this.chatId },
                 {},
-                {sort: {messageNum: -1}}
+                { sort: { messageNum: -1 } }
             );
 
             // If a message was found, set messageNum to lastMessage.messageNum + 1

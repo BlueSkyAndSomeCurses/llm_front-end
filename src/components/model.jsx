@@ -4,10 +4,10 @@ import "./model.scss"
 
 const ModelButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   return (
     <div className="model-container">
-      <button 
+      <button
         className="model-button"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="AI model"
@@ -15,7 +15,7 @@ const ModelButton = () => {
       >
         <span className="model-name">Model</span>
       </button>
-      
+
       {isOpen && (
         <div className="model-dropdown">
           <div className="model-option active">
