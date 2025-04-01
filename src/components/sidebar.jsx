@@ -1,4 +1,5 @@
-import { Menu, PlusCircle, MessageSquare, LogOut } from "lucide-react";
+import {Menu, PlusCircle, MessageSquare} from "lucide-react";
+import LogoutButton from "./LogoutButton";
 import "./sidebar.scss";
 
 function Sidebar() {
@@ -16,9 +17,7 @@ function Sidebar() {
                 </button>
             </div>
             <div className="sidebar-bottom">
-                <button className="sidebar-icon">
-                    <LogOut size={30} />
-                </button>
+                <LogoutButton />
             </div>
         </div>
     );

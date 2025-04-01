@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { Send } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {useState, useEffect} from "react";
+import {Send} from "lucide-react";
+import {useNavigate} from "react-router-dom";
+import axios from "axios";
 import "./chat.scss";
 import "./sidebar.scss";
 import Sidebar from "./sidebar";
@@ -9,26 +10,60 @@ import ModelButton from "./model";
 function Chat() {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
-    
-    const handleSubmit = (e) => {
+
+    useEffect(() => {
+        // Get user data from localStorage
+        const userData = localStorage.getItem("user");
+        if (userData) {
+            setUser(JSON.parse(userData));
+        }
+    }, []);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (inputValue.trim() === "") return;
-        const chatId = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-        
+
+        const chatId =
+            Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+
         const initialMessage = {
             text: inputValue,
-            sender: "user"
+            sender: "user",
         };
-        
 
-        localStorage.setItem(`chat_${chatId}`, JSON.stringify([initialMessage]));
-        
+        localStorage.setItem(
+            `chat_${chatId}`,
+            JSON.stringify([initialMessage])
+        );
+
+        try {
+            if (user) {
+                const token = localStorage.getItem("token");
+
+                await axios.post(
+                    "/api/messages",
+                    {
+                        messageText: inputValue,
+                        chatId: chatId,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+            }
+        } catch (error) {
+            console.error("Error saving message:", error);
+        }
+
         setMessages([...messages, initialMessage]);
         setInputValue("");
         navigate(`/active-chat/${chatId}`);
     };
-    
+
     return (
         <div className={`chatpage-container`}>
             <Sidebar />
@@ -41,7 +76,9 @@ function Chat() {
                     <div className="chat-box">
                         <div className="messages-area">
                             {messages.map((msg, i) => (
-                                <div key={i} className={`message ${msg.sender}-message`}>
+                                <div
+                                    key={i}
+                                    className={`message ${msg.sender}-message`}>
                                     {msg.text}
                                 </div>
                             ))}
