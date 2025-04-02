@@ -210,7 +210,7 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
         console.log("message", message);
 
         const completion = await openai.chat.completions.create({
-            model: "deepseek/deepseek-v3-base:free",
+            model:"deepseek/deepseek-r1-distill-qwen-14b:free",
             messages: [
                 {
                     role: "user",
