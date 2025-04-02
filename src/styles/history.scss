@@ -1,0 +1,90 @@
+@import './colors.scss';
+
+.history-page {
+    display: flex;
+    height: 100vh;
+    background-color: $bg;
+}
+
+.history-container {
+    flex: 1;
+    padding: 20px;
+    margin-left: 60px;
+    overflow-y: auto;
+
+    h1 {
+        color: $text-dark;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+}
+
+.search-container {
+    margin-bottom: 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    background-color: $bg-light;
+    color: $text-dark;
+    font-size: 16px;
+    transition: all 0.2s ease;
+
+    &:focus {
+        outline: none;
+        border-color: $illusion;
+        box-shadow: 0 0 0 2px rgba($illusion, 0.1);
+    }
+
+    &::placeholder {
+        color: lighten($text-dark, 30%);
+    }
+}
+
+.chats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.chat-item {
+    background-color: $bg-light;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid $border-color;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-color: $illusion;
+    }
+}
+
+.chat-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.chat-message {
+    color: $text-dark;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.4;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chat-date {
+    color: lighten($text-dark, 30%);
+    font-size: 14px;
+    white-space: nowrap;
+} 

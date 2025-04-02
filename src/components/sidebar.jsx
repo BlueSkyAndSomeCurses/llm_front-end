@@ -15,7 +15,6 @@ function Sidebar() {
             try {
                 const token = localStorage.getItem("token");
                 if (token) {
-                    console.log("fetching chats", token);
                     const response = await axios.get("/api/chats", {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -54,9 +53,9 @@ function Sidebar() {
                     <PlusCircle size={30} />
                     {expanded && <span className="icon-text">New Chat</span>}
                 </button>
-                <button className="sidebar-icon">
+                <button className="sidebar-icon" onClick={() => navigate("/history")}>
                     <MessageSquare size={30} />
-                    {expanded && <span className="icon-text">Messages</span>}
+                    {expanded && <span className="icon-text">History</span>}
                 </button>
                 {expanded && (
                     <div className="history">

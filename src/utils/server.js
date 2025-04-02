@@ -5,8 +5,9 @@ import User from "../models/user.js";
 import Message from "../models/message.js";
 import cors from "cors";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import OpenAI from "openai";
 
-// Load environment variables
 dotenv.config();
 
 const app = express();
@@ -16,7 +17,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 const corsOptions = {
     origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true, // Add this
+    credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -34,7 +35,6 @@ db.once("open", () => {
     console.log("Connected to MongoDB");
 });
 
-// Authentication middleware
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
@@ -50,33 +50,33 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
+// Initialize OpenAI
+const openai = new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: process.env.OPENROUTER_API_KEY,
+});
+
 app.get("/", (req, res) => {
     res.send("Hello from Express");
 });
 
-// Example of a protected route
 app.get("/api/protected", authenticateToken, (req, res) => {
     res.json({message: "This is protected data", user: req.user});
 });
 
 app.post("/api/login", async (req, res) => {
-    console.log("Login request received");
     try {
         const {email, password} = req.body;
 
         const user = await User.findOne({email});
-        console.log(user);
 
         if (!user) {
-            console.log("no such user");
             return res.status(401).json({message: "The user does not exist"});
         }
         if (user.password !== password) {
-            console.log("wrong password");
             return res.status(401).json({message: "Invalid email or password"});
         }
 
-        // Generate JWT token
         const token = jwt.sign(
             {id: user._id, email: user.email, name: user.name},
             JWT_SECRET,
@@ -101,11 +101,9 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.post("/api/register", async (req, res) => {
-    console.log("Registration request received");
     try {
         const {name, email, password} = req.body;
 
-        // Check if user already exists
         const existingUser = await User.findOne({email});
         if (existingUser) {
             return res
@@ -113,24 +111,20 @@ app.post("/api/register", async (req, res) => {
                 .json({message: "User with this email already exists"});
         }
 
-        // Create new user
         const newUser = new User({
             name,
             email,
-            password, // Note: In a production app, you should hash the password
+            password,
         });
 
-        // Save user to database
         await newUser.save();
 
-        // Generate JWT token
         const token = jwt.sign(
             {id: newUser._id, email: newUser.email, name: newUser.name},
             JWT_SECRET,
             {expiresIn: "24h"}
         );
 
-        // Return user data without password
         const userResponse = {
             _id: newUser._id,
             name: newUser.name,
@@ -148,17 +142,15 @@ app.post("/api/register", async (req, res) => {
     }
 });
 
-// Add message creation endpoint
 app.post("/api/messages", authenticateToken, async (req, res) => {
     try {
-        console.log(req.body);
         const {messageText, chatId, messageType = "question"} = req.body;
         const userId = req.user.id;
 
         const newMessage = new Message({
             userId,
             messageText,
-            messageType, // Use provided messageType or default to "question"
+            messageType,
             chatId,
         });
 
@@ -193,13 +185,10 @@ app.get("/api/messages/:chatId", authenticateToken, async (req, res) => {
     }
 });
 
-// Get all chats for a user
 app.get("/api/chats", authenticateToken, async (req, res) => {
     try {
         const userId = req.user.id;
-        console.log(userId, "is fetching chats");
 
-        // Find all messages with messageNum = 0 for this user
         const chats = await Message.find({
             userId,
             messageNum: 0,
@@ -211,6 +200,30 @@ app.get("/api/chats", authenticateToken, async (req, res) => {
     } catch (error) {
         console.error("Error fetching chats:", error);
         res.status(500).json({message: "Failed to fetch chats"});
+    }
+});
+
+app.post("/api/chat", authenticateToken, async (req, res) => {
+    try {
+        const {message} = req.body;
+
+        console.log("message", message);
+
+        const completion = await openai.chat.completions.create({
+            model: "deepseek/deepseek-v3-base:free",
+            messages: [
+                {
+                    role: "user",
+                    content: message,
+                },
+            ],
+        });
+
+        const response = completion.choices[0].message.content;
+        res.json({response});
+    } catch (error) {
+        console.error("Error getting LLM response:", error);
+        res.status(500).json({error: "Failed to get response from LLM"});
     }
 });
 

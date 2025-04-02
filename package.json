@@ -23,6 +23,7 @@
     "lucide-react": "^0.484.0",
     "mongodb": "^6.15.0",
     "mongoose": "^8.13.1",
+    "openai": "^4.91.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.4.1",

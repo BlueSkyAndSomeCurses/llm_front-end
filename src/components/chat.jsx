@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import { Send } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {useState, useEffect} from "react";
+import {Send} from "lucide-react";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../styles/chat.scss";
 import "../styles/sidebar.scss";
 import Sidebar from "./sidebar";
 import ModelButton from "./model";
+import {getLLMResponse} from "../utils/llm_rest";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
@@ -46,6 +47,7 @@ function Chat() {
                     {
                         messageText: inputValue,
                         chatId: chatId,
+                        messageType: "question",
                     },
                     {
                         headers: {
@@ -53,12 +55,14 @@ function Chat() {
                         },
                     }
                 );
+
+                
+                setMessages([...messages, initialMessage]);
             }
         } catch (error) {
-            console.error("Error saving message:", error);
+            console.error("Error in chat:", error);
         }
 
-        setMessages([...messages, initialMessage]);
         setInputValue("");
         navigate(`/chat/${chatId}`);
     };
