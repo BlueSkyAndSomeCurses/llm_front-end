@@ -23,40 +23,6 @@ function ActiveChat() {
         }
     }, []);
 
-    const generateMockResponse = (userMessage) => {
-        const responses = [
-            "Hello! I'm excited to chat with you about this.",
-            "What an intriguing topic! Let me share my thoughts...",
-            "I'd be happy to explore this with you in detail:",
-            "This is something I know quite a bit about...",
-            "Let me offer a different perspective on this:",
-            "I find this fascinating. Here's my take:",
-            "Thanks for bringing this up! My thoughts are:",
-            "I've given this some careful consideration...",
-            "This is an excellent discussion point. Let me elaborate:",
-            "I appreciate you asking about this. Here's what I know:",
-            "Let's dive deeper into this topic together:",
-            "I have some relevant experience to share here:",
-            "This reminds me of something interesting...",
-            "There are several ways to look at this:",
-            "I'm glad you brought this up. Let's explore it:",
-            "I'm here to help you with any questions you have.",
-        ];
-
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                const randomResponse =
-                    responses[Math.floor(Math.random() * responses.length)];
-                resolve(
-                    randomResponse +
-                        " " +
-                        userMessage.split(" ").slice(0, 5).join(" ") +
-                        "..."
-                );
-            }, 1000);
-        });
-    };
-
     const handleAssistantResponse = useCallback(
         async (userMessage) => {
             console.log("HAPPEND", userMessage);
