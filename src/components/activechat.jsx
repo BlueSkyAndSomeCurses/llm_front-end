@@ -231,7 +231,12 @@ function ActiveChat() {
                                 <div
                                     key={i}
                                     className={`active-message ${msg.sender}-message`}>
-                                    {msg.text}
+                                    {msg.text.split('\n').map((line, index) => (
+                                        <span key={index}>
+                                            {line}
+                                            {index < msg.text.split('\n').length - 1 && <br />}
+                                        </span>
+                                    ))}
                                 </div>
                             ))}
                             <div ref={messagesEndRef} />
