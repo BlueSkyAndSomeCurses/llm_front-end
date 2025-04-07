@@ -55,8 +55,9 @@
     border-radius: 8px;
     padding: 16px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
     border: 1px solid $border-color;
+    overflow: hidden;
 
     &:hover {
         transform: translateY(-2px);
@@ -66,6 +67,13 @@
 }
 
 .chat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.chat-main {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -87,4 +95,83 @@
     color: lighten($text-dark, 30%);
     font-size: 14px;
     white-space: nowrap;
+}
+
+.chat-preview {
+    border-top: 1px solid $border-color;
+    padding-top: 12px;
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideIn 0.7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    max-height: 0;
+    transition: max-height 0.7s cubic-bezier(0.25, 0.1, 0.25, 1), 
+                opacity 0.7s cubic-bezier(0.25, 0.1, 0.25, 1), 
+                transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.chat-item:hover .chat-preview {
+    max-height: 500px;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.preview-message {
+    font-size: 14px;
+    line-height: 1.4;
+    color: $text-dark;
+    padding: 8px;
+    border-radius: 6px;
+    background-color: rgba($bg-dark, 0.5);
+    opacity: 0;
+    animation: fadeIn 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    animation-delay: 0.3s;
+    display: -webkit-box;
+    -webkit-line-clamp: 10;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &.user {
+        border-left: 3px solid darken($illusion, 15%);
+    }
+
+    &.assistant {
+        border-left: 3px solid lighten($illusion-night, 40%);
+        animation-delay: 0.5s;
+    }
+
+    strong {
+        color: $illusion;
+        margin-right: 8px;
+    }
+
+    .more-lines {
+        display: block;
+        color: lighten($text-dark, 20%);
+        font-style: italic;
+        margin-top: 4px;
+        text-align: center;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
