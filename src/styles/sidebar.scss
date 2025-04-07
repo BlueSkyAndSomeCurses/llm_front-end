@@ -10,6 +10,7 @@
     align-items: center;
     transition: width 0.3s ease;
     overflow: hidden;
+    overflow-x: hidden;
     position: fixed;
     left: 0;
     top: 0;
@@ -99,11 +100,13 @@
 .history {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 8px;
     width: 100%;
+    box-sizing: border-box;
 
     .history-item {
         padding: 10px;
@@ -117,6 +120,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         width: 100%;
+        box-sizing: border-box;
 
         &:hover {
             background-color: darken($bg-light, 5%);
