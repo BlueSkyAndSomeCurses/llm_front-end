@@ -1,45 +1,42 @@
-import React from 'react';
-import { useState } from 'react';
-import "../styles/model.scss"
+import React from "react";
+import {useState} from "react";
+import "../styles/model.scss";
 
-const ModelButton = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedModel, setSelectedModel] = useState("DeepSeek R1");
+const ModelButton = ({selectedModel, setSelectedModel}) => {
+    const models = ["DeepSeek R1", "QWEN", "LLaMa 4 scout"];
+    const [isOpen, setIsOpen] = useState(false);
 
-  const handleModelSelect = (modelName) => {
-    setSelectedModel(modelName);
-    setIsOpen(false);
-  };
+    const handleModelSelect = (modelName) => {
+        setSelectedModel(modelName);
+        setIsOpen(false);
+    };
 
-  return (
-    <div className="model-container">
-      <button
-        className="model-button"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="AI model"
-        type="button"
-      >
-        <span className="model-name">{selectedModel}</span>
-      </button>
+    return (
+        <div className="model-container">
+            <button
+                className="model-button"
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label="AI model"
+                type="button">
+                <span className="model-name">{selectedModel}</span>
+            </button>
 
-      {isOpen && (
-        <div className="model-dropdown">
-          <div
-            className={`model-option ${selectedModel === "DeepSeek R1" ? "active" : ""}`}
-            onClick={() => handleModelSelect("DeepSeek R1")}
-          >
-            <span>DeepSeek R1</span>
-          </div>
-          <div
-            className={`model-option ${selectedModel === "QWEN" ? "active" : ""}`}
-            onClick={() => handleModelSelect("QWEN")}
-          >
-            <span>QWEN</span>
-          </div>
+            {isOpen && (
+                <div className="model-dropdown">
+                    {models.map((modelName) => (
+                        <div
+                            key={modelName}
+                            className={`model-option ${
+                                selectedModel === modelName ? "active" : ""
+                            }`}
+                            onClick={() => handleModelSelect(modelName)}>
+                            <span>{modelName}</span>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default ModelButton;

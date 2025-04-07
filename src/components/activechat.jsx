@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useParams } from "react-router-dom";
-import { Send } from "lucide-react";
+import {useState, useEffect, useRef, useCallback} from "react";
+import {useParams} from "react-router-dom";
+import {Send} from "lucide-react";
 import axios from "axios";
 import "../styles/activechat.scss";
 import "../styles/sidebar.scss";
 import Sidebar from "./sidebar";
-import { getLLMResponse } from "../utils/llm_rest";
+import {getLLMResponse} from "../utils/llm_rest";
 
 function ActiveChat() {
-    const { chatId } = useParams();
+    const {chatId} = useParams();
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -25,46 +25,63 @@ function ActiveChat() {
 
     const handleAssistantResponse = useCallback(
         async (userMessage) => {
-            console.log("HAPPEND", userMessage);
             setIsLoading(true);
-            console.log("handleAssistantResponse called, user state:", user);
+            let completeMessage = "";
 
             try {
                 setMessages((prev) => [
                     ...prev,
-                    { text: "Thinking...", sender: "assistant" },
+                    {text: "", sender: "assistant"},
                 ]);
 
-                const llmResponse = await getLLMResponse(userMessage);
-                const assistantMessage = {
-                    text: llmResponse,
-                    sender: "assistant",
-                };
+                const token = localStorage.getItem("token");
+                console.log("DEBUG: messages", messages);
+                console.log("DEBUG: last messages", messages.slice(-3));
+                const response = await axios.post(
+                    "/api/chat",
+                    {
+                        message: userMessage,
+                        model: localStorage.getItem("selectedModel"),
+                        context: messages.slice(-6).map((msg) => ({
+                            role: msg.sender === "user" ? "user" : "assistant",
+                            content: msg.text,
+                        })),
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                        responseType: "text",
+                        onDownloadProgress: (progressEvent) => {
+                            const newText =
+                                progressEvent.event?.target?.response;
+                            if (newText) {
+                                completeMessage = newText;
+                                setMessages((prev) => {
+                                    const updatedMessages = [...prev];
+                                    const lastMessage =
+                                        updatedMessages[
+                                            updatedMessages.length - 1
+                                        ];
+                                    lastMessage.text = newText;
 
-                setMessages((prev) => {
-                    const updatedMessages = [
-                        ...prev.slice(0, -1),
-                        assistantMessage,
-                    ];
-                    localStorage.setItem(
-                        `chat_${chatId}`,
-                        JSON.stringify(updatedMessages)
-                    );
-                    return updatedMessages;
-                });
+                                    localStorage.setItem(
+                                        `chat_${chatId}`,
+                                        JSON.stringify(updatedMessages)
+                                    );
+                                    return updatedMessages;
+                                });
+                            }
+                        },
+                    }
+                );
 
                 try {
-                    const token = localStorage.getItem("token");
-
                     if (token) {
-                        console.log(
-                            "Got token directly from localStorage, saving assistant message"
-                        );
-
-                        const response = await axios.post(
+                        await axios.post(
                             "/api/messages",
                             {
-                                messageText: llmResponse,
+                                messageText: completeMessage,
                                 messageType: "response",
                                 chatId: chatId,
                             },
@@ -74,12 +91,9 @@ function ActiveChat() {
                                 },
                             }
                         );
-                        console.log("Saved assistant message:", response.data);
-                    } else {
-                        console.log("No token available in localStorage");
                     }
                 } catch (error) {
-                    console.error("Error saving assistant message:", error);
+                    console.error("Error saving message:", error);
                 }
             } catch (error) {
                 console.error("Error generating response:", error);
@@ -105,31 +119,48 @@ function ActiveChat() {
                     hasRespondedRef.current = true;
 
                     setTimeout(() => {
-                        console.log("Triggering initial assistant response");
                         handleAssistantResponse(parsedMessages[0].text);
                     }, 500);
                 }
-            }
+            } else {
+                try {
+                    const token = localStorage.getItem("token");
+                    if (token) {
+                        const response = await axios.get(
+                            `/api/messages/${chatId}`,
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            }
+                        );
 
-            try {
-                const token = localStorage.getItem("token");
-                if (token) {
-                    const response = await axios.get(
-                        `/api/messages/${chatId}`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            },
+                        if (
+                            response.data.messages &&
+                            response.data.messages.length > 0
+                        ) {
+                            const serverMessages = response.data.messages.map(
+                                (msg) => ({
+                                    text: msg.messageText,
+                                    sender:
+                                        msg.messageType === "question"
+                                            ? "user"
+                                            : "assistant",
+                                })
+                            );
+                            setMessages(serverMessages);
+                            localStorage.setItem(
+                                `chat_${chatId}`,
+                                JSON.stringify(serverMessages)
+                            );
                         }
-                    );
-
-                    console.log(
-                        "Messages from database:",
-                        response.data.messages
+                    }
+                } catch (error) {
+                    console.error(
+                        "Error fetching messages from server:",
+                        error
                     );
                 }
-            } catch (error) {
-                console.error("Error fetching messages from database:", error);
             }
         };
 
@@ -137,7 +168,7 @@ function ActiveChat() {
     }, [chatId, handleAssistantResponse]);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        messagesEndRef.current?.scrollIntoView({behavior: "smooth"});
     };
 
     useEffect(() => {
@@ -165,7 +196,6 @@ function ActiveChat() {
         try {
             const token = localStorage.getItem("token");
             if (token) {
-                console.log("Saving user message to database");
                 await axios.post(
                     "/api/messages",
                     {

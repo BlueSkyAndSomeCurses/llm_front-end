@@ -1,17 +1,18 @@
-import { useState, useEffect } from "react";
-import { Send } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {useState, useEffect} from "react";
+import {Send} from "lucide-react";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../styles/chat.scss";
 import "../styles/sidebar.scss";
 import Sidebar from "./sidebar";
 import ModelButton from "./model";
-import { getLLMResponse } from "../utils/llm_rest";
+import {getLLMResponse} from "../utils/llm_rest";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [user, setUser] = useState(null);
+    const [selectedModel, setSelectedModel] = useState("DeepSeek R1");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -48,6 +49,7 @@ function Chat() {
                         messageText: inputValue,
                         chatId: chatId,
                         messageType: "question",
+                        model: selectedModel,
                     },
                     {
                         headers: {
@@ -56,13 +58,13 @@ function Chat() {
                     }
                 );
 
-
                 setMessages([...messages, initialMessage]);
             }
         } catch (error) {
             console.error("Error in chat:", error);
         }
 
+        localStorage.setItem("selectedModel", selectedModel);
         setInputValue("");
         navigate(`/chat/${chatId}`);
     };
@@ -95,7 +97,10 @@ function Chat() {
                                 onChange={(e) => setInputValue(e.target.value)}
                             />
                             <div className="input-utils">
-                                <ModelButton />
+                                <ModelButton
+                                    selectedModel={selectedModel}
+                                    setSelectedModel={setSelectedModel}
+                                />
                                 <button type="submit" className="send-button">
                                     <Send size={20} />
                                 </button>
