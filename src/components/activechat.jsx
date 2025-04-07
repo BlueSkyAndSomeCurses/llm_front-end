@@ -25,26 +25,28 @@ function ActiveChat() {
 
     const handleAssistantResponse = useCallback(
         async (userMessage) => {
-            console.log("HAPPEND", userMessage);
             setIsLoading(true);
-            console.log("handleAssistantResponse called, user state:", user);
-
+            
             try {
                 setMessages((prev) => [
                     ...prev,
                     {text: "Thinking...", sender: "assistant"},
                 ]);
-
-                const llmResponse = await getLLMResponse(userMessage);
-                const assistantMessage = {
-                    text: llmResponse,
-                    sender: "assistant",
-                };
-
+    
+                const fullResponse = await getLLMResponse(userMessage, (visibleText, fullText) => {
+                    setMessages((prev) => {
+                        const updatedMessages = [
+                            ...prev.slice(0, -1),
+                            { text: visibleText, sender: "assistant" },
+                        ];
+                        return updatedMessages;
+                    });
+                });
+                
                 setMessages((prev) => {
                     const updatedMessages = [
                         ...prev.slice(0, -1),
-                        assistantMessage,
+                        { text: fullResponse, sender: "assistant" },
                     ];
                     localStorage.setItem(
                         `chat_${chatId}`,
@@ -52,19 +54,14 @@ function ActiveChat() {
                     );
                     return updatedMessages;
                 });
-
+                
                 try {
                     const token = localStorage.getItem("token");
-
                     if (token) {
-                        console.log(
-                            "Got token directly from localStorage, saving assistant message"
-                        );
-
-                        const response = await axios.post(
+                        await axios.post(
                             "/api/messages",
                             {
-                                messageText: llmResponse,
+                                messageText: fullResponse,
                                 messageType: "response",
                                 chatId: chatId,
                             },
@@ -74,9 +71,7 @@ function ActiveChat() {
                                 },
                             }
                         );
-                        console.log("Saved assistant message:", response.data);
-                    } else {
-                        console.log("No token available in localStorage");
+                        console.log("Saved assistant message");
                     }
                 } catch (error) {
                     console.error("Error saving assistant message:", error);
@@ -89,7 +84,7 @@ function ActiveChat() {
         },
         [chatId]
     );
-
+    
     useEffect(() => {
         const fetchMessages = async () => {
             const savedMessages = localStorage.getItem(`chat_${chatId}`);

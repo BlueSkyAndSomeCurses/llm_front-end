@@ -50,7 +50,6 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// Initialize OpenAI
 const openai = new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
     apiKey: process.env.OPENROUTER_API_KEY,
@@ -206,10 +205,11 @@ app.get("/api/chats", authenticateToken, async (req, res) => {
 app.post("/api/chat", authenticateToken, async (req, res) => {
     try {
         const {message} = req.body;
+        res.setHeader('Content-Type', 'text/event-stream');
+        res.setHeader('Cache-Control', 'no-cache');
+        res.setHeader('Connection', 'keep-alive');
 
-        console.log("message", message);
-
-        const completion = await openai.chat.completions.create({
+        const stream = await openai.chat.completions.create({
             model:"deepseek/deepseek-r1-distill-qwen-14b:free",
             messages: [
                 {
@@ -217,12 +217,19 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
                     content: message,
                 },
             ],
+            stream: true,
         });
-
-        const response = completion.choices[0].message.content;
-        res.json({response});
+        for await (const chunk of stream) {
+            const content = chunk.choices[0]?.delta?.content || '';
+            if (content) {
+                res.write(`data: ${JSON.stringify({ content })}\n\n`);
+            }
+        }
+        res.write('data: [DONE]\n\n');
+        res.end();
     } catch (error) {
         console.error("Error getting LLM response:", error);
+        res.setHeader('Content-Type', 'application/json');
         res.status(500).json({error: "Failed to get response from LLM"});
     }
 });
