@@ -106,20 +106,25 @@ body {
 .send-button {
     background-color: transparent;
     border: none;
-    color: var(--text-primary);
+    color: $illusion;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 6px;
+    padding-top: 7px;
+    padding-right: 7px;
     border-radius: 6px;
-}
+    border-radius: 22px;
+    transition: all 0.2s ease;
 
-.send-button:hover {
-    background-color: var(--button-hover);
-}
+    &:hover {
+        background-color: rgba($illusion, 0.1);
+        transform: scale(1.05);
+    }
 
-.send-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 }
