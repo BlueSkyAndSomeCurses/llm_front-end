@@ -1,12 +1,12 @@
-import {useState, useEffect} from "react";
-import {Send} from "lucide-react";
-import {useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Send } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/chat.scss";
 import "../styles/sidebar.scss";
 import Sidebar from "./sidebar";
 import ModelButton from "./model";
-import {getLLMResponse} from "../utils/llm_rest";
+import { getLLMResponse } from "../utils/llm_rest";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
@@ -56,7 +56,7 @@ function Chat() {
                     }
                 );
 
-                
+
                 setMessages([...messages, initialMessage]);
             }
         } catch (error) {

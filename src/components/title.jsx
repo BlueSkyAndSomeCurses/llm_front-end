@@ -12,23 +12,21 @@ function TitlePage() {
 
     return (
         <div className="title-page">
-            <header className="title-header">
-                <div className="title-content">
-                    <h1 className="title">Welcome to Hello Kitty Chat</h1>
-                    <p className="description">Your personal assistant powered by AI.</p>
-                </div>
-                <div className="header-image">
-                    <img src="/path/to/image.jpg" alt="AI Assistant" />
-                </div>
-            </header>
-            <section className="try-section">
-                <div className="try-content">
-                    <h2 className="try-title">Try it out</h2>
-                    <p className="try-description">Experience the power of our AI assistant.</p>
-                    <button className="try-button" onClick={handleTryNow}>
-                        Try Now <Send size={16} />
+            <header className="header">
+                <div className="header-content">
+                    <span className="logo">FC Slavuta</span>
+                    <button className="login-button" onClick={() => navigate("/login")}>
+                        Login
                     </button>
                 </div>
+            </header>
+            <section className="title-section">
+                <span className="hellokittychat">Hello Kitty Chat</span>
+                <h1 className="title">Ask smarter. Learn faster. Achieve more.</h1>
+                <p className="description">Your personal assistant powered by AI.</p>
+                <button className="try-button" onClick={handleTryNow}>
+                    Try Now <Send size={16} />
+                </button>
             </section>
             <section className="features-section">
                 <div className="features-content">

@@ -1,14 +1,14 @@
-import {useState, useEffect, useRef, useCallback} from "react";
-import {useParams} from "react-router-dom";
-import {Send} from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useParams } from "react-router-dom";
+import { Send } from "lucide-react";
 import axios from "axios";
 import "../styles/activechat.scss";
 import "../styles/sidebar.scss";
 import Sidebar from "./sidebar";
-import {getLLMResponse} from "../utils/llm_rest";
+import { getLLMResponse } from "../utils/llm_rest";
 
 function ActiveChat() {
-    const {chatId} = useParams();
+    const { chatId } = useParams();
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +32,7 @@ function ActiveChat() {
             try {
                 setMessages((prev) => [
                     ...prev,
-                    {text: "Thinking...", sender: "assistant"},
+                    { text: "Thinking...", sender: "assistant" },
                 ]);
 
                 const llmResponse = await getLLMResponse(userMessage);
@@ -137,7 +137,7 @@ function ActiveChat() {
     }, [chatId, handleAssistantResponse]);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({behavior: "smooth"});
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     useEffect(() => {

@@ -1,8 +1,8 @@
-import {Menu, PlusCircle, MessageSquare, LogOut} from "lucide-react";
-import {useNavigate} from "react-router-dom";
+import { Menu, PlusCircle, MessageSquare, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
 import "../styles/sidebar.scss";
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 function Sidebar() {

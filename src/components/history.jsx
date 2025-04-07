@@ -1,5 +1,5 @@
-import {useState, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/chat.scss";
 import "../styles/sidebar.scss";
@@ -20,7 +20,7 @@ const History = () => {
                 }
 
                 const response = await axios.get("/api/chats", {
-                    headers: {Authorization: `Bearer ${token}`},
+                    headers: { Authorization: `Bearer ${token}` },
                 });
                 const chatData = response.data.chats;
                 setChats(chatData);
