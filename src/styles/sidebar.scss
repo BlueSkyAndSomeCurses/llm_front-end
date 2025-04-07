@@ -1,7 +1,7 @@
 @import './colors.scss';
 
 .chat-sidebar {
-    background-color: $bg;
+    background-color: $bg-dark;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     border-right: 1px solid $border-color;
     display: flex;
@@ -23,6 +23,7 @@
 
     &.expanded {
         width: 250px;
+        background-color: $bg;
     }
 }
 
