@@ -1,20 +1,25 @@
-import {useState, useEffect, useRef, useCallback} from "react";
-import {useParams} from "react-router-dom";
-import {Send} from "lucide-react";
+import { useState, useEffect, useRef, useCallback, use } from "react";
+import { useParams } from "react-router-dom";
+import { Send } from "lucide-react";
 import axios from "axios";
 import "../styles/activechat.scss";
 import "../styles/sidebar.scss";
 import Sidebar from "./sidebar";
-import {getLLMResponse} from "../utils/llm_rest";
+import { getLLMResponse } from "../utils/llm_rest";
 
 function ActiveChat() {
-    const {chatId} = useParams();
+    const { chatId } = useParams();
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState(null);
     const hasRespondedRef = useRef(false);
     const messagesEndRef = useRef(null);
+    const messagesRef = useRef(messages);
+
+    useEffect(() => {
+        messagesRef.current = messages;
+    }, [messages]);
 
     useEffect(() => {
         const userData = localStorage.getItem("user");
@@ -25,27 +30,25 @@ function ActiveChat() {
 
     const handleAssistantResponse = useCallback(
         async (userMessage) => {
+
             setIsLoading(true);
             let completeMessage = "";
 
             try {
                 setMessages((prev) => [
                     ...prev,
-                    {text: "", sender: "assistant"},
+                    { content: "", role: "assistant" },
                 ]);
 
                 const token = localStorage.getItem("token");
-                console.log("DEBUG: messages", messages);
-                console.log("DEBUG: last messages", messages.slice(-3));
+                console.log("ne", messagesRef.current);
+
                 const response = await axios.post(
                     "/api/chat",
                     {
                         message: userMessage,
                         model: localStorage.getItem("selectedModel"),
-                        context: messages.slice(-6).map((msg) => ({
-                            role: msg.sender === "user" ? "user" : "assistant",
-                            content: msg.text,
-                        })),
+                        context: messagesRef.current.slice(0, -1),
                     },
                     {
                         headers: {
@@ -61,9 +64,9 @@ function ActiveChat() {
                                     const updatedMessages = [...prev];
                                     const lastMessage =
                                         updatedMessages[
-                                            updatedMessages.length - 1
+                                        updatedMessages.length - 1
                                         ];
-                                    lastMessage.text = newText;
+                                    lastMessage.content = newText;
 
                                     localStorage.setItem(
                                         `chat_${chatId}`,
@@ -113,13 +116,13 @@ function ActiveChat() {
 
                 if (
                     parsedMessages.length === 1 &&
-                    parsedMessages[0].sender === "user" &&
+                    parsedMessages[0].role === "user" &&
                     !hasRespondedRef.current
                 ) {
                     hasRespondedRef.current = true;
 
                     setTimeout(() => {
-                        handleAssistantResponse(parsedMessages[0].text);
+                        handleAssistantResponse(parsedMessages[0].content);
                     }, 500);
                 }
             } else {
@@ -141,8 +144,8 @@ function ActiveChat() {
                         ) {
                             const serverMessages = response.data.messages.map(
                                 (msg) => ({
-                                    text: msg.messageText,
-                                    sender:
+                                    content: msg.messageText,
+                                    role:
                                         msg.messageType === "question"
                                             ? "user"
                                             : "assistant",
@@ -168,7 +171,7 @@ function ActiveChat() {
     }, [chatId, handleAssistantResponse]);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({behavior: "smooth"});
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     useEffect(() => {
@@ -180,8 +183,8 @@ function ActiveChat() {
         if (inputValue.trim() === "") return;
 
         const userMessage = {
-            text: inputValue,
-            sender: "user",
+            content: inputValue,
+            role: "user",
         };
 
         setMessages((prev) => {
@@ -216,8 +219,9 @@ function ActiveChat() {
 
         setInputValue("");
 
+
         await new Promise((resolve) => setTimeout(resolve, 500));
-        await handleAssistantResponse(inputValue);
+        await handleAssistantResponse(inputValue, messages.slice(-6));
     };
 
     return (
@@ -230,11 +234,11 @@ function ActiveChat() {
                             {messages.map((msg, i) => (
                                 <div
                                     key={i}
-                                    className={`active-message ${msg.sender}-message`}>
-                                    {msg.text.split('\n').map((line, index) => (
+                                    className={`active-message ${msg.role}-message`}>
+                                    {msg.content.split('\n').map((line, index) => (
                                         <span key={index}>
                                             {line}
-                                            {index < msg.text.split('\n').length - 1 && <br />}
+                                            {index < msg.content.split('\n').length - 1 && <br />}
                                         </span>
                                     ))}
                                 </div>
