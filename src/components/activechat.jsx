@@ -6,7 +6,7 @@ import rehypeKatex from 'rehype-katex';
 import rehypeHighlight from 'rehype-highlight';
 import 'katex/dist/katex.min.css';
 import 'highlight.js/styles/github-dark.css';
-import { useState, useEffect, useRef, useCallback, use } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { Send } from "lucide-react";
 import axios from "axios";
@@ -240,6 +240,28 @@ function ActiveChat() {
         await handleAssistantResponse(inputValue, messages.slice(-6));
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSubmit(e);
+        }
+    };
+
+    // Auto-resize textarea as content grows
+    const textareaRef = useRef(null);
+
+    const resizeTextarea = () => {
+        const textarea = textareaRef.current;
+        if (textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
+        }
+    };
+
+    useEffect(() => {
+        resizeTextarea();
+    }, [inputValue]);
+
     return (
         <div className="active-chat-container">
             <Sidebar />
@@ -260,30 +282,20 @@ function ActiveChat() {
                                     </ReactMarkdown>
                                 </div>
                             ))}
-                            {/* {messages.map((msg, i) => (
-                                <div
-                                    key={i}
-                                    className={`active-message ${msg.role}-message`}>
-                                    {msg.content.split('\n').map((line, index) => (
-                                        <span key={index}>
-                                            {line}
-                                            {index < msg.content.split('\n').length - 1 && <br />}
-                                        </span>
-                                    ))}
-                                </div>
-                            ))} */}
                             <div ref={messagesEndRef} />
                         </div>
                         <form
                             className="active-chat-input"
                             onSubmit={handleSubmit}>
-                            <input
-                                type="text"
-                                className="active-input-field"
-                                placeholder="Type a message..."
+                            <textarea
+                                ref={textareaRef}
+                                className="active-input-field multiline"
+                                placeholder="Type a message... (Shift+Enter for new line)"
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
+                                onKeyDown={handleKeyDown}
                                 disabled={isLoading}
+                                rows={1}
                             />
                             <div className="active-input-utils">
                                 <button

@@ -1,5 +1,10 @@
-import express, { json } from "express";
-import { mongoose, connect } from "mongoose";
+import express, {
+    json
+} from "express";
+import {
+    mongoose,
+    connect
+} from "mongoose";
 import dotenv from "dotenv";
 import User from "../models/user.js";
 import Message from "../models/message.js";
@@ -46,11 +51,15 @@ const authenticateToken = (req, res, next) => {
     const token = authHeader && authHeader.split(" ")[1];
 
     if (!token)
-        return res.status(401).json({ message: "Authentication token required" });
+        return res.status(401).json({
+            message: "Authentication token required"
+        });
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err)
-            return res.status(403).json({ message: "Invalid or expired token" });
+            return res.status(403).json({
+                message: "Invalid or expired token"
+            });
         req.user = user;
         next();
     });
@@ -67,26 +76,42 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/protected", authenticateToken, (req, res) => {
-    res.json({ message: "This is protected data", user: req.user });
+    res.json({
+        message: "This is protected data",
+        user: req.user
+    });
 });
 
 app.post("/api/login", async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const {
+            email,
+            password
+        } = req.body;
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({
+            email
+        });
 
         if (!user) {
-            return res.status(401).json({ message: "The user does not exist" });
+            return res.status(401).json({
+                message: "The user does not exist"
+            });
         }
         if (user.password !== password) {
-            return res.status(401).json({ message: "Invalid email or password" });
+            return res.status(401).json({
+                message: "Invalid email or password"
+            });
         }
 
-        const token = jwt.sign(
-            { id: user._id, email: user.email, name: user.name },
-            JWT_SECRET,
-            { expiresIn: "24h" }
+        const token = jwt.sign({
+                id: user._id,
+                email: user.email,
+                name: user.name
+            },
+            JWT_SECRET, {
+                expiresIn: "24h"
+            }
         );
 
         const userResponse = {
@@ -102,19 +127,29 @@ app.post("/api/login", async (req, res) => {
         });
     } catch (error) {
         console.error("Login error:", error);
-        res.status(500).json({ message: "Login failed" });
+        res.status(500).json({
+            message: "Login failed"
+        });
     }
 });
 
 app.post("/api/register", async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const {
+            name,
+            email,
+            password
+        } = req.body;
 
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({
+            email
+        });
         if (existingUser) {
             return res
                 .status(400)
-                .json({ message: "User with this email already exists" });
+                .json({
+                    message: "User with this email already exists"
+                });
         }
 
         const newUser = new User({
@@ -125,10 +160,14 @@ app.post("/api/register", async (req, res) => {
 
         await newUser.save();
 
-        const token = jwt.sign(
-            { id: newUser._id, email: newUser.email, name: newUser.name },
-            JWT_SECRET,
-            { expiresIn: "24h" }
+        const token = jwt.sign({
+                id: newUser._id,
+                email: newUser.email,
+                name: newUser.name
+            },
+            JWT_SECRET, {
+                expiresIn: "24h"
+            }
         );
 
         const userResponse = {
@@ -144,13 +183,19 @@ app.post("/api/register", async (req, res) => {
         });
     } catch (error) {
         console.error("Registration error:", error);
-        res.status(500).json({ message: "Registration failed" });
+        res.status(500).json({
+            message: "Registration failed"
+        });
     }
 });
 
 app.post("/api/messages", authenticateToken, async (req, res) => {
     try {
-        const { messageText, chatId, messageType = "question" } = req.body;
+        const {
+            messageText,
+            chatId,
+            messageType = "question"
+        } = req.body;
         const userId = req.user.id;
 
         const newMessage = new Message({
@@ -168,26 +213,34 @@ app.post("/api/messages", authenticateToken, async (req, res) => {
         });
     } catch (error) {
         console.error("Message creation error:", error);
-        res.status(500).json({ message: "Failed to save message" });
+        res.status(500).json({
+            message: "Failed to save message"
+        });
     }
 });
 
 app.get("/api/messages/:chatId", authenticateToken, async (req, res) => {
     try {
-        const { chatId } = req.params;
+        const {
+            chatId
+        } = req.params;
         const userId = req.user.id;
 
         const messages = await Message.find({
             userId,
             chatId,
-        }).sort({ messageNum: 1 });
+        }).sort({
+            messageNum: 1
+        });
 
         res.status(200).json({
             messages,
         });
     } catch (error) {
         console.error("Error fetching messages:", error);
-        res.status(500).json({ message: "Failed to fetch messages" });
+        res.status(500).json({
+            message: "Failed to fetch messages"
+        });
     }
 });
 
@@ -198,46 +251,50 @@ app.get("/api/chats", authenticateToken, async (req, res) => {
         const chats = await Message.find({
             userId,
             messageNum: 0,
-        }).sort({ timestamp: -1 });
+        }).sort({
+            timestamp: -1
+        });
 
         res.status(200).json({
             chats,
         });
     } catch (error) {
         console.error("Error fetching chats:", error);
-        res.status(500).json({ message: "Failed to fetch chats" });
+        res.status(500).json({
+            message: "Failed to fetch chats"
+        });
     }
 });
 
 app.post("/api/chat", authenticateToken, async (req, res) => {
     try {
-        const { message } = req.body;
+        const {
+            message
+        } = req.body;
         let selectedModel = req.body.model;
 
         selectedModel = models[selectedModel];
         console.log(
 
-                    ...req.body.context,
-                    {
-                        role: "user",
-                        content: message,
+            ...req.body.context, {
+                role: "user",
+                content: message,
             },
         )
 
-        const completion = await openai.chat.completions.create(
-            {
-                model: selectedModel,
-                messages: [
-                    ...req.body.context,
-                    {
-                        role: "user",
-                        content: message,
-                    },
-                ],
-                stream: true,
-            },
-            { responseType: "stream" }
-        );
+        const completion = await openai.chat.completions.create({
+            model: selectedModel,
+            messages: [
+                ...req.body.context,
+                {
+                    role: "user",
+                    content: message,
+                },
+            ],
+            stream: true,
+        }, {
+            responseType: "stream"
+        });
 
         res.setHeader("Content-Type", "text/plain");
         res.setHeader("Transfer-Encoding", "chunked");
@@ -253,11 +310,12 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
         res.end();
     } catch (error) {
         console.error("Error getting LLM response:", error);
-        res.status(500).json({ error: "Failed to get response from LLM" });
+        res.status(500).json({
+            error: "Failed to get response from LLM"
+        });
     }
 });
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-        

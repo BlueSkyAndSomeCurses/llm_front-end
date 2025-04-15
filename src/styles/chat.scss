@@ -94,6 +94,15 @@ body {
     border: none;
     outline: none;
     font-size: 16px;
+
+    &.multiline {
+        min-height: 24px;
+        max-height: 150px;
+        resize: none;
+        overflow-y: auto;
+        line-height: 1.4;
+        font-family: inherit;
+    }
 }
 
 .input-utils {

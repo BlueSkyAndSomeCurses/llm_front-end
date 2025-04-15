@@ -5,9 +5,10 @@ export async function getLLMResponse(message) {
         const token = localStorage.getItem("token");
 
         const response = await axios.post(
-            "/api/chat",
-            {message, model: localStorage.getItem("selectedModel")},
-            {
+            "/api/chat", {
+                message,
+                model: localStorage.getItem("selectedModel")
+            }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

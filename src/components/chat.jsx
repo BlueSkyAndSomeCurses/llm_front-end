@@ -1,12 +1,12 @@
-import {useState, useEffect} from "react";
-import {Send} from "lucide-react";
-import {useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Send } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/chat.scss";
 import "../styles/sidebar.scss";
 import Sidebar from "./sidebar";
 import ModelButton from "./model";
-import {getLLMResponse} from "../utils/llm_rest";
+import { getLLMResponse } from "../utils/llm_rest";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
@@ -69,6 +69,13 @@ function Chat() {
         navigate(`/chat/${chatId}`);
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSubmit(e);
+        }
+    };
+
     return (
         <div className={`chatpage-container`}>
             <Sidebar />
@@ -89,12 +96,13 @@ function Chat() {
                             ))}
                         </div>
                         <form className="chat-input" onSubmit={handleSubmit}>
-                            <input
-                                type="text"
-                                className="input-field"
-                                placeholder="Type a message..."
+                            <textarea
+                                className="input-field multiline"
+                                placeholder="Type a message... (Shift+Enter for new line)"
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                rows={1}
                             />
                             <div className="input-utils">
                                 <ModelButton

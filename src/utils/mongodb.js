@@ -1,4 +1,7 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const {
+    MongoClient,
+    ServerApiVersion
+} = require("mongodb");
 const uri = process.env.MONGODB_URI;
 
 const options = {
@@ -25,4 +28,3 @@ if (process.env.NODE_ENV === "development") {
 }
 
 export default clientPromise;
-
