@@ -41,7 +41,6 @@ function ActiveChat() {
                 ]);
 
                 const token = localStorage.getItem("token");
-                console.log("ne", messagesRef.current);
 
                 const response = await axios.post(
                     "/api/chat",

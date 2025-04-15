@@ -30,8 +30,8 @@ function Chat() {
             Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
 
         const initialMessage = {
-            text: inputValue,
-            sender: "user",
+            content: inputValue,
+            role: "user",
         };
 
         localStorage.setItem(
@@ -83,8 +83,8 @@ function Chat() {
                             {messages.map((msg, i) => (
                                 <div
                                     key={i}
-                                    className={`message ${msg.sender}-message`}>
-                                    {msg.text}
+                                    className={`message ${msg.role}-message`}>
+                                    {msg.content}
                                 </div>
                             ))}
                         </div>
