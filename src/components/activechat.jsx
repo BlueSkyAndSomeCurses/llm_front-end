@@ -1,3 +1,11 @@
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import remarkBreaks from 'remark-breaks';
+import rehypeKatex from 'rehype-katex';
+import rehypeHighlight from 'rehype-highlight';
+import 'katex/dist/katex.min.css';
+import 'highlight.js/styles/github-dark.css';
 import { useState, useEffect, useRef, useCallback, use } from "react";
 import { useParams } from "react-router-dom";
 import { Send } from "lucide-react";
@@ -37,7 +45,16 @@ function ActiveChat() {
             try {
                 setMessages((prev) => [
                     ...prev,
-                    { content: "", role: "assistant" },
+                    {
+                        content: `Test Math Rendering:
+                                    $$
+                                    \\frac{d}{dx} x^2 = 2x
+                                    $$
+                                    Inline: $E = mc^2$
+                                    \\(\\frac{1}{2} \\)`
+
+                        , role: "assistant"
+                    },
                 ]);
 
                 const token = localStorage.getItem("token");
@@ -231,6 +248,19 @@ function ActiveChat() {
                     <div className="active-chat-box">
                         <div className="active-messages-area">
                             {messages.map((msg, i) => (
+                                <div key={i} className={`active-message ${msg.role}-message`}>
+                                    <ReactMarkdown
+                                        remarkPlugins={[remarkGfm, [remarkMath, {
+                                            inlineMath: [['\\(', '\\)']],
+                                            displayMath: [['\\[', '\\]']]
+                                        }], remarkBreaks]}
+                                        rehypePlugins={[rehypeKatex, rehypeHighlight]}
+                                    >
+                                        {msg.content.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$').replace(/\\\(/g, '$').replace(/\\\)/g, '$')}
+                                    </ReactMarkdown>
+                                </div>
+                            ))}
+                            {/* {messages.map((msg, i) => (
                                 <div
                                     key={i}
                                     className={`active-message ${msg.role}-message`}>
@@ -241,7 +271,7 @@ function ActiveChat() {
                                         </span>
                                     ))}
                                 </div>
-                            ))}
+                            ))} */}
                             <div ref={messagesEndRef} />
                         </div>
                         <form

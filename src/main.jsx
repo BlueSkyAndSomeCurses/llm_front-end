@@ -1,6 +1,8 @@
-import {StrictMode} from "react";
-import {createRoot} from "react-dom/client";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import 'katex/dist/katex.min.css'; // Ensure this comes first
+import 'highlight.js/styles/github-dark.css';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import Chat from "./components/chat.jsx";
 import ActiveChat from "./components/activechat.jsx";
