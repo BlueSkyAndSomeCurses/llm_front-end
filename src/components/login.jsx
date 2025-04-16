@@ -52,7 +52,6 @@ function Login() {
                     "user",
                     JSON.stringify(response.data.user)
                 );
-                // Redirect to chat page after successful registration
                 navigate("/chat");
             }
         } catch (error) {

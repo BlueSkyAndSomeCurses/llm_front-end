@@ -2,6 +2,7 @@ import { Menu, PlusCircle, MessageSquare, ChevronRight, ChevronLeft } from "luci
 import { useNavigate } from "react-router-dom";
 import UserButton from "./userbutton";
 import "../styles/sidebar.scss";
+import "../styles/popups.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
 

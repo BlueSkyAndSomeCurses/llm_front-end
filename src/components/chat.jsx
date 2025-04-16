@@ -6,6 +6,7 @@ import "../styles/chat.scss";
 import "../styles/sidebar.scss";
 import Sidebar from "./sidebar";
 import ModelButton from "./model";
+import "../styles/popups.scss";
 import { getLLMResponse } from "../utils/llm_rest";
 
 function Chat() {

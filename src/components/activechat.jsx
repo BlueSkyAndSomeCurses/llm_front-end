@@ -6,9 +6,10 @@ import rehypeKatex from 'rehype-katex';
 import rehypeHighlight from 'rehype-highlight';
 import 'katex/dist/katex.min.css';
 import 'highlight.js/styles/github-dark.css';
+import '../styles/markdown.scss';
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useParams } from "react-router-dom";
-import { Send } from "lucide-react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { Send, XCircle } from "lucide-react";
 import axios from "axios";
 import "../styles/activechat.scss";
 import "../styles/sidebar.scss";
@@ -24,20 +25,63 @@ function ActiveChat() {
     const hasRespondedRef = useRef(false);
     const messagesEndRef = useRef(null);
     const messagesRef = useRef(messages);
+    const cancelTokenSourceRef = useRef(null);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const prevLocationRef = useRef(location);
 
     useEffect(() => {
         messagesRef.current = messages;
     }, [messages]);
 
     useEffect(() => {
+        if (prevLocationRef.current.pathname !== location.pathname) {
+            cancelOngoingRequest("Request cancelled: You navigated away from the page.");
+        }
+        prevLocationRef.current = location;
+    }, [location]);
+
+    useEffect(() => {
         const userData = localStorage.getItem("user");
         if (userData) {
             setUser(JSON.parse(userData));
         }
+
+        return () => {
+            cancelOngoingRequest("Request cancelled: Component unmounted.");
+        };
     }, []);
+
+    const cancelOngoingRequest = (reason) => {
+        if (cancelTokenSourceRef.current) {
+            cancelTokenSourceRef.current.cancel(reason || "Request manually cancelled.");
+            cancelTokenSourceRef.current = null;
+        }
+    };
+
+    const handleCancel = () => {
+        cancelOngoingRequest();
+        
+        setMessages((prev) => {
+            const updatedMessages = [...prev];
+            const lastMessage = updatedMessages[updatedMessages.length - 1];
+            if (lastMessage && lastMessage.role === "assistant") {
+                lastMessage.content = "There was an error when generating response: Request was cancelled.";
+                
+                localStorage.setItem(
+                    `chat_${chatId}`,
+                    JSON.stringify(updatedMessages)
+                );
+            }
+            return updatedMessages;
+        });
+        
+        setIsLoading(false);
+    };
 
     const handleAssistantResponse = useCallback(
         async (userMessage) => {
+            cancelOngoingRequest();
 
             setIsLoading(true);
             let completeMessage = "";
@@ -46,18 +90,12 @@ function ActiveChat() {
                 setMessages((prev) => [
                     ...prev,
                     {
-                        content: `Test Math Rendering:
-                                    $$
-                                    \\frac{d}{dx} x^2 = 2x
-                                    $$
-                                    Inline: $E = mc^2$
-                                    \\(\\frac{1}{2} \\)`
-
-                        , role: "assistant"
+                        content: `Thinking...`, role: "assistant"
                     },
                 ]);
 
                 const token = localStorage.getItem("token");
+                cancelTokenSourceRef.current = axios.CancelToken.source();
 
                 const response = await axios.post(
                     "/api/chat",
@@ -70,6 +108,7 @@ function ActiveChat() {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
+                        cancelToken: cancelTokenSourceRef.current.token,
                         responseType: "text",
                         onDownloadProgress: (progressEvent) => {
                             const newText =
@@ -116,8 +155,39 @@ function ActiveChat() {
                 }
             } catch (error) {
                 console.error("Error generating response:", error);
+                if (axios.isCancel(error)) {
+                    console.log('Request canceled:', error.message);
+                    setMessages((prev) => {
+                        const updatedMessages = [...prev];
+                        const lastMessage = updatedMessages[updatedMessages.length - 1];
+                        if (lastMessage && lastMessage.role === "assistant") {
+                            lastMessage.content = `There was an error when generating response: ${error.message}`;
+                            
+                            localStorage.setItem(
+                                `chat_${chatId}`,
+                                JSON.stringify(updatedMessages)
+                            );
+                        }
+                        return updatedMessages;
+                    });
+                } else {
+                    setMessages((prev) => {
+                        const updatedMessages = [...prev];
+                        const lastMessage = updatedMessages[updatedMessages.length - 1];
+                        if (lastMessage && lastMessage.role === "assistant") {
+                            lastMessage.content = "There was an error when generating response.";
+                            
+                            localStorage.setItem(
+                                `chat_${chatId}`,
+                                JSON.stringify(updatedMessages)
+                            );
+                        }
+                        return updatedMessages;
+                    });
+                }
             } finally {
                 setIsLoading(false);
+                cancelTokenSourceRef.current = null;
             }
         },
         [chatId]
@@ -187,7 +257,12 @@ function ActiveChat() {
     }, [chatId, handleAssistantResponse]);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        if (messagesEndRef.current) {
+            window.scrollTo({
+                top: document.documentElement.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
     };
 
     useEffect(() => {
@@ -247,7 +322,6 @@ function ActiveChat() {
         }
     };
 
-    // Auto-resize textarea as content grows
     const textareaRef = useRef(null);
 
     const resizeTextarea = () => {
@@ -271,15 +345,21 @@ function ActiveChat() {
                         <div className="active-messages-area">
                             {messages.map((msg, i) => (
                                 <div key={i} className={`active-message ${msg.role}-message`}>
-                                    <ReactMarkdown
-                                        remarkPlugins={[remarkGfm, [remarkMath, {
-                                            inlineMath: [['\\(', '\\)']],
-                                            displayMath: [['\\[', '\\]']]
-                                        }], remarkBreaks]}
-                                        rehypePlugins={[rehypeKatex, rehypeHighlight]}
-                                    >
-                                        {msg.content.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$').replace(/\\\(/g, '$').replace(/\\\)/g, '$')}
-                                    </ReactMarkdown>
+                                    {msg.role === "assistant" ? (
+                                        <div className="markdown-content">
+                                            <ReactMarkdown
+                                                remarkPlugins={[remarkGfm, [remarkMath, {
+                                                    inlineMath: [['\\(', '\\)']],
+                                                    displayMath: [['\\[', '\\]']]
+                                                }], remarkBreaks]}
+                                                rehypePlugins={[rehypeKatex, rehypeHighlight]}
+                                            >
+                                                {msg.content.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$').replace(/\\\(/g, '$').replace(/\\\)/g, '$')}
+                                            </ReactMarkdown>
+                                        </div>
+                                    ) : (
+                                        <div>{msg.content}</div>
+                                    )}
                                 </div>
                             ))}
                             <div ref={messagesEndRef} />
@@ -294,15 +374,14 @@ function ActiveChat() {
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                disabled={isLoading}
                                 rows={1}
                             />
                             <div className="active-input-utils">
                                 <button
-                                    type="submit"
-                                    className="active-send-button"
-                                    disabled={isLoading}>
-                                    <Send size={20} />
+                                    type={isLoading ? "button" : "submit"}
+                                    onClick={isLoading ? handleCancel : undefined}
+                                    className={`active-send-button ${isLoading ? "cancel-button" : ""}`}>
+                                    {isLoading ? <XCircle size={20} /> : <Send size={20} />}
                                 </button>
                             </div>
                         </form>

@@ -1,0 +1,181 @@
+@import './colors.scss';
+
+.popup-base {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid $border-color;
+  overflow: hidden;
+  z-index: 1000;
+  animation: popup-fade 0.2s ease-out;
+}
+
+@keyframes popup-fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.user-popup {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 180px;
+  margin-bottom: 10px;
+  @extend .popup-base;
+  
+  &.popup-absolute {
+    position: fixed;
+    left: 70px;
+    bottom: 10px;
+  }
+}
+
+.popup-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: $text-dark;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  
+  &:hover {
+    background-color: $bg-light;
+    color: $illusion;
+  }
+  
+  &:active {
+    background-color: darken($bg-light, 3%);
+  }
+  
+  svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+  
+  span {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 16px;
+    right: 16px;
+    height: 1px;
+    background-color: $border-color;
+    opacity: 0.5;
+  }
+}
+
+.dropdown-popup {
+  @extend .popup-base;
+  width: 220px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.context-menu {
+  @extend .popup-base;
+  position: fixed;
+  min-width: 180px;
+}
+
+.tooltip {
+  @extend .popup-base;
+  position: absolute;
+  padding: 8px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+  background-color: $bg-dark;
+  color: white;
+  border: none;
+  pointer-events: none;
+  z-index: 1001;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: overlay-fade 0.2s ease-out;
+}
+
+@keyframes overlay-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-container {
+  @extend .popup-base;
+  min-width: 300px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid $border-color;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    color: $text-dark;
+  }
+  
+  .close-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    
+    &:hover {
+      background-color: $bg-light;
+    }
+  }
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: 16px 20px;
+  border-top: 1px solid $border-color;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

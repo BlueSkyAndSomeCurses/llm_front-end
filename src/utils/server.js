@@ -65,7 +65,6 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// Initialize OpenAI
 const openai = new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
     apiKey: process.env.OPENROUTER_API_KEY,
@@ -302,7 +301,7 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
         for await (const chunk of completion) {
             if (chunk.choices[0]?.delta?.content) {
                 const retrievedContent = chunk.choices[0].delta.content;
-                // console.log("DEBUG: retrievedContent", retrievedContent);
+                console.log("DEBUG: retrievedContent", retrievedContent);
                 res.write(retrievedContent);
             }
         }
