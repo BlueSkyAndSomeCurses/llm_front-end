@@ -5,7 +5,12 @@
   color: $text-dark;
   overflow-wrap: break-word;
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     margin-top: 0.2em;
     margin-bottom: 0.1em;
     color: darken($text-dark, 10%);
@@ -13,19 +18,37 @@
     line-height: 1.1;
   }
 
-  h1 { font-size: 1.5em; }
-  h2 { font-size: 1.3em; }
-  h3 { font-size: 1.1em; }
-  h4 { font-size: 1em; }
-  h5 { font-size: 0.9em; }
-  h6 { font-size: 0.8em; }
+  h1 {
+    font-size: 1.5em;
+  }
+
+  h2 {
+    font-size: 1.3em;
+  }
+
+  h3 {
+    font-size: 1.1em;
+  }
+
+  h4 {
+    font-size: 1em;
+  }
+
+  h5 {
+    font-size: 0.9em;
+  }
+
+  h6 {
+    font-size: 0.8em;
+  }
 
   p {
     margin-top: 0;
     margin-bottom: 0.1em;
   }
 
-  ul, ol {
+  ul,
+  ol {
     padding-left: 0.5em;
     margin-top: 0;
     margin-bottom: 0.1em;
@@ -33,7 +56,7 @@
 
   li {
     margin-bottom: 0;
-    
+
     p {
       margin-bottom: 0;
     }
@@ -84,7 +107,8 @@
     margin: 0.1em 0;
   }
 
-  th, td {
+  th,
+  td {
     padding: 0.1em 0.2em;
     border: 1px solid $border-color;
   }
@@ -113,7 +137,7 @@
   overflow-y: hidden;
   padding: 0.1em 0;
   margin: 0.1em 0;
-  
+
   &::-webkit-scrollbar {
     height: 3px;
   }
@@ -126,8 +150,8 @@
     background-color: rgba($illusion, 0.3);
     border-radius: 10px;
   }
-  
-  > .katex {
+
+  >.katex {
     display: table;
     margin: 0 auto;
   }

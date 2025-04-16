@@ -299,7 +299,7 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
         res.setHeader("Transfer-Encoding", "chunked");
 
         for await (const chunk of completion) {
-            if (chunk.choices[0]?.delta?.content) {
+            if (chunk.choices[0] ? .delta ? .content) {
                 const retrievedContent = chunk.choices[0].delta.content;
                 console.log("DEBUG: retrievedContent", retrievedContent);
                 res.write(retrievedContent);

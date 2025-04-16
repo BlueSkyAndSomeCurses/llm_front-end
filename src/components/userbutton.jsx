@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Settings, LogOut, User, LogIn } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "../styles/sidebar.scss";
+import "../styles/popups.scss";
 
 function UserButton({ size, expanded }) {
     const [user, setUser] = useState(null);
@@ -61,7 +62,7 @@ function UserButton({ size, expanded }) {
 
     return (
         <div className="user-button-container">
-            <button className="user-button" onClick={togglePopup}>
+            <button className="user-button" onClick={togglePopup} title={user ? user.name : "Login"}>
                 {user ? (
                     <>
                         <div className="user-avatar">

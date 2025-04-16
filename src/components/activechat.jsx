@@ -61,13 +61,13 @@ function ActiveChat() {
 
     const handleCancel = () => {
         cancelOngoingRequest();
-        
+
         setMessages((prev) => {
             const updatedMessages = [...prev];
             const lastMessage = updatedMessages[updatedMessages.length - 1];
             if (lastMessage && lastMessage.role === "assistant") {
                 lastMessage.content = "There was an error when generating response: Request was cancelled.";
-                
+
                 localStorage.setItem(
                     `chat_${chatId}`,
                     JSON.stringify(updatedMessages)
@@ -75,7 +75,7 @@ function ActiveChat() {
             }
             return updatedMessages;
         });
-        
+
         setIsLoading(false);
     };
 
@@ -162,7 +162,7 @@ function ActiveChat() {
                         const lastMessage = updatedMessages[updatedMessages.length - 1];
                         if (lastMessage && lastMessage.role === "assistant") {
                             lastMessage.content = `There was an error when generating response: ${error.message}`;
-                            
+
                             localStorage.setItem(
                                 `chat_${chatId}`,
                                 JSON.stringify(updatedMessages)
@@ -176,7 +176,7 @@ function ActiveChat() {
                         const lastMessage = updatedMessages[updatedMessages.length - 1];
                         if (lastMessage && lastMessage.role === "assistant") {
                             lastMessage.content = "There was an error when generating response.";
-                            
+
                             localStorage.setItem(
                                 `chat_${chatId}`,
                                 JSON.stringify(updatedMessages)
