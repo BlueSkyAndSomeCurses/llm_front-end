@@ -19,6 +19,10 @@ const app = express();
 const PORT = 3001;
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
+const strongPasswordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+={}[\]|\\:;"'<>,.?/~`]).{8,}$/;
+
+
 const models = {
     "DeepSeek R1": "deepseek/deepseek-r1-distill-qwen-14b:free",
     QWEN: "qwen/qwen2.5-vl-3b-instruct:free",
@@ -104,13 +108,13 @@ app.post("/api/login", async (req, res) => {
         }
 
         const token = jwt.sign({
-                id: user._id,
-                email: user.email,
-                name: user.name
-            },
+            id: user._id,
+            email: user.email,
+            name: user.name
+        },
             JWT_SECRET, {
-                expiresIn: "24h"
-            }
+            expiresIn: "24h"
+        }
         );
 
         const userResponse = {
@@ -151,6 +155,40 @@ app.post("/api/register", async (req, res) => {
                 });
         }
 
+        if (!strongPasswordRegex.test(password)) {
+            return res.status(400).json({
+                message: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+            });
+        }
+
+
+        try {
+            const response = await fetch(process.env.EMAIL_API_ENDPOINT + email, {
+                method: "GET"
+            });
+
+            if (response.status !== 200) {
+                console.error("Email check failed:", response.status);
+                return res.status(500).json({
+                    message: "Email check failed"
+                });
+            }
+
+            const data = await response.json();
+            if (data.result.score < 90) {
+                console.error("Email check failed:", data);
+                return res.status(400).json({
+                    message: "Email is not valid"
+                });
+            }
+
+        } catch (error) {
+            console.error("Error during email check:", error);
+            return res.status(500).json({
+                message: "Email check failed"
+            });
+        }
+
         const newUser = new User({
             name,
             email,
@@ -160,13 +198,13 @@ app.post("/api/register", async (req, res) => {
         await newUser.save();
 
         const token = jwt.sign({
-                id: newUser._id,
-                email: newUser.email,
-                name: newUser.name
-            },
+            id: newUser._id,
+            email: newUser.email,
+            name: newUser.name
+        },
             JWT_SECRET, {
-                expiresIn: "24h"
-            }
+            expiresIn: "24h"
+        }
         );
 
         const userResponse = {
@@ -276,9 +314,9 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
         console.log(
 
             ...req.body.context, {
-                role: "user",
-                content: message,
-            },
+            role: "user",
+            content: message,
+        },
         )
 
         const completion = await openai.chat.completions.create({
@@ -299,7 +337,7 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
         res.setHeader("Transfer-Encoding", "chunked");
 
         for await (const chunk of completion) {
-            if (chunk.choices[0] ? .delta ? .content) {
+            if (chunk.choices[0]?.delta?.content) {
                 const retrievedContent = chunk.choices[0].delta.content;
                 console.log("DEBUG: retrievedContent", retrievedContent);
                 res.write(retrievedContent);

@@ -9,7 +9,7 @@ import 'highlight.js/styles/github-dark.css';
 import '../styles/markdown.scss';
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { Send, XCircle } from "lucide-react";
+import { DiscAlbum, Send, XCircle } from "lucide-react";
 import axios from "axios";
 import "../styles/activechat.scss";
 import "../styles/sidebar.scss";
@@ -364,27 +364,29 @@ function ActiveChat() {
                             ))}
                             <div ref={messagesEndRef} />
                         </div>
-                        <form
-                            className="active-chat-input"
-                            onSubmit={handleSubmit}>
-                            <textarea
-                                ref={textareaRef}
-                                className="active-input-field multiline"
-                                placeholder="Type a message... (Shift+Enter for new line)"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                                onKeyDown={handleKeyDown}
-                                rows={1}
-                            />
-                            <div className="active-input-utils">
-                                <button
-                                    type={isLoading ? "button" : "submit"}
-                                    onClick={isLoading ? handleCancel : undefined}
-                                    className={`active-send-button ${isLoading ? "cancel-button" : ""}`}>
-                                    {isLoading ? <XCircle size={20} /> : <Send size={20} />}
-                                </button>
-                            </div>
-                        </form>
+                        <div className="form-wrapper">
+                            <form
+                                className="active-chat-input"
+                                onSubmit={handleSubmit}>
+                                <textarea
+                                    ref={textareaRef}
+                                    className="active-input-field multiline"
+                                    placeholder="Type a message... (Shift+Enter for new line)"
+                                    value={inputValue}
+                                    onChange={(e) => setInputValue(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                    rows={1}
+                                />
+                                <div className="active-input-utils">
+                                    <button
+                                        type={isLoading ? "button" : "submit"}
+                                        onClick={isLoading ? handleCancel : undefined}
+                                        className={`active-send-button ${isLoading ? "cancel-button" : ""}`}>
+                                        {isLoading ? <XCircle size={20} /> : <Send size={20} />}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
