@@ -8,11 +8,20 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true,
     },
     password: {
         type: String,
         required: true,
     },
+    avatar: {
+        type: String, // This will store the base64 encoded image
+        default: null
+    }
+}, {
+    timestamps: true
 });
 
-export default mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+export default User;

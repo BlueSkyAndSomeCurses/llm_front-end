@@ -310,6 +310,12 @@
     border-radius: 50%;
     font-weight: 600;
     font-size: 14px;
+
+.avatar-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 }
 
 .login-avatar {

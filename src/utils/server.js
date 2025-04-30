@@ -36,6 +36,10 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
 app.use(express.json());
 
 connect(process.env.MONGODB_URI, {
@@ -110,7 +114,7 @@ app.post("/api/login", async (req, res) => {
         const token = jwt.sign({
             id: user._id,
             email: user.email,
-            name: user.name
+            name: user.name,
         },
             JWT_SECRET, {
             expiresIn: "24h"
@@ -121,6 +125,8 @@ app.post("/api/login", async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
+
+            avatar: user.avatar
         };
 
         res.status(200).json({
@@ -352,6 +358,85 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
         });
     }
 });
+
+
+app.put("/api/user/profile", authenticateToken, async (req, res) => {
+    try {
+        const { name, avatar } = req.body;
+        const userId = req.user.id;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {
+                ...(name && { name }),
+                ...(avatar !== undefined && { avatar })
+            },
+            { new: true, select: '-password' }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const userResponse = {
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            avatar: updatedUser.avatar,
+        };
+
+        let token = req.headers.authorization.split(" ")[1];
+        if (name) {
+            token = jwt.sign(
+                { id: updatedUser._id, email: updatedUser.email, name: updatedUser.name },
+                JWT_SECRET,
+                { expiresIn: "24h" }
+            );
+        }
+
+        res.status(200).json({
+            message: "Profile updated successfully",
+            user: userResponse,
+            token: name ? token : undefined
+        });
+    } catch (error) {
+        console.error("Profile update error:", error);
+        res.status(500).json({ message: "Failed to update profile" });
+    }
+});
+
+app.put("/api/user/password", authenticateToken, async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const userId = req.user.id;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (user.password !== currentPassword) {
+            return res.status(401).json({ message: "Current password is incorrect" });
+        }
+
+        if (!strongPasswordRegex.test(newPassword)) {
+            return res.status(400).json({
+                message: "New password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+            });
+        }
+
+        user.password = newPassword;
+        await user.save();
+
+        res.status(200).json({
+            message: "Password updated successfully"
+        });
+    } catch (error) {
+        console.error("Password update error:", error);
+        res.status(500).json({ message: "Failed to update password" });
+    }
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
