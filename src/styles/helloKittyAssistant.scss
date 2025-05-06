@@ -1,0 +1,82 @@
+@import './colors.scss';
+
+.hello-kitty-assistant {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  
+  &.thinking {
+    animation: gentle-bounce 2s infinite ease-in-out;
+  }
+  
+  &.idle {
+    animation: gentle-sway 4s infinite ease-in-out;
+  }
+}
+
+.hello-kitty-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid $illusion;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba($illusion, 0.3);
+}
+
+.thinking-indicator {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+    background-color: $illusion;
+    border-radius: 50%;
+    opacity: 0.7;
+    
+    &:nth-child(1) {
+      animation: pulse 1s infinite ease-in-out;
+    }
+    
+    &:nth-child(2) {
+      animation: pulse 1s infinite ease-in-out 0.33s;
+    }
+    
+    &:nth-child(3) {
+      animation: pulse 1s infinite ease-in-out 0.66s;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes gentle-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes gentle-sway {
+  0%, 100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
