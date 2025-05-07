@@ -111,6 +111,7 @@ function ActiveChat() {
                         cancelToken: cancelTokenSourceRef.current.token,
                         responseType: "text",
                         onDownloadProgress: (progressEvent) => {
+                            console.log("Progress event:", progressEvent);
                             const newText =
                                 progressEvent.event?.target?.response;
                             if (newText) {
