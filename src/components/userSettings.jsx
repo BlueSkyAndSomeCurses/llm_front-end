@@ -9,7 +9,6 @@ function UserSettings({ onClose, user }) {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [avatar, setAvatar] = useState(null);
-    // Use the user's existing avatar if available
     const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);

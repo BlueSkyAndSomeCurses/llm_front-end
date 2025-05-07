@@ -14,6 +14,7 @@ import axios from "axios";
 import "../styles/activechat.scss";
 import "../styles/sidebar.scss";
 import Sidebar from "./sidebar";
+import HelloKittyAssistant from "./HelloKittyAssistant";
 import { getLLMResponse } from "../utils/llm_rest";
 
 function ActiveChat() {
@@ -337,6 +338,9 @@ function ActiveChat() {
         resizeTextarea();
     }, [inputValue]);
 
+    // Determine if there's at least one assistant message in the conversation
+    const hasAssistantMessage = messages.some(msg => msg.role === 'assistant');
+
     return (
         <div className="active-chat-container">
             <Sidebar />
@@ -363,6 +367,12 @@ function ActiveChat() {
                                     )}
                                 </div>
                             ))}
+                            
+                            {/* Hello Kitty Assistant character */}
+                            {(hasAssistantMessage || isLoading) && (
+                                <HelloKittyAssistant isThinking={isLoading} />
+                            )}
+                            
                             <div ref={messagesEndRef} />
                         </div>
                         <div className="form-wrapper">

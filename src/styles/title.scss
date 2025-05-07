@@ -59,10 +59,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
     margin: 30px;
-
 }
-
-//
 
 .title-page {
     display: flex;
@@ -80,7 +77,6 @@
     padding: 60px 20px;
     text-align: center;
 }
-
 
 .title {
     color: $illusion;
@@ -120,7 +116,6 @@
     width: 50%;
 }
 
-
 .header-image {
     max-width: 400px;
     margin-bottom: 30px;
@@ -150,16 +145,10 @@
     margin-top: 140px;
     margin-bottom: 20px;
 
-    // margin-bottom: 70px;
     &:hover {
         background-color: darken($illusion, 5%);
     }
-
 }
-
-/// 
-/// FEATURES SECTION
-/// 
 
 .features-section {
     display: flex;
@@ -193,7 +182,6 @@
 .features-content .description {
     margin-bottom: 90px;
 }
-
 
 .feature-item {
     background-color: white;
@@ -395,7 +383,6 @@
     margin-top: 30px;
     gap: 20px;
     width: 100%;
-
 }
 
 .value-item {

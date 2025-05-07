@@ -24,7 +24,7 @@
 }
 
 .settings-modal {
-  background-color: #FFF5F7; // Lighter pink background to match the screenshot
+  background-color: #FFF5F7;
   border-radius: 10px;
   width: 90%;
   max-width: 500px;
@@ -38,7 +38,6 @@
     background-color: $bg-dark;
     color: $text-light;
   }
-
 }
 
 @keyframes slideIn {
@@ -51,8 +50,6 @@
     transform: translateY(0);
   }
 }
-
-
 
 .settings-header {
   display: flex;
@@ -86,7 +83,6 @@
   }
 }
 
-// Consolidated avatar-section styles
 .avatar-section {
   display: flex;
   flex-direction: column;
@@ -94,7 +90,7 @@
   margin-bottom: 35px;
   
   .avatar-preview {
-    width: 120px; // Larger avatar as shown in screenshot
+    width: 120px;
     height: 120px;
     border-radius: 50%;
     overflow: hidden;
@@ -114,7 +110,7 @@
     }
     
     .avatar-placeholder {
-      font-size: 3.5rem; // Larger font for the initial
+      font-size: 3.5rem;
       font-weight: 600;
     }
   }
