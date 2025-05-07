@@ -316,4 +316,33 @@
   border-radius: 6px;
   margin: 15px 0;
   font-size: 0.9rem;
+
+}
+// ...existing code...
+
+.save-avatar-button {
+  background-color: #dd90b3;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: #c87a9d;
+  }
+  
+  &:disabled {
+    background-color: #e6b7cd;
+    cursor: not-allowed;
+  }
+}
+
+.success-message {
+  color: green;
 }

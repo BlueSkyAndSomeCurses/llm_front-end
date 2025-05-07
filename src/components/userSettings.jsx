@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { X, Upload, Save, Trash2 } from "lucide-react";
+import { X, Upload, Save, Trash2, CheckCircle } from "lucide-react";
 import "../styles/usersettings.scss";
 import axios from "axios";
 
@@ -10,9 +10,12 @@ function UserSettings({ onClose, user }) {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [avatar, setAvatar] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null);
+    const [avatarLoading, setAvatarLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const fileInputRef = useRef(null);
+    const successTimerRef = useRef(null);
 
     useEffect(() => {
         const handleEscKey = (event) => {
@@ -26,6 +29,14 @@ function UserSettings({ onClose, user }) {
             document.removeEventListener("keydown", handleEscKey);
         };
     }, [onClose]);
+
+    useEffect(() => {
+        return () => {
+            if (successTimerRef.current) {
+                clearTimeout(successTimerRef.current);
+            }
+        };
+    }, []);
 
     const handleAvatarChange = (e) => {
         if (e.target.files && e.target.files[0]) {
@@ -53,6 +64,47 @@ function UserSettings({ onClose, user }) {
         delete newErrors.avatar;
         setErrors(newErrors);
     };
+
+    const handleAvatarUpload = async () => {
+        if (!avatar && !avatarPreview) {
+            setErrors({ ...errors, avatar: "No avatar to upload" });
+            return;
+        }
+
+        setAvatarLoading(true);
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.put("/api/user/profile",
+                { avatar: avatarPreview },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            const currentUser = JSON.parse(localStorage.getItem("user"));
+            currentUser.avatar = response.data.avatar || avatarPreview;
+            localStorage.setItem("user", JSON.stringify(currentUser));
+
+            setSuccessMessage("Avatar updated successfully!");
+            if (successTimerRef.current) {
+                clearTimeout(successTimerRef.current);
+            }
+            successTimerRef.current = setTimeout(() => {
+                setSuccessMessage("");
+                window.location.reload()
+            }, 1500);
+
+
+            setAvatar(null);
+            const newErrors = { ...errors };
+            delete newErrors.avatar;
+            setErrors(newErrors);
+        } catch (error) {
+            console.error("Error uploading avatar:", error);
+            setErrors({ ...errors, avatar: "Failed to upload avatar. Please try again." });
+        } finally {
+            setAvatarLoading(false);
+        }
+    };
+
     const triggerFileInput = () => {
         fileInputRef.current.click();
     };
@@ -86,7 +138,7 @@ function UserSettings({ onClose, user }) {
         try {
             const token = localStorage.getItem("token");
             const response = await axios.put("/api/user/profile",
-                { name, avatar: avatarPreview },
+                { name },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
@@ -137,8 +189,11 @@ function UserSettings({ onClose, user }) {
                 }
 
                 if (profileUpdated && passwordUpdated) {
-                    alert("Settings updated successfully!");
-                    onClose();
+                    setSuccessMessage("Settings updated successfully!");
+
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
                 }
             } catch (error) {
                 console.error("Error updating user:", error);
@@ -173,18 +228,30 @@ function UserSettings({ onClose, user }) {
                         <div className="avatar-buttons">
                             <button type="button" className="upload-button" onClick={triggerFileInput}>
                                 <Upload size={16} />
-                                Upload Avatar
+                                Select Avatar
                             </button>
                             {avatarPreview && (
-                                <button
-                                    type="button"
-                                    className="reset-button"
-                                    onClick={handleResetAvatar}
-                                    title="Remove avatar"
-                                >
-                                    <Trash2 size={16} />
-                                    Reset
-                                </button>
+                                <>
+                                    <button
+                                        type="button"
+                                        className="save-avatar-button"
+                                        onClick={handleAvatarUpload}
+                                        disabled={avatarLoading}
+                                    >
+                                        <Save size={16} />
+                                        {avatarLoading ? "Uploading..." : "Upload Avatar"}
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        className="reset-button"
+                                        onClick={handleResetAvatar}
+                                        title="Remove avatar"
+                                    >
+                                        <Trash2 size={16} />
+                                        Reset
+                                    </button>
+                                </>
                             )}
                         </div>
                         <input
@@ -195,6 +262,13 @@ function UserSettings({ onClose, user }) {
                             style={{ display: 'none' }}
                         />
                         {errors.avatar && <span className="error">{errors.avatar}</span>}
+                        {successMessage && (
+                            <span className="success-message">
+                                <CheckCircle size={16} />
+                                {successMessage}
+                            </span>
+                        )}
+
                     </div>
 
                     <div className="form-group">

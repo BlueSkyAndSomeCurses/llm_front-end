@@ -71,6 +71,7 @@
     width: 100%;
     overflow: hidden;
     flex: 1;
+    height: calc(100% - 60px); 
 }
 
 .sidebar-bottom {
@@ -227,6 +228,23 @@
     flex-direction: column;
     gap: 8px;
     width: 100%;
+    max-height: calc(100vh - 200px);
+    scrollbar-width: thin; 
+    flex-shrink: 0; 
+
+    /* Customize scrollbar for webkit browsers */
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(128, 128, 128, 0.5);
+        border-radius: 10px;
+    }
     box-sizing: border-box;
 }
 
@@ -250,6 +268,10 @@
     text-overflow: ellipsis;
     width: 100%;
     box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    min-height: 40px; 
 
     &:hover {
         background-color: darken($bg-light, 5%);

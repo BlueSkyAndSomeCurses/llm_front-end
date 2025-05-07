@@ -5,11 +5,13 @@ import "../styles/popups.scss";
 import { useNavigate } from "react-router-dom";
 import helloKittyLogo from "../assets/hello-kitty.png";
 import UserButton from "./userbutton";
+import UserSettings from "./userSettings";
 
 function TitlePage() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [showUserMenu, setShowUserMenu] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
     const menuRef = useRef(null);
 
     useEffect(() => {
@@ -18,6 +20,8 @@ function TitlePage() {
             setUser(JSON.parse(userData));
         }
     }, []);
+
+
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -48,8 +52,17 @@ function TitlePage() {
     };
 
     const handleSettings = () => {
-        console.log("Settings clicked");
-        setShowUserMenu(false);
+        setShowSettings(true); // Show settings modal
+        setShowUserMenu(false); // Close dropdown menu
+    };
+
+    const handleCloseSettings = () => {
+        setShowSettings(false);
+        // Update user data from localStorage after settings change
+        const userData = localStorage.getItem("user");
+        if (userData) {
+            setUser(JSON.parse(userData));
+        }
     };
 
     const getInitial = () => {
@@ -61,6 +74,10 @@ function TitlePage() {
 
     return (
         <div className="title-page">
+            {showSettings && user && (
+                <UserSettings onClose={handleCloseSettings} user={user} />
+            )}
+
             <header className="header">
                 <div className="header-content">
                     <span className="logo">FC Slavuta</span>
@@ -69,7 +86,12 @@ function TitlePage() {
                             <div className="user-header-container" ref={menuRef}>
                                 <button className="user-button" onClick={toggleUserMenu} title={user.name}>
                                     <div className="user-avatar">
-                                        {getInitial()}
+                                        {user.avatar ? (
+                                            <img src={user.avatar} alt={user.name} className="avatar-image" />
+                                        ) : (
+                                            getInitial()
+                                        )}
+
                                     </div>
                                     <span className="user-name">
                                         {user.name}
