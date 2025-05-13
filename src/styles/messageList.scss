@@ -1,0 +1,9 @@
+@import './colors.scss';
+
+.active-messages-area {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0;
+  width: 100%;
+}

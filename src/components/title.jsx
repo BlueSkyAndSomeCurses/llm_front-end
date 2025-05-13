@@ -52,13 +52,12 @@ function TitlePage() {
     };
 
     const handleSettings = () => {
-        setShowSettings(true); // Show settings modal
-        setShowUserMenu(false); // Close dropdown menu
+        setShowSettings(true);
+        setShowUserMenu(false); 
     };
 
     const handleCloseSettings = () => {
         setShowSettings(false);
-        // Update user data from localStorage after settings change
         const userData = localStorage.getItem("user");
         if (userData) {
             setUser(JSON.parse(userData));
@@ -193,7 +192,7 @@ function TitlePage() {
                 </div>
             </section>
             <footer className="title-footer">
-                <p>© 2024 Hello Kitty Chat. All rights reserved.</p>
+                <p>© 2025 Hello Kitty Chat. All rights reserved.</p>
             </footer>
         </div>
     );
