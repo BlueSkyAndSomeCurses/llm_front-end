@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../styles/activechat.scss";
 import "../styles/sidebar.scss";
-import Sidebar from "./sidebar";
+import Sidebar from "./Sidebar";
 import MessageList from "./MessageList";
 import MessageInput from "./MessageInput";
 import { fetchMessages, saveMessage, getAssistantResponse, cancelRequest } from "./ChatAPI";

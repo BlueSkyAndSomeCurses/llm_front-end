@@ -31,6 +31,19 @@ function UserSettings({ onClose, user }) {
     }, [onClose]);
 
     useEffect(() => {
+        const scrollY = window.scrollY;
+        
+        document.body.style.setProperty('--scroll-position', `-${scrollY}px`);
+        
+        document.body.classList.add('no-scroll');
+        
+        return () => {
+            document.body.classList.remove('no-scroll');
+            window.scrollTo(0, scrollY);
+        };
+    }, []);
+
+    useEffect(() => {
         return () => {
             if (successTimerRef.current) {
                 clearTimeout(successTimerRef.current);

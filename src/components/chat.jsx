@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/chat.scss";
 import "../styles/sidebar.scss";
-import Sidebar from "./sidebar";
-import ModelButton from "./model";
+import Sidebar from "./Sidebar";
+import ModelButton from "./Model";
 import "../styles/popups.scss";
 import { getLLMResponse } from "../utils/llm_rest";
 

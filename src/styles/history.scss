@@ -1,12 +1,12 @@
 @import './colors.scss';
 
-.history-page {
+.HistoryPage {
     display: flex;
     height: 100vh;
     background-color: $bg;
 }
 
-.history-container {
+.HistoryContainer {
     flex: 1;
     padding: 20px;
     margin-left: 60px;
@@ -19,11 +19,11 @@
     }
 }
 
-.search-container {
+.SearchContainer {
     margin-bottom: 20px;
 }
 
-.search-input {
+.SearchInput {
     width: 100%;
     padding: 12px 20px;
     border: 1px solid $border-color;
@@ -135,7 +135,7 @@
     color: $text-dark;
     padding: 8px;
     border-radius: 6px;
-    background-color: rgba($bg-dark, 0.5);
+    // background-color: rgba($bg-dark, 0.5);
     opacity: 0;
     animation: fadeIn 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
     animation-delay: 0.3s;
@@ -146,11 +146,15 @@
     text-overflow: ellipsis;
 
     &.user {
-        border-left: 3px solid darken($illusion, 15%);
+        border: 1.5px solid rgba(darken($illusion, 15%), 0.3);
+        border-left: 4px solid darken($illusion, 15%);
+        
+
     }
 
     &.assistant {
-        border-left: 3px solid lighten($illusion-night, 40%);
+        border: 1,5px solid rgba(lighten($illusion-night, 40%), 0.3);
+        border-left: 4px solid lighten($illusion-night, 40%);
         animation-delay: 0.5s;
     }
 
