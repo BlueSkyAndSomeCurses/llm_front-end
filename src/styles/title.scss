@@ -88,6 +88,8 @@
     min-height: 100vh;
     background-color: $bg;
     color: $text-primary;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 .title-section {
@@ -101,9 +103,10 @@
 
 .title {
     color: $illusion;
-    font-size: 5.3rem;
+    font-size: clamp(2.5rem, 5vw, 5.3rem);
     margin-bottom: 40px;
-    width: 70%;
+    width: 100%;
+    max-width: 1200px;
     text-align: center;
     padding: 0;
     margin-top: 0;
@@ -131,10 +134,11 @@
 }
 
 .description {
-    font-size: 1.6rem;
+    font-size: clamp(1rem, 2vw, 1.6rem);
     color: $text-muted;
     margin: 0;
-    width: 50%;
+    width: 100%;
+    max-width: 800px;
 }
 
 .header-image {
@@ -177,7 +181,9 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 80px 0 80px;
+    padding: 80px 20px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .features-content {
@@ -228,9 +234,11 @@
 
 .features {
     display: flex;
-    gap: 90px;
+    gap: 30px;
     width: 100%;
-    max-width: 1500px;
+    max-width: 1200px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .feature-card {
@@ -240,7 +248,9 @@
     height: 400px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
-    width: 500px;
+    flex: 1;
+    min-width: 280px;
+    max-width: 500px;
 
     &:hover {
         transform: translateY(-5px);
@@ -367,8 +377,10 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 60px 0;
+    padding: 60px 20px;
     margin-bottom: 70px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .about-content {
@@ -404,11 +416,13 @@
     margin-top: 30px;
     gap: 20px;
     width: 100%;
+    flex-wrap: wrap;
 }
 
 .value-item {
     flex: 1;
     padding: 15px;
+    min-width: 250px;
 
     h3 {
         color: $illusion;
