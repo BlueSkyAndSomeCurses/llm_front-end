@@ -18,7 +18,11 @@ function MessageList({ messages, isLoading }) {
   };
 
   useEffect(() => {
-    scrollToBottom();
+    const timer = setTimeout(() => {
+      scrollToBottom();
+    }, 50);
+    
+    return () => clearTimeout(timer);
   }, [messages]);
 
   return (

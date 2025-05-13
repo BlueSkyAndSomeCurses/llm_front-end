@@ -20,12 +20,10 @@ function ActiveChat() {
     const location = useLocation();
     const prevLocationRef = useRef(location);
 
-    // Update messages ref when messages change
     useEffect(() => {
         messagesRef.current = messages;
     }, [messages]);
 
-    // Handle navigation changes
     useEffect(() => {
         if (prevLocationRef.current.pathname !== location.pathname) {
             cancelTokenSourceRef.current = cancelRequest(
@@ -36,7 +34,6 @@ function ActiveChat() {
         prevLocationRef.current = location;
     }, [location]);
 
-    // Load user data
     useEffect(() => {
         const userData = localStorage.getItem("user");
         if (userData) {
@@ -51,15 +48,18 @@ function ActiveChat() {
         };
     }, []);
 
-    // Cancel ongoing request handler
     const handleCancel = () => {
         cancelTokenSourceRef.current = cancelRequest(cancelTokenSourceRef.current);
 
-        setMessages((prev) => {
-            const updatedMessages = [...prev];
-            const lastMessage = updatedMessages[updatedMessages.length - 1];
-            if (lastMessage && lastMessage.role === "assistant") {
-                lastMessage.content = "There was an error when generating response: Request was cancelled.";
+        setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages];
+            const lastIndex = updatedMessages.length - 1;
+            
+            if (lastIndex >= 0 && updatedMessages[lastIndex].role === "assistant") {
+                updatedMessages[lastIndex] = {
+                    ...updatedMessages[lastIndex],
+                    content: "There was an error when generating response: Request was cancelled."
+                };
 
                 localStorage.setItem(
                     `chat_${chatId}`,
@@ -72,13 +72,11 @@ function ActiveChat() {
         setIsLoading(false);
     };
 
-    // Handle assistant response
     const handleAssistantResponse = useCallback(
         async (userMessage) => {
             cancelTokenSourceRef.current = cancelRequest(cancelTokenSourceRef.current);
             setIsLoading(true);
 
-            // Add thinking message
             setMessages((prev) => [
                 ...prev,
                 {
@@ -87,10 +85,8 @@ function ActiveChat() {
                 },
             ]);
 
-            // Create cancel token
             cancelTokenSourceRef.current = axios.CancelToken.source();
 
-            // Get response from the assistant
             const { completeMessage, error } = await getAssistantResponse(
                 userMessage, 
                 messagesRef.current.slice(0, -1),
@@ -98,30 +94,40 @@ function ActiveChat() {
                     cancelTokenSource: cancelTokenSourceRef.current,
                     chatId,
                     onProgress: (newText) => {
-                        setMessages((prev) => {
-                            const updatedMessages = [...prev];
-                            const lastMessage = updatedMessages[updatedMessages.length - 1];
-                            lastMessage.content = newText;
-
-                            localStorage.setItem(
-                                `chat_${chatId}`,
-                                JSON.stringify(updatedMessages)
-                            );
+                        setMessages((prevMessages) => {
+                            const updatedMessages = [...prevMessages];
+                            const lastIndex = updatedMessages.length - 1;
+                            
+                            if (lastIndex >= 0 && updatedMessages[lastIndex].role === "assistant") {
+                                updatedMessages[lastIndex] = {
+                                    ...updatedMessages[lastIndex],
+                                    content: newText
+                                };
+                                
+                                localStorage.setItem(
+                                    `chat_${chatId}`,
+                                    JSON.stringify(updatedMessages)
+                                );
+                            }
+                            
                             return updatedMessages;
                         });
                     }
                 }
             );
 
-            // Handle errors
             if (error) {
-                setMessages((prev) => {
-                    const updatedMessages = [...prev];
-                    const lastMessage = updatedMessages[updatedMessages.length - 1];
-                    if (lastMessage && lastMessage.role === "assistant") {
-                        lastMessage.content = error.isCancel 
-                            ? `There was an error when generating response: ${error.message}`
-                            : "There was an error when generating response.";
+                setMessages((prevMessages) => {
+                    const updatedMessages = [...prevMessages];
+                    const lastIndex = updatedMessages.length - 1;
+                    
+                    if (lastIndex >= 0 && updatedMessages[lastIndex].role === "assistant") {
+                        updatedMessages[lastIndex] = {
+                            ...updatedMessages[lastIndex],
+                            content: error.isCancel 
+                                ? `There was an error when generating response: ${error.message}`
+                                : "There was an error when generating response."
+                        };
 
                         localStorage.setItem(
                             `chat_${chatId}`,
@@ -140,40 +146,59 @@ function ActiveChat() {
 
     // Load messages
     useEffect(() => {
+        let isMounted = true;
+        const abortController = new AbortController();
+        
         const loadMessages = async () => {
-            const fetchedMessages = await fetchMessages(chatId);
-            setMessages(fetchedMessages);
-
-            // Auto-respond to first message if needed
-            if (
-                fetchedMessages.length === 1 &&
-                fetchedMessages[0].role === "user" &&
-                !hasRespondedRef.current
-            ) {
-                hasRespondedRef.current = true;
-
-                setTimeout(() => {
-                    handleAssistantResponse(fetchedMessages[0].content);
-                }, 500);
+            try {
+                const fetchedMessages = await fetchMessages(chatId, abortController.signal);
+                
+                if (isMounted) {
+                    setMessages(fetchedMessages);
+    
+                    if (
+                        fetchedMessages.length === 1 &&
+                        fetchedMessages[0].role === "user" &&
+                        !hasRespondedRef.current
+                    ) {
+                        hasRespondedRef.current = true;
+    
+                        setTimeout(() => {
+                            if (isMounted) {
+                                handleAssistantResponse(fetchedMessages[0].content);
+                            }
+                        }, 500);
+                    }
+                }
+            } catch (error) {
+                if (error.name !== 'AbortError' && isMounted) {
+                    console.error("Error loading messages:", error);
+                }
             }
         };
 
         loadMessages();
+        
+        return () => {
+            isMounted = false;
+            abortController.abort();
+        };
     }, [chatId, handleAssistantResponse]);
 
-    // Handle submit
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (inputValue.trim() === "") return;
 
+        const currentInputValue = inputValue;
+        
         const userMessage = {
-            content: inputValue,
+            content: currentInputValue,
             role: "user",
         };
 
-        // Add user message to the chat
-        setMessages((prev) => {
-            const updatedMessages = [...prev, userMessage];
+        setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages, userMessage];
+            
             localStorage.setItem(
                 `chat_${chatId}`,
                 JSON.stringify(updatedMessages)
@@ -181,13 +206,14 @@ function ActiveChat() {
             return updatedMessages;
         });
 
-        // Save the message
-        await saveMessage(inputValue, "question", chatId);
-
-        // Clear input and get AI response
         setInputValue("");
+        
+        await saveMessage(currentInputValue, "question", chatId);
+
+
         await new Promise((resolve) => setTimeout(resolve, 500));
-        await handleAssistantResponse(inputValue);
+        
+        await handleAssistantResponse(currentInputValue);
     };
 
     return (

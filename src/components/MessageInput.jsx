@@ -21,13 +21,22 @@ function MessageInput({
   const resizeTextarea = () => {
     const textarea = textareaRef.current;
     if (textarea) {
+      const scrollPos = window.scrollY;
+      
       textarea.style.height = 'auto';
+      
       textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
+      
+      window.scrollTo(0, scrollPos);
     }
   };
 
   useEffect(() => {
-    resizeTextarea();
+    const timer = setTimeout(() => {
+      resizeTextarea();
+    }, 0);
+    
+    return () => clearTimeout(timer);
   }, [inputValue]);
 
   return (

@@ -19,22 +19,32 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const currentIsLogin = isLogin;
+        const currentName = name;
+        const currentEmail = email;
+        const currentPassword = password;
+        const currentConfirmPassword = confirmPassword;
+
         try {
-            if (isLogin) {
-                console.log("Login button pressed", email, password);
+            if (currentIsLogin) {
+                console.log("Login button pressed", currentEmail, currentPassword);
                 const response = await axios.post("/api/login", {
-                    email,
-                    password,
+                    email: currentEmail,
+                    password: currentPassword,
                 });
                 console.log(response.data);
-                localStorage.setItem("token", response.data.token);
-                localStorage.setItem(
-                    "user",
-                    JSON.stringify(response.data.user)
-                );
+                
+                if (response.data.token) {
+                    localStorage.setItem("token", response.data.token);
+                }
+                
+                if (response.data.user) {
+                    localStorage.setItem("user", JSON.stringify(response.data.user));
+                }
+                
                 navigate("/chat");
             } else {
-                if (password !== confirmPassword) {
+                if (currentPassword !== currentConfirmPassword) {
                     setError("Passwords don't match");
                     return;
                 }
@@ -42,16 +52,19 @@ function Login() {
                 console.log("we are registering");
 
                 const response = await axios.post("/api/register", {
-                    name,
-                    email,
-                    password,
+                    name: currentName,
+                    email: currentEmail,
+                    password: currentPassword,
                 });
-                console.log(response.data);
-                localStorage.setItem("token", response.data.token);
-                localStorage.setItem(
-                    "user",
-                    JSON.stringify(response.data.user)
-                );
+                
+                if (response.data.token) {
+                    localStorage.setItem("token", response.data.token);
+                }
+                
+                if (response.data.user) {
+                    localStorage.setItem("user", JSON.stringify(response.data.user));
+                }
+                
                 navigate("/chat");
             }
         } catch (error) {

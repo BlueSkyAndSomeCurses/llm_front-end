@@ -17,21 +17,38 @@ function Chat() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const userData = localStorage.getItem("user");
-        if (userData) {
-            setUser(JSON.parse(userData));
-        }
+        let isMounted = true;
+        
+        const loadUserData = () => {
+            const userData = localStorage.getItem("user");
+            if (userData && isMounted) {
+                try {
+                    setUser(JSON.parse(userData));
+                } catch (error) {
+                    console.error("Error parsing user data:", error);
+                }
+            }
+        };
+        
+        loadUserData();
+        
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (inputValue.trim() === "") return;
 
+        const currentInputValue = inputValue;
+        const currentSelectedModel = selectedModel;
+        
         const chatId =
             Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
 
         const initialMessage = {
-            content: inputValue,
+            content: currentInputValue,
             role: "user",
         };
 
@@ -47,10 +64,10 @@ function Chat() {
                 await axios.post(
                     "/api/messages",
                     {
-                        messageText: inputValue,
+                        messageText: currentInputValue,
                         chatId: chatId,
                         messageType: "question",
-                        model: selectedModel,
+                        model: currentSelectedModel,
                     },
                     {
                         headers: {
@@ -59,14 +76,16 @@ function Chat() {
                     }
                 );
 
-                setMessages([...messages, initialMessage]);
+                setMessages(prevMessages => [...prevMessages, initialMessage]);
             }
         } catch (error) {
             console.error("Error in chat:", error);
         }
 
-        localStorage.setItem("selectedModel", selectedModel);
+        localStorage.setItem("selectedModel", currentSelectedModel);
+        
         setInputValue("");
+        
         navigate(`/chat/${chatId}`);
     };
 

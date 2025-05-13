@@ -13,6 +13,8 @@ function Sidebar() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        let isMounted = true;
+        
         const fetchChats = async () => {
             try {
                 const token = localStorage.getItem("token");
@@ -22,7 +24,10 @@ function Sidebar() {
                             Authorization: `Bearer ${token}`,
                         },
                     });
-                    setChats(response.data.chats);
+                    
+                    if (isMounted) {
+                        setChats(response.data.chats);
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching chats:", error);
@@ -30,6 +35,10 @@ function Sidebar() {
         };
 
         fetchChats();
+        
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     const toggleSidebar = () => {

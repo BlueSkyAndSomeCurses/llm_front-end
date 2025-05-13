@@ -43,7 +43,10 @@ function UserSettings({ onClose, user }) {
             const file = e.target.files[0];
 
             if (file.size > 2 * 1024 * 1024) {
-                setErrors({ ...errors, avatar: "Image size should be less than 2MB" });
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    avatar: "Image size should be less than 2MB"
+                }));
                 return;
             }
 
@@ -51,7 +54,8 @@ function UserSettings({ onClose, user }) {
 
             const reader = new FileReader();
             reader.onload = (e) => {
-                setAvatarPreview(e.target.result);
+                const result = e.target.result;
+                setAvatarPreview(result);
             };
             reader.readAsDataURL(file);
         }
@@ -60,14 +64,23 @@ function UserSettings({ onClose, user }) {
     const handleResetAvatar = () => {
         setAvatar(null);
         setAvatarPreview(null);
-        const newErrors = { ...errors };
-        delete newErrors.avatar;
-        setErrors(newErrors);
+    
+        setErrors((prevErrors) => {
+            const newErrors = { ...prevErrors };
+            delete newErrors.avatar;
+            return newErrors;
+        });
     };
 
     const handleAvatarUpload = async () => {
-        if (!avatar && !avatarPreview) {
-            setErrors({ ...errors, avatar: "No avatar to upload" });
+        const currentAvatar = avatar;
+        const currentAvatarPreview = avatarPreview;
+        
+        if (!currentAvatar && !currentAvatarPreview) {
+            setErrors((prevErrors) => ({ 
+                ...prevErrors, 
+                avatar: "No avatar to upload" 
+            }));
             return;
         }
 
@@ -75,31 +88,47 @@ function UserSettings({ onClose, user }) {
         try {
             const token = localStorage.getItem("token");
             const response = await axios.put("/api/user/profile",
-                { avatar: avatarPreview },
+                { avatar: currentAvatarPreview },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
-            const currentUser = JSON.parse(localStorage.getItem("user"));
-            currentUser.avatar = response.data.avatar || avatarPreview;
-            localStorage.setItem("user", JSON.stringify(currentUser));
+            try {
+                const currentUser = JSON.parse(localStorage.getItem("user"));
+                if (currentUser) {
+                    const updatedUser = {
+                        ...currentUser,
+                        avatar: response.data.avatar || currentAvatarPreview
+                    };
+                    localStorage.setItem("user", JSON.stringify(updatedUser));
+                }
+            } catch (storageError) {
+                console.error("Error updating localStorage:", storageError);
+            }
 
             setSuccessMessage("Avatar updated successfully!");
+            
             if (successTimerRef.current) {
                 clearTimeout(successTimerRef.current);
             }
+            
             successTimerRef.current = setTimeout(() => {
                 setSuccessMessage("");
-                window.location.reload()
+                window.location.reload();
             }, 1500);
 
-
             setAvatar(null);
-            const newErrors = { ...errors };
-            delete newErrors.avatar;
-            setErrors(newErrors);
+            
+            setErrors((prevErrors) => {
+                const newErrors = { ...prevErrors };
+                delete newErrors.avatar;
+                return newErrors;
+            });
         } catch (error) {
             console.error("Error uploading avatar:", error);
-            setErrors({ ...errors, avatar: "Failed to upload avatar. Please try again." });
+            setErrors((prevErrors) => ({ 
+                ...prevErrors, 
+                avatar: "Failed to upload avatar. Please try again." 
+            }));
         } finally {
             setAvatarLoading(false);
         }
@@ -110,18 +139,23 @@ function UserSettings({ onClose, user }) {
     };
 
     const validateForm = () => {
+        const currentName = name;
+        const currentNewPassword = newPassword;
+        const currentConfirmPassword = confirmPassword;
+        const currentPassword = currentPassword;
+        
         const newErrors = {};
 
-        if (!name.trim()) {
+        if (!currentName.trim()) {
             newErrors.name = "Name is required";
         }
 
-        if (newPassword) {
-            if (newPassword.length < 8) {
+        if (currentNewPassword) {
+            if (currentNewPassword.length < 8) {
                 newErrors.newPassword = "Password must be at least 8 characters";
             }
 
-            if (newPassword !== confirmPassword) {
+            if (currentNewPassword !== currentConfirmPassword) {
                 newErrors.confirmPassword = "Passwords don't match";
             }
 
@@ -135,14 +169,18 @@ function UserSettings({ onClose, user }) {
     };
 
     const updateUserProfile = async () => {
+        const currentName = name.trim();
+        
         try {
             const token = localStorage.getItem("token");
             const response = await axios.put("/api/user/profile",
-                { name },
+                { name: currentName },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
-            localStorage.setItem("user", JSON.stringify(response.data.user));
+            if (response.data.user) {
+                localStorage.setItem("user", JSON.stringify(response.data.user));
+            }
 
             if (response.data.token) {
                 localStorage.setItem("token", response.data.token);
@@ -151,25 +189,38 @@ function UserSettings({ onClose, user }) {
             return true;
         } catch (error) {
             console.error("Error updating profile:", error);
-            setErrors({ ...errors, submit: "Failed to update profile. Please try again." });
+            setErrors((prevErrors) => ({ 
+                ...prevErrors, 
+                submit: "Failed to update profile. Please try again." 
+            }));
             return false;
         }
     };
 
     const updatePassword = async () => {
-        if (!newPassword) return true;
+        const currentPasswordVal = currentPassword;
+        const newPasswordVal = newPassword;
+        
+        if (!newPasswordVal) return true;
 
         try {
             const token = localStorage.getItem("token");
             await axios.put("/api/user/password",
-                { currentPassword, newPassword },
+                { 
+                    currentPassword: currentPasswordVal, 
+                    newPassword: newPasswordVal 
+                },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             return true;
         } catch (error) {
             console.error("Error updating password:", error);
             const errorMessage = error.response?.data?.message || "Failed to update password";
-            setErrors({ ...errors, currentPassword: errorMessage });
+            
+            setErrors((prevErrors) => ({ 
+                ...prevErrors, 
+                currentPassword: errorMessage 
+            }));
             return false;
         }
     };
@@ -191,13 +242,18 @@ function UserSettings({ onClose, user }) {
                 if (profileUpdated && passwordUpdated) {
                     setSuccessMessage("Settings updated successfully!");
 
-                    setTimeout(() => {
+                    const timeoutId = setTimeout(() => {
                         window.location.reload();
                     }, 1000);
+                    
+                    successTimerRef.current = timeoutId;
                 }
             } catch (error) {
                 console.error("Error updating user:", error);
-                setErrors({ ...errors, submit: "An error occurred while saving your settings" });
+                setErrors((prevErrors) => ({ 
+                    ...prevErrors, 
+                    submit: "An error occurred while saving your settings" 
+                }));
             } finally {
                 setLoading(false);
             }

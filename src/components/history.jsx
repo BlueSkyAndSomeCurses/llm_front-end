@@ -13,6 +13,8 @@ const History = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        let isMounted = true;
+        
         const fetchChats = async () => {
             try {
                 const token = localStorage.getItem("token");
@@ -24,17 +26,24 @@ const History = () => {
                 const response = await axios.get("/api/chats", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                const chatData = response.data.chats;
-                setChats(chatData);
+                
+                if (isMounted) {
+                    const chatData = response.data.chats;
+                    setChats(chatData);
+                }
             } catch (error) {
                 console.error("Error fetching chats:", error);
-                if (error.response?.status === 401) {
+                if (error.response?.status === 401 && isMounted) {
                     navigate("/login");
                 }
             }
         };
 
         fetchChats();
+        
+        return () => {
+            isMounted = false;
+        };
     }, [navigate]);
 
     const handleChatClick = (chatId) => {
@@ -42,12 +51,14 @@ const History = () => {
     };
 
     const handleChatHover = async (chatId) => {
-        setHoveredChatId(chatId);
-        if (hoverMessages[chatId]) return;
+        const currentChatId = chatId;
+        setHoveredChatId(currentChatId);
+        
+        if (hoverMessages[currentChatId]) return;
 
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.get(`/api/messages/${chatId}`, {
+            const response = await axios.get(`/api/messages/${currentChatId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -56,13 +67,17 @@ const History = () => {
                 const lastUserMessage = messages.filter(m => m.messageType === "question").pop();
                 const lastResponse = messages.filter(m => m.messageType === "response").pop();
 
-                setHoverMessages(prev => ({
-                    ...prev,
-                    [chatId]: {
-                        userMessage: lastUserMessage?.messageText || "",
-                        response: lastResponse?.messageText || ""
-                    }
-                }));
+                setHoverMessages(prev => {
+                    if (prev[currentChatId]) return prev;
+                    
+                    return {
+                        ...prev,
+                        [currentChatId]: {
+                            userMessage: lastUserMessage?.messageText || "",
+                            response: lastResponse?.messageText || ""
+                        }
+                    };
+                });
             }
         } catch (error) {
             console.error("Error fetching messages:", error);

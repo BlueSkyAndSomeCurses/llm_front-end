@@ -7,7 +7,10 @@ const ModelButton = ({ selectedModel, setSelectedModel }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleModelSelect = (modelName) => {
-        setSelectedModel(modelName);
+        if (selectedModel !== modelName) {
+            setSelectedModel(modelName);
+        }
+        
         setIsOpen(false);
     };
 

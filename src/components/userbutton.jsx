@@ -14,10 +14,24 @@ function UserButton({ size, expanded }) {
     const popupRef = useRef(null);
 
     useEffect(() => {
-        const userData = localStorage.getItem("user");
-        if (userData) {
-            setUser(JSON.parse(userData));
-        }
+        let isMounted = true;
+        
+        const loadUserData = () => {
+            const userData = localStorage.getItem("user");
+            if (userData && isMounted) {
+                try {
+                    setUser(JSON.parse(userData));
+                } catch (error) {
+                    console.error("Error parsing user data:", error);
+                }
+            }
+        };
+        
+        loadUserData();
+        
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     const handleLogout = () => {
