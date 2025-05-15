@@ -18,7 +18,7 @@ function Chat() {
 
     useEffect(() => {
         let isMounted = true;
-        
+
         const loadUserData = () => {
             const userData = localStorage.getItem("user");
             if (userData && isMounted) {
@@ -29,9 +29,9 @@ function Chat() {
                 }
             }
         };
-        
+
         loadUserData();
-        
+
         return () => {
             isMounted = false;
         };
@@ -43,7 +43,7 @@ function Chat() {
 
         const currentInputValue = inputValue;
         const currentSelectedModel = selectedModel;
-        
+
         const chatId =
             Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
 
@@ -68,6 +68,7 @@ function Chat() {
                         chatId: chatId,
                         messageType: "question",
                         model: currentSelectedModel,
+                        modelName: currentSelectedModel,
                     },
                     {
                         headers: {
@@ -83,9 +84,9 @@ function Chat() {
         }
 
         localStorage.setItem("selectedModel", currentSelectedModel);
-        
+
         setInputValue("");
-        
+
         navigate(`/chat/${chatId}`);
     };
 

@@ -237,15 +237,38 @@ app.post("/api/messages", authenticateToken, async (req, res) => {
         const {
             messageText,
             chatId,
-            messageType = "question"
+            messageType = "question",
+            modelName
         } = req.body;
         const userId = req.user.id;
+
+        let selectedModelName = modelName;
+        if (!selectedModelName) {
+            // Get the last message in this chat to retrieve its model
+            const lastMessage = await Message.findOne({
+                userId: userId,
+                chatId
+            }, {}, {
+                sort: {
+                    messageNum: -1
+                }
+            });
+
+            if (lastMessage) {
+                // Use the model from the last message
+                selectedModelName = lastMessage.modelName;
+            } else if (messageType === "question") {
+                // If no existing messages and this is a question, use the provided model or fallback
+                selectedModelName = modelName || "DeepSeek R1";
+            }
+        }
 
         const newMessage = new Message({
             userId,
             messageText,
             messageType,
             chatId,
+            modelName: selectedModelName,
         });
 
         await newMessage.save();
@@ -312,18 +335,33 @@ app.get("/api/chats", authenticateToken, async (req, res) => {
 app.post("/api/chat", authenticateToken, async (req, res) => {
     try {
         const {
-            message
+            message,
+            chatId
         } = req.body;
         let selectedModel = req.body.model;
 
-        selectedModel = models[selectedModel];
-        console.log(
+        if (chatId) {
+            const lastMessage = await Message.findOne({
+                userId: req.user.id,
+                chatId
+            }, {}, {
+                sort: {
+                    messageNum: -1
+                }
+            });
 
+            if (lastMessage && lastMessage.modelName) {
+                selectedModel = lastMessage.modelName;
+            }
+        }
+
+        selectedModel = models[selectedModel];
+
+        console.log(
             ...req.body.context, {
             role: "user",
             content: message,
-        },
-        )
+        });
 
         const completion = await openai.chat.completions.create({
             model: selectedModel,
@@ -339,7 +377,7 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
             responseType: "stream"
         });
 
-        res.setHeader("Content-Type", "text/plain");
+        res.setHeader("Content-Type", "application/json; charset = utf-8");
         res.setHeader("Transfer-Encoding", "chunked");
 
         for await (const chunk of completion) {

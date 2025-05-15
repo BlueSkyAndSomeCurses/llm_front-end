@@ -12,8 +12,8 @@ export const fetchMessages = async (chatId, signal) => {
   const savedMessages = localStorage.getItem(`chat_${chatId}`);
   if (savedMessages) {
     return JSON.parse(savedMessages);
-  } 
-  
+  }
+
   try {
     const token = localStorage.getItem("token");
     if (token) {
@@ -40,12 +40,12 @@ export const fetchMessages = async (chatId, signal) => {
                 : "assistant",
           })
         );
-        
+
         localStorage.setItem(
           `chat_${chatId}`,
           JSON.stringify(serverMessages)
         );
-        
+
         return serverMessages;
       }
     }
@@ -56,7 +56,7 @@ export const fetchMessages = async (chatId, signal) => {
     }
     console.error("Error fetching messages from server:", error);
   }
-  
+
   return [];
 };
 
@@ -67,13 +67,15 @@ export const saveMessage = async (messageText, messageType, chatId) => {
       const currentMessageText = messageText;
       const currentMessageType = messageType;
       const currentChatId = chatId;
-      
+      const currentModel = localStorage.getItem("selectedModel");
+
       await axios.post(
         "/api/messages",
         {
           messageText: currentMessageText,
           messageType: currentMessageType,
           chatId: currentChatId,
+          modelName: currentModel
         },
         {
           headers: {
@@ -90,26 +92,29 @@ export const saveMessage = async (messageText, messageType, chatId) => {
 export const getAssistantResponse = async (userMessage, context, options = {}) => {
   const currentUserMessage = userMessage;
   const currentContext = [...context];
-  
-  const { 
-    cancelTokenSource, 
-    onProgress, 
-    chatId 
+
+  const {
+    cancelTokenSource,
+    onProgress,
+    chatId
   } = options;
-  
+
   let completeMessage = "";
   let error = null;
-  
+
   try {
     const token = localStorage.getItem("token");
     const currentModel = localStorage.getItem("selectedModel");
-    
-    const response = await axios.post(
+
+    console.log("DEBUG:", currentModel)
+
+    await axios.post(
       "/api/chat",
       {
         message: currentUserMessage,
         model: currentModel,
         context: currentContext,
+        chatId,
       },
       {
         headers: {
@@ -126,30 +131,30 @@ export const getAssistantResponse = async (userMessage, context, options = {}) =
         },
       }
     );
-    
+
     if (completeMessage) {
       await saveMessage(completeMessage, "response", chatId);
     }
-    
+
   } catch (err) {
     console.error("Error generating response:", err);
-    
+
     if (axios.isCancel(err)) {
       console.log('Request canceled:', err.message);
-      error = { 
+      error = {
         message: err.message,
-        isCancel: true 
+        isCancel: true
       };
     } else {
-      error = { 
+      error = {
         message: "There was an error when generating response.",
-        isCancel: false 
+        isCancel: false
       };
     }
   }
-  
-  return { 
-    completeMessage, 
-    error 
+
+  return {
+    completeMessage,
+    error
   };
 };

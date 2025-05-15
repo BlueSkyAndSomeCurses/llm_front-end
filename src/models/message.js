@@ -22,6 +22,10 @@ const messageSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    modelName: {
+        type: String,
+        default: "DeepSeek R1",
+    },
     timestamp: {
         type: Date,
         default: Date.now,
