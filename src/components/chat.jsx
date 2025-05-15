@@ -32,8 +32,18 @@ function Chat() {
 
         loadUserData();
 
+        // Listen for user data changes from other components
+        const handleUserDataChanged = (event) => {
+            if (isMounted && event.detail && event.detail.user) {
+                setUser(event.detail.user);
+            }
+        };
+
+        window.addEventListener('userDataChanged', handleUserDataChanged);
+
         return () => {
             isMounted = false;
+            window.removeEventListener('userDataChanged', handleUserDataChanged);
         };
     }, []);
 

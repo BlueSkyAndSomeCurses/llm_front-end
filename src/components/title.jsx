@@ -16,7 +16,7 @@ function TitlePage() {
 
     useEffect(() => {
         let isMounted = true;
-        
+
         const loadUserData = () => {
             const userData = localStorage.getItem("user");
             if (userData && isMounted) {
@@ -27,11 +27,19 @@ function TitlePage() {
                 }
             }
         };
-        
+
         loadUserData();
-        
+
+        // Listen for user data changes from other components
+        const handleUserDataChanged = (event) => {
+            if (isMounted && event.detail && event.detail.user) {
+                setUser(event.detail.user);
+            }
+        }; window.addEventListener('userDataChanged', handleUserDataChanged);
+
         return () => {
             isMounted = false;
+            window.removeEventListener('userDataChanged', handleUserDataChanged);
         };
     }, []);
 
@@ -67,7 +75,7 @@ function TitlePage() {
 
     const handleSettings = () => {
         setShowSettings(true);
-        setShowUserMenu(false); 
+        setShowUserMenu(false);
     };
 
     const handleCloseSettings = () => {

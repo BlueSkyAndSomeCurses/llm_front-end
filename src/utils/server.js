@@ -357,12 +357,6 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
 
         selectedModel = models[selectedModel];
 
-        console.log(
-            ...req.body.context, {
-            role: "user",
-            content: message,
-        });
-
         const completion = await openai.chat.completions.create({
             model: selectedModel,
             messages: [
@@ -383,7 +377,6 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
         for await (const chunk of completion) {
             if (chunk.choices[0]?.delta?.content) {
                 const retrievedContent = chunk.choices[0].delta.content;
-                console.log("DEBUG: retrievedContent", retrievedContent);
                 res.write(retrievedContent);
             }
         }

@@ -32,11 +32,11 @@ function UserSettings({ onClose, user }) {
 
     useEffect(() => {
         const scrollY = window.scrollY;
-        
+
         document.body.style.setProperty('--scroll-position', `-${scrollY}px`);
-        
+
         document.body.classList.add('no-scroll');
-        
+
         return () => {
             document.body.classList.remove('no-scroll');
             window.scrollTo(0, scrollY);
@@ -77,7 +77,7 @@ function UserSettings({ onClose, user }) {
     const handleResetAvatar = () => {
         setAvatar(null);
         setAvatarPreview(null);
-    
+
         setErrors((prevErrors) => {
             const newErrors = { ...prevErrors };
             delete newErrors.avatar;
@@ -88,11 +88,11 @@ function UserSettings({ onClose, user }) {
     const handleAvatarUpload = async () => {
         const currentAvatar = avatar;
         const currentAvatarPreview = avatarPreview;
-        
+
         if (!currentAvatar && !currentAvatarPreview) {
-            setErrors((prevErrors) => ({ 
-                ...prevErrors, 
-                avatar: "No avatar to upload" 
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                avatar: "No avatar to upload"
             }));
             return;
         }
@@ -113,24 +113,30 @@ function UserSettings({ onClose, user }) {
                         avatar: response.data.avatar || currentAvatarPreview
                     };
                     localStorage.setItem("user", JSON.stringify(updatedUser));
+
+                    // Dispatch custom event for other components
+                    const userDataChangedEvent = new CustomEvent('userDataChanged', {
+                        detail: { user: updatedUser }
+                    });
+                    window.dispatchEvent(userDataChangedEvent);
                 }
             } catch (storageError) {
                 console.error("Error updating localStorage:", storageError);
             }
 
             setSuccessMessage("Avatar updated successfully!");
-            
+
             if (successTimerRef.current) {
                 clearTimeout(successTimerRef.current);
             }
-            
+
             successTimerRef.current = setTimeout(() => {
                 setSuccessMessage("");
-                window.location.reload();
+                // Don't close the window automatically
             }, 1500);
 
             setAvatar(null);
-            
+
             setErrors((prevErrors) => {
                 const newErrors = { ...prevErrors };
                 delete newErrors.avatar;
@@ -138,9 +144,9 @@ function UserSettings({ onClose, user }) {
             });
         } catch (error) {
             console.error("Error uploading avatar:", error);
-            setErrors((prevErrors) => ({ 
-                ...prevErrors, 
-                avatar: "Failed to upload avatar. Please try again." 
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                avatar: "Failed to upload avatar. Please try again."
             }));
         } finally {
             setAvatarLoading(false);
@@ -155,8 +161,9 @@ function UserSettings({ onClose, user }) {
         const currentName = name;
         const currentNewPassword = newPassword;
         const currentConfirmPassword = confirmPassword;
-        const currentPassword = currentPassword;
-        
+        // Do not redeclare currentPassword as it's already available from state
+
+        console.log(currentName, currentNewPassword, currentConfirmPassword, currentPassword);
         const newErrors = {};
 
         if (!currentName.trim()) {
@@ -183,7 +190,7 @@ function UserSettings({ onClose, user }) {
 
     const updateUserProfile = async () => {
         const currentName = name.trim();
-        
+
         try {
             const token = localStorage.getItem("token");
             const response = await axios.put("/api/user/profile",
@@ -193,6 +200,12 @@ function UserSettings({ onClose, user }) {
 
             if (response.data.user) {
                 localStorage.setItem("user", JSON.stringify(response.data.user));
+
+                // Dispatch custom event for other components
+                const userDataChangedEvent = new CustomEvent('userDataChanged', {
+                    detail: { user: response.data.user }
+                });
+                window.dispatchEvent(userDataChangedEvent);
             }
 
             if (response.data.token) {
@@ -202,9 +215,9 @@ function UserSettings({ onClose, user }) {
             return true;
         } catch (error) {
             console.error("Error updating profile:", error);
-            setErrors((prevErrors) => ({ 
-                ...prevErrors, 
-                submit: "Failed to update profile. Please try again." 
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                submit: "Failed to update profile. Please try again."
             }));
             return false;
         }
@@ -213,15 +226,15 @@ function UserSettings({ onClose, user }) {
     const updatePassword = async () => {
         const currentPasswordVal = currentPassword;
         const newPasswordVal = newPassword;
-        
+
         if (!newPasswordVal) return true;
 
         try {
             const token = localStorage.getItem("token");
             await axios.put("/api/user/password",
-                { 
-                    currentPassword: currentPasswordVal, 
-                    newPassword: newPasswordVal 
+                {
+                    currentPassword: currentPasswordVal,
+                    newPassword: newPasswordVal
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -229,10 +242,10 @@ function UserSettings({ onClose, user }) {
         } catch (error) {
             console.error("Error updating password:", error);
             const errorMessage = error.response?.data?.message || "Failed to update password";
-            
-            setErrors((prevErrors) => ({ 
-                ...prevErrors, 
-                currentPassword: errorMessage 
+
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                currentPassword: errorMessage
             }));
             return false;
         }
@@ -256,16 +269,17 @@ function UserSettings({ onClose, user }) {
                     setSuccessMessage("Settings updated successfully!");
 
                     const timeoutId = setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
-                    
+                        setSuccessMessage("");
+                        // Don't close the settings window
+                    }, 1500);
+
                     successTimerRef.current = timeoutId;
                 }
             } catch (error) {
                 console.error("Error updating user:", error);
-                setErrors((prevErrors) => ({ 
-                    ...prevErrors, 
-                    submit: "An error occurred while saving your settings" 
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    submit: "An error occurred while saving your settings"
                 }));
             } finally {
                 setLoading(false);
@@ -406,6 +420,6 @@ function UserSettings({ onClose, user }) {
             </div>
         </div>
     );
-}
+};
 
 export default UserSettings;

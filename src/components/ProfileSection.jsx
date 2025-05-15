@@ -30,7 +30,13 @@ function ProfileSection({ user, updateUser }) {
 
             if (response.data.user) {
                 localStorage.setItem("user", JSON.stringify(response.data.user));
-                
+
+                // Dispatch custom event for other components
+                const userDataChangedEvent = new CustomEvent('userDataChanged', {
+                    detail: { user: response.data.user }
+                });
+                window.dispatchEvent(userDataChangedEvent);
+
                 if (typeof updateUser === 'function') {
                     updateUser(response.data.user);
                 }
@@ -43,8 +49,8 @@ function ProfileSection({ user, updateUser }) {
             return { success: true };
         } catch (error) {
             console.error("Error updating profile:", error);
-            setErrors({ 
-                submit: "Failed to update profile. Please try again." 
+            setErrors({
+                submit: "Failed to update profile. Please try again."
             });
             return { success: false };
         }

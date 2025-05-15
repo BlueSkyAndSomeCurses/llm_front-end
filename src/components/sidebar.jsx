@@ -14,7 +14,7 @@ function Sidebar() {
 
     useEffect(() => {
         let isMounted = true;
-        
+
         const fetchChats = async () => {
             try {
                 const token = localStorage.getItem("token");
@@ -24,7 +24,7 @@ function Sidebar() {
                             Authorization: `Bearer ${token}`,
                         },
                     });
-                    
+
                     if (isMounted) {
                         setChats(response.data.chats);
                     }
@@ -35,7 +35,7 @@ function Sidebar() {
         };
 
         fetchChats();
-        
+
         return () => {
             isMounted = false;
         };
@@ -74,7 +74,7 @@ function Sidebar() {
                     {expanded && (
                         <button
                             className="title-btn"
-                            onClick={handleNewChat}
+                            onClick={() => navigate("/")}
                         >
                             <span className="icon-text kitty-chat-text">Kitty Chat</span>
                         </button>

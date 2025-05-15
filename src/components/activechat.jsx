@@ -27,7 +27,7 @@ function ActiveChat() {
     useEffect(() => {
         if (prevLocationRef.current.pathname !== location.pathname) {
             cancelTokenSourceRef.current = cancelRequest(
-                cancelTokenSourceRef.current, 
+                cancelTokenSourceRef.current,
                 "Request cancelled: You navigated away from the page."
             );
         }
@@ -40,11 +40,21 @@ function ActiveChat() {
             setUser(JSON.parse(userData));
         }
 
+        // Listen for user data changes from other components
+        const handleUserDataChanged = (event) => {
+            if (event.detail && event.detail.user) {
+                setUser(event.detail.user);
+            }
+        };
+
+        window.addEventListener('userDataChanged', handleUserDataChanged);
+
         return () => {
             cancelTokenSourceRef.current = cancelRequest(
                 cancelTokenSourceRef.current,
                 "Request cancelled: Component unmounted."
             );
+            window.removeEventListener('userDataChanged', handleUserDataChanged);
         };
     }, []);
 
@@ -54,7 +64,7 @@ function ActiveChat() {
         setMessages((prevMessages) => {
             const updatedMessages = [...prevMessages];
             const lastIndex = updatedMessages.length - 1;
-            
+
             if (lastIndex >= 0 && updatedMessages[lastIndex].role === "assistant") {
                 updatedMessages[lastIndex] = {
                     ...updatedMessages[lastIndex],
@@ -80,7 +90,7 @@ function ActiveChat() {
             setMessages((prev) => [
                 ...prev,
                 {
-                    content: `Thinking...`, 
+                    content: `Thinking...`,
                     role: "assistant"
                 },
             ]);
@@ -88,7 +98,7 @@ function ActiveChat() {
             cancelTokenSourceRef.current = axios.CancelToken.source();
 
             const { completeMessage, error } = await getAssistantResponse(
-                userMessage, 
+                userMessage,
                 messagesRef.current.slice(0, -1),
                 {
                     cancelTokenSource: cancelTokenSourceRef.current,
@@ -97,19 +107,19 @@ function ActiveChat() {
                         setMessages((prevMessages) => {
                             const updatedMessages = [...prevMessages];
                             const lastIndex = updatedMessages.length - 1;
-                            
+
                             if (lastIndex >= 0 && updatedMessages[lastIndex].role === "assistant") {
                                 updatedMessages[lastIndex] = {
                                     ...updatedMessages[lastIndex],
                                     content: newText
                                 };
-                                
+
                                 localStorage.setItem(
                                     `chat_${chatId}`,
                                     JSON.stringify(updatedMessages)
                                 );
                             }
-                            
+
                             return updatedMessages;
                         });
                     }
@@ -120,11 +130,11 @@ function ActiveChat() {
                 setMessages((prevMessages) => {
                     const updatedMessages = [...prevMessages];
                     const lastIndex = updatedMessages.length - 1;
-                    
+
                     if (lastIndex >= 0 && updatedMessages[lastIndex].role === "assistant") {
                         updatedMessages[lastIndex] = {
                             ...updatedMessages[lastIndex],
-                            content: error.isCancel 
+                            content: error.isCancel
                                 ? `There was an error when generating response: ${error.message}`
                                 : "There was an error when generating response."
                         };
@@ -148,21 +158,21 @@ function ActiveChat() {
     useEffect(() => {
         let isMounted = true;
         const abortController = new AbortController();
-        
+
         const loadMessages = async () => {
             try {
                 const fetchedMessages = await fetchMessages(chatId, abortController.signal);
-                
+
                 if (isMounted) {
                     setMessages(fetchedMessages);
-    
+
                     if (
                         fetchedMessages.length === 1 &&
                         fetchedMessages[0].role === "user" &&
                         !hasRespondedRef.current
                     ) {
                         hasRespondedRef.current = true;
-    
+
                         setTimeout(() => {
                             if (isMounted) {
                                 handleAssistantResponse(fetchedMessages[0].content);
@@ -178,7 +188,7 @@ function ActiveChat() {
         };
 
         loadMessages();
-        
+
         return () => {
             isMounted = false;
             abortController.abort();
@@ -190,7 +200,7 @@ function ActiveChat() {
         if (inputValue.trim() === "") return;
 
         const currentInputValue = inputValue;
-        
+
         const userMessage = {
             content: currentInputValue,
             role: "user",
@@ -198,7 +208,7 @@ function ActiveChat() {
 
         setMessages((prevMessages) => {
             const updatedMessages = [...prevMessages, userMessage];
-            
+
             localStorage.setItem(
                 `chat_${chatId}`,
                 JSON.stringify(updatedMessages)
@@ -207,12 +217,12 @@ function ActiveChat() {
         });
 
         setInputValue("");
-        
+
         await saveMessage(currentInputValue, "question", chatId);
 
 
         await new Promise((resolve) => setTimeout(resolve, 500));
-        
+
         await handleAssistantResponse(currentInputValue);
     };
 
@@ -222,11 +232,11 @@ function ActiveChat() {
             <div className="active-chat-content">
                 <div className="active-chatbox-container">
                     <div className="active-chat-box">
-                        <MessageList 
-                            messages={messages} 
-                            isLoading={isLoading} 
+                        <MessageList
+                            messages={messages}
+                            isLoading={isLoading}
                         />
-                        <MessageInput 
+                        <MessageInput
                             inputValue={inputValue}
                             setInputValue={setInputValue}
                             handleSubmit={handleSubmit}

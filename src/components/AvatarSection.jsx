@@ -34,7 +34,7 @@ function AvatarSection({ user, updateUser, onSuccess }) {
     const handleResetAvatar = () => {
         setAvatar(null);
         setAvatarPreview(null);
-    
+
         setErrors((prevErrors) => {
             const newErrors = { ...prevErrors };
             delete newErrors.avatar;
@@ -45,10 +45,10 @@ function AvatarSection({ user, updateUser, onSuccess }) {
     const handleAvatarUpload = async () => {
         const currentAvatar = avatar;
         const currentAvatarPreview = avatarPreview;
-        
+
         if (!currentAvatar && !currentAvatarPreview) {
-            setErrors({ 
-                avatar: "No avatar to upload" 
+            setErrors({
+                avatar: "No avatar to upload"
             });
             return;
         }
@@ -69,7 +69,13 @@ function AvatarSection({ user, updateUser, onSuccess }) {
                         avatar: response.data.avatar || currentAvatarPreview
                     };
                     localStorage.setItem("user", JSON.stringify(updatedUser));
-                    
+
+                    // Dispatch custom event for other components
+                    const userDataChangedEvent = new CustomEvent('userDataChanged', {
+                        detail: { user: updatedUser }
+                    });
+                    window.dispatchEvent(userDataChangedEvent);
+
                     // Notify parent component about the user update
                     if (typeof updateUser === 'function') {
                         updateUser(updatedUser);
@@ -81,12 +87,12 @@ function AvatarSection({ user, updateUser, onSuccess }) {
 
             onSuccess("Avatar updated successfully!");
             setAvatar(null);
-            
+
             setErrors({});
         } catch (error) {
             console.error("Error uploading avatar:", error);
-            setErrors({ 
-                avatar: "Failed to upload avatar. Please try again." 
+            setErrors({
+                avatar: "Failed to upload avatar. Please try again."
             });
         } finally {
             setAvatarLoading(false);
