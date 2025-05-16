@@ -168,32 +168,33 @@ app.post("/api/register", async (req, res) => {
         }
 
 
-        try {
-            const response = await fetch(process.env.EMAIL_API_ENDPOINT + email, {
-                method: "GET"
-            });
+        // here should be a call to the email validation API
+        // try {
+        //     const response = await fetch(process.env.EMAIL_API_ENDPOINT + email, {
+        //         method: "GET"
+        //     });
 
-            if (response.status !== 200) {
-                console.error("Email check failed:", response.status);
-                return res.status(500).json({
-                    message: "Email check failed"
-                });
-            }
+        //     if (response.status !== 200) {
+        //         console.error("Email check failed:", response.status);
+        //         return res.status(500).json({
+        //             message: "Email check failed"
+        //         });
+        //     }
 
-            const data = await response.json();
-            if (data.result.score < 90) {
-                console.error("Email check failed:", data);
-                return res.status(400).json({
-                    message: "Email is not valid"
-                });
-            }
+        //     const data = await response.json();
+        //     if (data.result.score < 90) {
+        //         console.error("Email check failed:", data);
+        //         return res.status(400).json({
+        //             message: "Email is not valid"
+        //         });
+        //     }
 
-        } catch (error) {
-            console.error("Error during email check:", error);
-            return res.status(500).json({
-                message: "Email check failed"
-            });
-        }
+        // } catch (error) {
+        //     console.error("Error during email check:", error);
+        //     return res.status(500).json({
+        //         message: "Email check failed"
+        //     });
+        // }
 
         const newUser = new User({
             name,
@@ -244,7 +245,6 @@ app.post("/api/messages", authenticateToken, async (req, res) => {
 
         let selectedModelName = modelName;
         if (!selectedModelName) {
-            // Get the last message in this chat to retrieve its model
             const lastMessage = await Message.findOne({
                 userId: userId,
                 chatId
@@ -255,10 +255,8 @@ app.post("/api/messages", authenticateToken, async (req, res) => {
             });
 
             if (lastMessage) {
-                // Use the model from the last message
                 selectedModelName = lastMessage.modelName;
             } else if (messageType === "question") {
-                // If no existing messages and this is a question, use the provided model or fallback
                 selectedModelName = modelName || "DeepSeek R1";
             }
         }
