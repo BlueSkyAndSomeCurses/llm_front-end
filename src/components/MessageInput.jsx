@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Send, XCircle } from 'lucide-react';
 import '../styles/messageInput.scss';
 
@@ -30,14 +30,10 @@ function MessageInput({
       window.scrollTo(0, scrollPos);
     }
   };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      resizeTextarea();
-    }, 0);
-
-    return () => clearTimeout(timer);
-  }, [inputValue]);
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    resizeTextarea();
+  };
 
   return (
     <div className="form-wrapper">
@@ -45,11 +41,10 @@ function MessageInput({
         className="active-chat-input"
         onSubmit={handleSubmit}>
         <textarea
-          ref={textareaRef}
-          className="active-input-field multiline"
+          ref={textareaRef}          className="active-input-field multiline"
           placeholder="Type a message... (Shift+Enter for new line)"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={handleChange}
           onKeyDown={handleKeyDown}
           rows={1}
         />
