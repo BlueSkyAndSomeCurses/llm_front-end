@@ -6,7 +6,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: $shadow;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,7 +25,7 @@
 }
 
 .settings-modal {
-  background-color: #fff5f7;
+  background-color: $bg-secondary;
   border-radius: 10px;
   width: 90%;
   max-width: 500px;
@@ -61,17 +61,12 @@
   position: sticky;
   top: 0;
   z-index: 1010;
-  background-color: #fff5f7;
+  background-color: $bg-secondary;
   padding: 20px 0;
   margin: 0 -35px 30px;
   padding-left: 35px;
   padding-right: 35px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-
-  @media (prefers-color-scheme: dark) {
-    background-color: $bg-dark;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  }
+  box-shadow: 0 2px 10px $shadow;
 
   h2 {
     margin: 0;
@@ -174,27 +169,17 @@
     gap: 8px;
     padding: 10px 18px;
     background-color: white;
-    border: 1px solid #e74c3c;
+    border: 1px solid $red-accent;
     border-radius: 8px;
     cursor: pointer;
-    color: #e74c3c;
+    color: $red-accent;
     font-size: 14px;
     transition: all 0.2s ease;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 3px $shadow;
 
     &:hover {
       background-color: rgba(231, 76, 60, 0.1);
-      color: #c0392b;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      background-color: rgba(255, 255, 255, 0.1);
-      border-color: #e74c3c;
-      color: #e74c3c;
-
-      &:hover {
-        background-color: rgba(231, 76, 60, 0.2);
-      }
+      color: $red-secondary;
     }
   }
 }
@@ -209,10 +194,6 @@
     font-weight: 500;
     color: $text-dark;
     font-size: 16px;
-
-    @media (prefers-color-scheme: dark) {
-      color: $text-light;
-    }
   }
 
   input {
@@ -239,7 +220,7 @@
   }
 
   .error {
-    color: #e74c3c;
+    color: $red-accent;
     font-size: 0.875rem;
     margin-top: 6px;
     display: block;
@@ -328,7 +309,7 @@
 }
 
 .error-message {
-  color: #e74c3c;
+  color: $red-accent;
   background-color: rgba(231, 76, 60, 0.1);
   padding: 10px;
   border-radius: 6px;
@@ -337,7 +318,7 @@
 }
 
 .save-avatar-button {
-  background-color: #dd90b3;
+  background-color: $pink-bg;
   color: white;
   display: flex;
   align-items: center;
@@ -350,15 +331,15 @@
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #c87a9d;
+    background-color: $pink-bg-dark;
   }
 
   &:disabled {
-    background-color: #e6b7cd;
+    background-color: $pink-bg-light;
     cursor: not-allowed;
   }
 }
 
 .success-message {
-  color: green;
+  color: $green-accent;
 }

@@ -159,15 +159,15 @@
 }
 
 .katex-error {
-  background-color: rgba(#ff0000, 0.1);
+  background-color: rgba($red-accent, 0.1);
   padding: 0;
   border-radius: 2px;
-  color: #e91e63;
+  color: $red-secondary;
   font-family: monospace;
 }
 
 .hljs {
-  background-color: #282c34 !important;
+  background-color: $text-dark !important;
   border-radius: 2px;
   padding: 0.1em !important;
 }

@@ -10,6 +10,7 @@ const History = () => {
     const [chats, setChats] = useState([]);
     const [hoveredChatId, setHoveredChatId] = useState(null);
     const [hoverMessages, setHoverMessages] = useState({});
+    const [sidebarExpanded, setSidebarExpanded] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -106,9 +107,13 @@ const History = () => {
         );
     };
 
+    const handleSidebarStateChange = (isExpanded) => {
+        setSidebarExpanded(isExpanded);
+    };
+
     return (
-        <div className="history-page">
-            <Sidebar />
+        <div className={`history-page ${sidebarExpanded ? "sidebar-expanded" : ""}`}>
+            <Sidebar onToggle={handleSidebarStateChange} />
             <div className="history-container">
                 <h1>Chat History</h1>
                 <div className="chats-list">

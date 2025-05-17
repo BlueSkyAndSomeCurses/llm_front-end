@@ -6,7 +6,7 @@ import "../styles/popups.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-function Sidebar() {
+function Sidebar({ onToggle = () => { } }) {
     const [chats, setChats] = useState([]);
     const [expanded, setExpanded] = useState(false);
     const [menuHovered, setMenuHovered] = useState(false);
@@ -42,7 +42,11 @@ function Sidebar() {
     }, []);
 
     const toggleSidebar = () => {
-        setExpanded(!expanded);
+        const newExpandedState = !expanded;
+        setExpanded(newExpandedState);
+        if (onToggle) {
+            onToggle(newExpandedState);
+        }
     };
 
     const handleNewChat = () => {

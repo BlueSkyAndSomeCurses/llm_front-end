@@ -36,7 +36,7 @@
   background-color: $bg-light;
   border-radius: 10px;
   padding: 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px $border-light;
   border: 1px solid $border-color;
   display: flex;
   flex-direction: column;
@@ -107,7 +107,7 @@
   color: #e74c3c;
   font-size: 14px;
   padding: 8px;
-  background-color: rgba(#e74c3c, 0.1);
+  background-color: rgba($red-accent, 0.1);
   border-radius: 6px;
   text-align: center;
 }

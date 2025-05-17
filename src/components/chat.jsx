@@ -8,6 +8,7 @@ import Sidebar from "./Sidebar";
 import ModelButton from "./Model";
 import "../styles/popups.scss";
 import { getLLMResponse } from "../utils/llm_rest";
+import { saveMessage } from "./ChatAPI";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
@@ -59,38 +60,15 @@ function Chat() {
             role: "user",
         };
 
-        localStorage.setItem(
-            `chat_${chatId}`,
-            JSON.stringify([initialMessage])
-        );
-
         try {
             if (user) {
-                const token = localStorage.getItem("token");
-
-                await axios.post(
-                    "/api/messages",
-                    {
-                        messageText: currentInputValue,
-                        chatId: chatId,
-                        messageType: "question",
-                        model: currentSelectedModel,
-                        modelName: currentSelectedModel,
-                    },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
+                await saveMessage(currentInputValue, "question", chatId, currentSelectedModel);
 
                 setMessages(prevMessages => [...prevMessages, initialMessage]);
             }
         } catch (error) {
             console.error("Error in chat:", error);
         }
-
-        localStorage.setItem("selectedModel", currentSelectedModel);
 
         setInputValue("");
 

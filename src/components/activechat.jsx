@@ -6,7 +6,7 @@ import "../styles/sidebar.scss";
 import Sidebar from "./Sidebar";
 import MessageList from "./MessageList";
 import MessageInput from "./MessageInput";
-import { fetchMessages, saveMessage, getAssistantResponse, cancelRequest } from "./ChatAPI";
+import { fetchMessages, fetchModelName, saveMessage, getAssistantResponse, cancelRequest } from "./ChatAPI";
 
 function ActiveChat() {
     const { chatId } = useParams();
@@ -14,6 +14,7 @@ function ActiveChat() {
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState(null);
+    const [selectedModel, setSelectedModel] = useState("");
     const hasRespondedRef = useRef(false);
     const messagesRef = useRef(messages);
     const cancelTokenSourceRef = useRef(null);
@@ -32,7 +33,9 @@ function ActiveChat() {
             );
         }
         prevLocationRef.current = location;
-    }, [location]); useEffect(() => {
+    }, [location]);
+
+    useEffect(() => {
         const userData = localStorage.getItem("user");
         if (userData) {
             setUser(JSON.parse(userData));
@@ -67,11 +70,6 @@ function ActiveChat() {
                     ...updatedMessages[lastIndex],
                     content: "There was an error when generating response: Request was cancelled."
                 };
-
-                localStorage.setItem(
-                    `chat_${chatId}`,
-                    JSON.stringify(updatedMessages)
-                );
             }
             return updatedMessages;
         });
@@ -97,6 +95,7 @@ function ActiveChat() {
             const { completeMessage, error } = await getAssistantResponse(
                 userMessage,
                 messagesRef.current.slice(0, -1),
+                selectedModel,
                 {
                     cancelTokenSource: cancelTokenSourceRef.current,
                     chatId,
@@ -110,11 +109,6 @@ function ActiveChat() {
                                     ...updatedMessages[lastIndex],
                                     content: newText
                                 };
-
-                                localStorage.setItem(
-                                    `chat_${chatId}`,
-                                    JSON.stringify(updatedMessages)
-                                );
                             }
 
                             return updatedMessages;
@@ -122,6 +116,7 @@ function ActiveChat() {
                     }
                 }
             );
+
 
             if (error) {
                 setMessages((prevMessages) => {
@@ -136,10 +131,6 @@ function ActiveChat() {
                                 : "There was an error when generating response."
                         };
 
-                        localStorage.setItem(
-                            `chat_${chatId}`,
-                            JSON.stringify(updatedMessages)
-                        );
                     }
                     return updatedMessages;
                 });
@@ -148,13 +139,18 @@ function ActiveChat() {
             setIsLoading(false);
             cancelTokenSourceRef.current = null;
         },
-        [chatId]
-    ); useEffect(() => {
+        [chatId, selectedModel]
+    );
+
+    useEffect(() => {
         let isMounted = true;
         const abortController = new AbortController();
 
         const loadMessages = async () => {
             try {
+                const modelName = await fetchModelName(chatId, abortController.signal);
+                setSelectedModel(modelName);
+
                 const fetchedMessages = await fetchMessages(chatId, abortController.signal);
 
                 if (isMounted) {
@@ -202,27 +198,27 @@ function ActiveChat() {
 
         setMessages((prevMessages) => {
             const updatedMessages = [...prevMessages, userMessage];
-
-            localStorage.setItem(
-                `chat_${chatId}`,
-                JSON.stringify(updatedMessages)
-            );
             return updatedMessages;
         });
 
         setInputValue("");
 
-        await saveMessage(currentInputValue, "question", chatId);
-
+        await saveMessage(currentInputValue, "question", chatId, selectedModel);
 
         await new Promise((resolve) => setTimeout(resolve, 500));
 
         await handleAssistantResponse(currentInputValue);
     };
 
+    const [sidebarExpanded, setSidebarExpanded] = useState(false);
+
+    const handleSidebarStateChange = (isExpanded) => {
+        setSidebarExpanded(isExpanded);
+    };
+
     return (
-        <div className="active-chat-container">
-            <Sidebar />
+        <div className={`active-chat-container ${sidebarExpanded ? "sidebar-expanded" : ""}`}>
+            <Sidebar onToggle={handleSidebarStateChange} />
             <div className="active-chat-content">
                 <div className="active-chatbox-container">
                     <div className="active-chat-box">
