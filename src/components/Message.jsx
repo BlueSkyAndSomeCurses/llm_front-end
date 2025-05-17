@@ -12,7 +12,7 @@ import '../styles/message.scss';
 
 function Message({ message }) {
   const { role, content } = message;
-  
+
   return (
     <div className={`active-message ${role}-message`}>
       {role === "assistant" ? (

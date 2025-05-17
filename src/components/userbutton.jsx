@@ -25,11 +25,8 @@ function UserButton({ size, expanded }) {
                     console.error("Error parsing user data:", error);
                 }
             }
-        };
+        }; loadUserData();
 
-        loadUserData();
-
-        // Listen for user data changes from other components
         const handleUserDataChanged = (event) => {
             if (isMounted && event.detail && event.detail.user) {
                 setUser(event.detail.user);

@@ -1,4 +1,4 @@
-@import './colors.scss';
+@import "./colors.scss";
 
 .settings-overlay {
   position: fixed;
@@ -25,7 +25,7 @@
 }
 
 .settings-modal {
-  background-color: #FFF5F7;
+  background-color: #fff5f7;
   border-radius: 10px;
   width: 90%;
   max-width: 500px;
@@ -35,7 +35,7 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   animation: slideIn 0.3s ease-out forwards;
   position: relative;
-  
+
   @media (prefers-color-scheme: dark) {
     background-color: $bg-dark;
     color: $text-light;
@@ -61,25 +61,25 @@
   position: sticky;
   top: 0;
   z-index: 1010;
-  background-color: #FFF5F7;
+  background-color: #fff5f7;
   padding: 20px 0;
   margin: 0 -35px 30px;
   padding-left: 35px;
   padding-right: 35px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  
+
   @media (prefers-color-scheme: dark) {
     background-color: $bg-dark;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   }
-  
+
   h2 {
     margin: 0;
     font-size: 1.8rem;
     color: $illusion;
     font-weight: 600;
   }
-  
+
   .close-button {
     background: none;
     border: none;
@@ -91,7 +91,7 @@
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
-    
+
     &:hover {
       background-color: rgba($illusion, 0.1);
       color: $illusion;
@@ -104,7 +104,7 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 35px;
-  
+
   .avatar-preview {
     width: 120px;
     height: 120px;
@@ -118,26 +118,26 @@
     color: white;
     border: 3px solid white;
     box-shadow: 0 2px 12px rgba($illusion, 0.3);
-    
+
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       border-radius: 50%;
     }
-    
+
     .avatar-placeholder {
       font-size: 3.5rem;
       font-weight: 600;
     }
   }
-  
+
   .avatar-buttons {
     display: flex;
     gap: 12px;
     margin-bottom: 10px;
   }
-  
+
   .upload-button {
     display: flex;
     align-items: center;
@@ -151,23 +151,23 @@
     font-size: 14px;
     transition: all 0.2s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    
+
     &:hover {
       border-color: $illusion;
       color: $illusion;
       background-color: rgba($illusion, 0.05);
     }
-    
+
     @media (prefers-color-scheme: dark) {
       background-color: rgba(255, 255, 255, 0.1);
       color: $text-primary;
-      
+
       &:hover {
         background-color: rgba($illusion, 0.1);
       }
     }
   }
-  
+
   .reset-button {
     display: flex;
     align-items: center;
@@ -181,17 +181,17 @@
     font-size: 14px;
     transition: all 0.2s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    
+
     &:hover {
       background-color: rgba(231, 76, 60, 0.1);
       color: #c0392b;
     }
-    
+
     @media (prefers-color-scheme: dark) {
       background-color: rgba(255, 255, 255, 0.1);
       border-color: #e74c3c;
       color: #e74c3c;
-      
+
       &:hover {
         background-color: rgba(231, 76, 60, 0.2);
       }
@@ -202,19 +202,19 @@
 .form-group {
   margin-bottom: 24px;
   width: 100%;
-  
+
   label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
     color: $text-dark;
     font-size: 16px;
-    
+
     @media (prefers-color-scheme: dark) {
       color: $text-light;
     }
   }
-  
+
   input {
     width: 100%;
     padding: 12px 15px;
@@ -224,20 +224,20 @@
     background-color: white;
     color: $text-dark;
     transition: all 0.2s ease;
-    
+
     &:focus {
       outline: none;
       border-color: $illusion;
       box-shadow: 0 0 0 2px rgba($illusion, 0.2);
     }
-    
+
     @media (prefers-color-scheme: dark) {
       background-color: rgba(255, 255, 255, 0.05);
       border-color: rgba(255, 255, 255, 0.1);
       color: $text-light;
     }
   }
-  
+
   .error {
     color: #e74c3c;
     font-size: 0.875rem;
@@ -252,7 +252,7 @@
   padding-top: 25px;
   margin-top: 25px;
   margin-bottom: 10px;
-  
+
   h3 {
     margin-top: 0;
     margin-bottom: 20px;
@@ -267,8 +267,9 @@
   justify-content: flex-end;
   gap: 12px;
   margin-top: 35px;
-  
-  .cancel-button, .save-button {
+
+  .cancel-button,
+  .save-button {
     padding: 12px 22px;
     border-radius: 8px;
     cursor: pointer;
@@ -276,28 +277,28 @@
     transition: all 0.2s ease;
     font-size: 15px;
   }
-  
+
   .cancel-button {
     background: transparent;
     border: 1px solid $border-color;
     color: $text-primary;
-    
+
     &:hover {
       background-color: rgba($illusion, 0.03);
       border-color: $text-primary;
     }
-    
+
     @media (prefers-color-scheme: dark) {
       color: $text-primary;
       border-color: rgba(255, 255, 255, 0.2);
-      
+
       &:hover {
         background-color: rgba(255, 255, 255, 0.05);
         border-color: $text-primary;
       }
     }
   }
-  
+
   .save-button {
     display: flex;
     align-items: center;
@@ -306,17 +307,17 @@
     background-color: $illusion;
     border: none;
     color: white;
-    
+
     &:hover {
       background-color: darken($illusion, 5%);
       transform: translateY(-1px);
       box-shadow: 0 2px 8px rgba($illusion, 0.4);
     }
-    
+
     &:active {
       transform: translateY(0);
     }
-    
+
     &:disabled {
       opacity: 0.7;
       cursor: not-allowed;
@@ -333,7 +334,6 @@
   border-radius: 6px;
   margin: 15px 0;
   font-size: 0.9rem;
-
 }
 
 .save-avatar-button {
@@ -348,11 +348,11 @@
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.2s;
-  
+
   &:hover {
     background-color: #c87a9d;
   }
-  
+
   &:disabled {
     background-color: #e6b7cd;
     cursor: not-allowed;

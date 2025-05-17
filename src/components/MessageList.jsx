@@ -5,7 +5,7 @@ import '../styles/messageList.scss';
 
 function MessageList({ messages, isLoading }) {
   const messagesEndRef = useRef(null);
-  
+
   const hasAssistantMessage = messages.some(msg => msg.role === 'assistant');
 
   const scrollToBottom = () => {
@@ -21,7 +21,7 @@ function MessageList({ messages, isLoading }) {
     const timer = setTimeout(() => {
       scrollToBottom();
     }, 50);
-    
+
     return () => clearTimeout(timer);
   }, [messages]);
 
@@ -30,11 +30,11 @@ function MessageList({ messages, isLoading }) {
       {messages.map((msg, i) => (
         <Message key={i} message={msg} />
       ))}
-      
+
       {(hasAssistantMessage || isLoading) && (
         <HelloKittyAssistant isThinking={isLoading} />
       )}
-      
+
       <div ref={messagesEndRef} />
     </div>
   );

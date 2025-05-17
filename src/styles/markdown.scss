@@ -1,4 +1,4 @@
-@import './colors.scss';
+@import "./colors.scss";
 
 .markdown-content {
   line-height: 1.2;
@@ -76,7 +76,8 @@
   }
 
   code {
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier,
+      monospace;
     padding: 0 0.1em;
     margin: 0;
     font-size: 85%;
@@ -151,7 +152,7 @@
     border-radius: 10px;
   }
 
-  >.katex {
+  > .katex {
     display: table;
     margin: 0 auto;
   }

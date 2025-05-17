@@ -114,7 +114,6 @@ function UserSettings({ onClose, user }) {
                     };
                     localStorage.setItem("user", JSON.stringify(updatedUser));
 
-                    // Dispatch custom event for other components
                     const userDataChangedEvent = new CustomEvent('userDataChanged', {
                         detail: { user: updatedUser }
                     });
@@ -128,11 +127,8 @@ function UserSettings({ onClose, user }) {
 
             if (successTimerRef.current) {
                 clearTimeout(successTimerRef.current);
-            }
-
-            successTimerRef.current = setTimeout(() => {
+            } successTimerRef.current = setTimeout(() => {
                 setSuccessMessage("");
-                // Don't close the window automatically
             }, 1500);
 
             setAvatar(null);
@@ -155,13 +151,10 @@ function UserSettings({ onClose, user }) {
 
     const triggerFileInput = () => {
         fileInputRef.current.click();
-    };
-
-    const validateForm = () => {
+    }; const validateForm = () => {
         const currentName = name;
         const currentNewPassword = newPassword;
         const currentConfirmPassword = confirmPassword;
-        // Do not redeclare currentPassword as it's already available from state
 
         console.log(currentName, currentNewPassword, currentConfirmPassword, currentPassword);
         const newErrors = {};
@@ -201,7 +194,6 @@ function UserSettings({ onClose, user }) {
             if (response.data.user) {
                 localStorage.setItem("user", JSON.stringify(response.data.user));
 
-                // Dispatch custom event for other components
                 const userDataChangedEvent = new CustomEvent('userDataChanged', {
                     detail: { user: response.data.user }
                 });
@@ -270,7 +262,6 @@ function UserSettings({ onClose, user }) {
 
                     const timeoutId = setTimeout(() => {
                         setSuccessMessage("");
-                        // Don't close the settings window
                     }, 1500);
 
                     successTimerRef.current = timeoutId;

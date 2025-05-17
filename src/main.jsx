@@ -9,7 +9,6 @@ import Title from "./components/title.jsx";
 import History from "./components/history.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
-// Import the auth helpers so they're initialized on app start
 import "./utils/authHelpers.js";
 
 createRoot(document.getElementById("root")).render(

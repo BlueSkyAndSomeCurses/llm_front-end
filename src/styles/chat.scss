@@ -1,139 +1,140 @@
-@import './colors.scss';
+@import "./colors.scss";
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: $text-primary;
-    width: 100%;
-    min-height: 100vh;
-    display: block;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  color: $text-primary;
+  width: 100%;
+  min-height: 100vh;
+  display: block;
 }
 
 #root {
-    width: 100%;
-    height: 100vh;
+  width: 100%;
+  height: 100vh;
 }
 
 .chatpage-container {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
 }
 
 .chat-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    padding: 20px;
-    background-color: $bg-dark;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: 20px;
+  background-color: $bg-dark;
 }
 
 .chatbox-container {
-    width: 100%;
-    max-width: 800px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 8px;
-    overflow: hidden;
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .chat-box {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    border: 1px solid $border-color;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border: 1px solid $border-color;
 }
 
 .chat-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
 
-    h2 {
-        padding: 0;
-        margin: 0;
-        font-size: 1.8rem;
-        color: $illusion;
-    }
+  h2 {
+    padding: 0;
+    margin: 0;
+    font-size: 1.8rem;
+    color: $illusion;
+  }
 
-    p {
-        margin: 10px 0 50px 0;
-        font-size: 1.1rem;
-        max-width: 400px;
-        line-height: 1.6;
-        color: $text-muted;
-    }
+  p {
+    margin: 10px 0 50px 0;
+    font-size: 1.1rem;
+    max-width: 400px;
+    line-height: 1.6;
+    color: $text-muted;
+  }
 }
 
 .chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
 }
 
 .chat-input {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    background-color: $bg-light;
-    border-radius: 8px;
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: $bg-light;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .input-field {
-    width: 100%;
-    padding: 16px;
-    background-color: var(--bg-input);
-    color: $text-dark;
-    border: none;
-    outline: none;
-    font-size: 16px;
+  width: 100%;
+  padding: 16px;
+  background-color: var(--bg-input);
+  color: $text-dark;
+  border: none;
+  outline: none;
+  font-size: 16px;
 
-    &.multiline {
-        min-height: 24px;
-        max-height: 150px;
-        resize: none;
-        overflow-y: auto;
-        line-height: 1.4;
-        font-family: inherit;
-    }
+  &.multiline {
+    min-height: 24px;
+    max-height: 150px;
+    resize: none;
+    overflow-y: auto;
+    line-height: 1.4;
+    font-family: inherit;
+  }
 }
 
 .input-utils {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
 }
 
 .send-button {
-    background-color: transparent;
-    border: none;
-    color: $illusion;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px;
-    padding-top: 7px;
-    padding-right: 7px;
-    border-radius: 6px;
-    border-radius: 22px;
-    transition: all 0.2s ease;
+  background-color: transparent;
+  border: none;
+  color: $illusion;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  padding-top: 7px;
+  padding-right: 7px;
+  border-radius: 6px;
+  border-radius: 22px;
+  transition: all 0.2s ease;
 
-    &:hover {
-        background-color: rgba($illusion, 0.1);
-        transform: scale(1.05);
-    }
+  &:hover {
+    background-color: rgba($illusion, 0.1);
+    transform: scale(1.05);
+  }
 
-    &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }

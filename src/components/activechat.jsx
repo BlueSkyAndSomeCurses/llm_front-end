@@ -32,15 +32,12 @@ function ActiveChat() {
             );
         }
         prevLocationRef.current = location;
-    }, [location]);
-
-    useEffect(() => {
+    }, [location]); useEffect(() => {
         const userData = localStorage.getItem("user");
         if (userData) {
             setUser(JSON.parse(userData));
         }
 
-        // Listen for user data changes from other components
         const handleUserDataChanged = (event) => {
             if (event.detail && event.detail.user) {
                 setUser(event.detail.user);
@@ -152,10 +149,7 @@ function ActiveChat() {
             cancelTokenSourceRef.current = null;
         },
         [chatId]
-    );
-
-    // Load messages
-    useEffect(() => {
+    ); useEffect(() => {
         let isMounted = true;
         const abortController = new AbortController();
 

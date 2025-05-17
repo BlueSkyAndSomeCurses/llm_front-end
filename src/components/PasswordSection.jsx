@@ -30,7 +30,7 @@ function PasswordSection({ setParentErrors }) {
 
     const updatePassword = async () => {
         if (!newPassword) return { success: true };
-        
+
         if (!validatePasswords()) {
             return { success: false };
         }
@@ -38,9 +38,9 @@ function PasswordSection({ setParentErrors }) {
         try {
             const token = localStorage.getItem("token");
             await axios.put("/api/user/password",
-                { 
-                    currentPassword, 
-                    newPassword 
+                {
+                    currentPassword,
+                    newPassword
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -48,14 +48,14 @@ function PasswordSection({ setParentErrors }) {
         } catch (error) {
             console.error("Error updating password:", error);
             const errorMessage = error.response?.data?.message || "Failed to update password";
-            
+
             const newError = { currentPassword: errorMessage };
             setErrors(prev => ({ ...prev, ...newError }));
-            
+
             if (setParentErrors) {
                 setParentErrors(prev => ({ ...prev, ...newError }));
             }
-            
+
             return { success: false };
         }
     };

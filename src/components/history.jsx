@@ -14,7 +14,7 @@ const History = () => {
 
     useEffect(() => {
         let isMounted = true;
-        
+
         const fetchChats = async () => {
             try {
                 const token = localStorage.getItem("token");
@@ -26,7 +26,7 @@ const History = () => {
                 const response = await axios.get("/api/chats", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                
+
                 if (isMounted) {
                     const chatData = response.data.chats;
                     setChats(chatData);
@@ -40,7 +40,7 @@ const History = () => {
         };
 
         fetchChats();
-        
+
         return () => {
             isMounted = false;
         };
@@ -53,7 +53,7 @@ const History = () => {
     const handleChatHover = async (chatId) => {
         const currentChatId = chatId;
         setHoveredChatId(currentChatId);
-        
+
         if (hoverMessages[currentChatId]) return;
 
         try {
@@ -69,7 +69,7 @@ const History = () => {
 
                 setHoverMessages(prev => {
                     if (prev[currentChatId]) return prev;
-                    
+
                     return {
                         ...prev,
                         [currentChatId]: {

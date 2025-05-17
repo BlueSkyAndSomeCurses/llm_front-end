@@ -28,7 +28,7 @@ const strongPasswordRegex =
 const models = {
     "DeepSeek R1": "deepseek/deepseek-r1-distill-qwen-14b:free",
     QWEN: "qwen/qwen2.5-vl-3b-instruct:free",
-    "LLaMa 4 scout": "meta-llama/llama-4-maverick:free", // we can unify this dict with array in model.jsx
+    "LLaMa 4 scout": "meta-llama/llama-4-maverick:free",
 };
 
 const corsOptions = {
@@ -71,7 +71,6 @@ const authenticateToken = (req, res, next) => {
     if (token) {
         jwt.verify(token, JWT_SECRET, (err, user) => {
             if (err) {
-                // Access token expired or invalid, try refresh token
                 if (!refreshToken) {
                     return res.status(403).json({
                         message: "Invalid or expired token"
@@ -104,10 +103,7 @@ const handleRefreshToken = (req, res, next) => {
                 message: "Invalid or expired refresh token",
                 tokenExpired: true
             });
-        }
-
-        try {
-            // Get fresh user data
+        } try {
             const user = await User.findById(userData.id);
 
             if (!user) {
@@ -116,7 +112,6 @@ const handleRefreshToken = (req, res, next) => {
                 });
             }
 
-            // Generate new access token
             const accessToken = jwt.sign({
                 id: user._id,
                 email: user.email,
@@ -125,7 +120,6 @@ const handleRefreshToken = (req, res, next) => {
                 expiresIn: "24h"
             });
 
-            // Set the token in the response header to be picked up by the frontend
             res.set("X-New-Access-Token", accessToken);
 
             req.user = {
@@ -160,7 +154,6 @@ app.get("/api/protected", authenticateToken, (req, res) => {
     });
 });
 
-// Check authentication status endpoint
 app.get("/api/check-auth", (req, res) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
@@ -182,11 +175,9 @@ app.get("/api/check-auth", (req, res) => {
                         message: "Invalid or expired token"
                     });
                 } else {
-                    // Try with refresh token
                     verifyRefreshToken(req, res);
                 }
             } else {
-                // Valid access token
                 return res.status(200).json({
                     authenticated: true,
                     user: {
@@ -273,29 +264,24 @@ app.post("/api/login", async (req, res) => {
             });
         }
 
-        // Create access token (short-lived)
         const accessToken = jwt.sign({
             id: user._id,
             email: user.email,
             name: user.name,
         }, JWT_SECRET, {
             expiresIn: "24h"
-        });
-
-        // Create refresh token (long-lived)
-        const refreshToken = jwt.sign({
+        }); const refreshToken = jwt.sign({
             id: user._id,
             email: user.email
         }, JWT_REFRESH_SECRET, {
             expiresIn: "30d"
         });
 
-        // Set refresh token in HTTP-only cookie
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // true in production
+            secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
-            maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
+            maxAge: 30 * 24 * 60 * 60 * 1000
         });
 
         const userResponse = {
@@ -319,7 +305,6 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.post("/api/logout", (req, res) => {
-    // Clear the refresh token cookie
     res.clearCookie("refreshToken");
 
     res.status(200).json({
@@ -344,31 +329,11 @@ app.post("/api/register", async (req, res) => {
                 .json({
                     message: "User with this email already exists"
                 });
-        }
-
-        if (!strongPasswordRegex.test(password)) {
+        } if (!strongPasswordRegex.test(password)) {
             return res.status(400).json({
                 message: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
             });
         }
-
-
-        // here should be a call to the email validation API
-        // try {
-        //     const response = await fetch(process.env.EMAIL_API_ENDPOINT + email, {
-        //         method: "GET"
-        //     });
-
-        //     if (response.status !== 200) {
-        //         console.error("Email check failed:", response.status);
-        //         return res.status(500).json({
-        //             message: "Email check failed"
-        //         });
-        //     }
-
-        //     const data = await response.json();
-        //     if (data.result.score < 90) {
-        //         console.error("Email check failed:", data);
         //         return res.status(400).json({
         //             message: "Email is not valid"
         //         });
@@ -400,7 +365,6 @@ app.post("/api/register", async (req, res) => {
         }
         );
 
-        // Create refresh token (long-lived)
         const refreshToken = jwt.sign({
             id: newUser._id,
             email: newUser.email
@@ -408,14 +372,11 @@ app.post("/api/register", async (req, res) => {
             JWT_SECRET, {
             expiresIn: "30d"
         }
-        );
-
-        // Set refresh token in HTTP-only cookie
-        res.cookie("refreshToken", refreshToken, {
+        ); res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: false, // Set to true in production
+            secure: false,
             sameSite: "strict",
-            maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
+            maxAge: 30 * 24 * 60 * 60 * 1000
         });
 
         const userResponse = {

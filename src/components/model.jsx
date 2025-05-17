@@ -10,7 +10,7 @@ const ModelButton = ({ selectedModel, setSelectedModel }) => {
         if (selectedModel !== modelName) {
             setSelectedModel(modelName);
         }
-        
+
         setIsOpen(false);
     };
 

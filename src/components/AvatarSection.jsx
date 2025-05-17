@@ -62,21 +62,18 @@ function AvatarSection({ user, updateUser, onSuccess }) {
             );
 
             try {
-                const currentUser = JSON.parse(localStorage.getItem("user"));
-                if (currentUser) {
+                const currentUser = JSON.parse(localStorage.getItem("user")); if (currentUser) {
                     const updatedUser = {
                         ...currentUser,
                         avatar: response.data.avatar || currentAvatarPreview
                     };
                     localStorage.setItem("user", JSON.stringify(updatedUser));
 
-                    // Dispatch custom event for other components
                     const userDataChangedEvent = new CustomEvent('userDataChanged', {
                         detail: { user: updatedUser }
                     });
                     window.dispatchEvent(userDataChangedEvent);
 
-                    // Notify parent component about the user update
                     if (typeof updateUser === 'function') {
                         updateUser(updatedUser);
                     }

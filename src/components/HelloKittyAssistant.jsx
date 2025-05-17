@@ -5,9 +5,9 @@ import helloKittyLogo from "../assets/hello-kitty.png";
 const HelloKittyAssistant = ({ isThinking }) => {
   return (
     <div className={`hello-kitty-assistant ${isThinking ? 'thinking' : 'idle'}`}>
-      <img 
-        src={helloKittyLogo} 
-        alt="Hello Kitty Assistant" 
+      <img
+        src={helloKittyLogo}
+        alt="Hello Kitty Assistant"
         className="hello-kitty-image"
       />
       {isThinking && (

@@ -13,9 +13,8 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-    },
-    avatar: {
-        type: String, // This will store the base64 encoded image
+    }, avatar: {
+        type: String,
         default: null
     }
 }, {

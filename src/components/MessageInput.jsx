@@ -2,12 +2,12 @@ import React, { useRef, useEffect } from 'react';
 import { Send, XCircle } from 'lucide-react';
 import '../styles/messageInput.scss';
 
-function MessageInput({ 
-  inputValue, 
-  setInputValue, 
-  handleSubmit, 
-  isLoading, 
-  handleCancel 
+function MessageInput({
+  inputValue,
+  setInputValue,
+  handleSubmit,
+  isLoading,
+  handleCancel
 }) {
   const textareaRef = useRef(null);
 
@@ -22,11 +22,11 @@ function MessageInput({
     const textarea = textareaRef.current;
     if (textarea) {
       const scrollPos = window.scrollY;
-      
+
       textarea.style.height = 'auto';
-      
+
       textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
-      
+
       window.scrollTo(0, scrollPos);
     }
   };
@@ -35,7 +35,7 @@ function MessageInput({
     const timer = setTimeout(() => {
       resizeTextarea();
     }, 0);
-    
+
     return () => clearTimeout(timer);
   }, [inputValue]);
 

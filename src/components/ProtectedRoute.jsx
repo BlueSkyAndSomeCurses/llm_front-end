@@ -21,19 +21,14 @@ function ProtectedRoute({ children }) {
         };
 
         verifyAuth();
-    }, []);
-
-    if (isLoading) {
-        // Return loading state
+    }, []); if (isLoading) {
         return <div className="loading-container">Loading...</div>;
     }
 
     if (!isAuthenticated) {
-        // Redirect to login page
         return <Navigate to="/login" replace />;
     }
 
-    // User is authenticated, render children
     return children;
 }
 

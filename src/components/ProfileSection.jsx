@@ -31,7 +31,6 @@ function ProfileSection({ user, updateUser }) {
             if (response.data.user) {
                 localStorage.setItem("user", JSON.stringify(response.data.user));
 
-                // Dispatch custom event for other components
                 const userDataChangedEvent = new CustomEvent('userDataChanged', {
                     detail: { user: response.data.user }
                 });

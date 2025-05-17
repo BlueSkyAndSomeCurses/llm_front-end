@@ -33,15 +33,15 @@ function Login() {
                     password: currentPassword,
                 });
                 console.log(response.data);
-                
+
                 if (response.data.token) {
                     localStorage.setItem("token", response.data.token);
                 }
-                
+
                 if (response.data.user) {
                     localStorage.setItem("user", JSON.stringify(response.data.user));
                 }
-                
+
                 navigate("/chat");
             } else {
                 if (currentPassword !== currentConfirmPassword) {
@@ -56,15 +56,15 @@ function Login() {
                     email: currentEmail,
                     password: currentPassword,
                 });
-                
+
                 if (response.data.token) {
                     localStorage.setItem("token", response.data.token);
                 }
-                
+
                 if (response.data.user) {
                     localStorage.setItem("user", JSON.stringify(response.data.user));
                 }
-                
+
                 navigate("/chat");
             }
         } catch (error) {

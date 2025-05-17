@@ -1,4 +1,4 @@
-@import './colors.scss';
+@import "./colors.scss";
 
 .popup-base {
   background-color: white;
@@ -68,7 +68,7 @@
   }
 
   &:not(:last-child)::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 16px;
@@ -220,7 +220,7 @@
   }
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -8px;
     right: 20px;

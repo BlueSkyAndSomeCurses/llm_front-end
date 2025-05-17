@@ -1,183 +1,180 @@
-@import './colors.scss';
+@import "./colors.scss";
 
 .HistoryPage {
-    display: flex;
-    height: 100vh;
-    background-color: $bg;
+  display: flex;
+  height: 100vh;
+  background-color: $bg;
 }
 
 .HistoryContainer {
-    flex: 1;
-    padding: 20px;
-    margin-left: 60px;
-    overflow-y: auto;
+  flex: 1;
+  padding: 20px;
+  margin-left: 60px;
+  overflow-y: auto;
 
-    h1 {
-        color: $text-dark;
-        margin-bottom: 20px;
-        font-size: 24px;
-    }
+  h1 {
+    color: $text-dark;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
 }
 
 .SearchContainer {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .SearchInput {
-    width: 100%;
-    padding: 12px 20px;
-    border: 1px solid $border-color;
-    border-radius: 8px;
-    background-color: $bg-light;
-    color: $text-dark;
-    font-size: 16px;
-    transition: all 0.2s ease;
+  width: 100%;
+  padding: 12px 20px;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  background-color: $bg-light;
+  color: $text-dark;
+  font-size: 16px;
+  transition: all 0.2s ease;
 
-    &:focus {
-        outline: none;
-        border-color: $illusion;
-        box-shadow: 0 0 0 2px rgba($illusion, 0.1);
-    }
+  &:focus {
+    outline: none;
+    border-color: $illusion;
+    box-shadow: 0 0 0 2px rgba($illusion, 0.1);
+  }
 
-    &::placeholder {
-        color: lighten($text-dark, 30%);
-    }
+  &::placeholder {
+    color: lighten($text-dark, 30%);
+  }
 }
 
 .chats-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .chat-item {
-    background-color: $bg-light;
-    border-radius: 8px;
-    padding: 16px;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    border: 1px solid $border-color;
-    overflow: hidden;
+  background-color: $bg-light;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  border: 1px solid $border-color;
+  overflow: hidden;
 
-    &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        border-color: $illusion;
-    }
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: $illusion;
+  }
 }
 
 .chat-content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .chat-main {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
 }
 
 .chat-message {
-    color: $text-dark;
-    margin: 0;
-    font-size: 16px;
-    line-height: 1.4;
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  color: $text-dark;
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .chat-date {
-    color: lighten($text-dark, 30%);
-    font-size: 14px;
-    white-space: nowrap;
+  color: lighten($text-dark, 30%);
+  font-size: 14px;
+  white-space: nowrap;
 }
 
 .chat-preview {
-    border-top: 1px solid $border-color;
-    padding-top: 12px;
-    margin-top: 4px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: slideIn 0.7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-    max-height: 0;
-    transition: max-height 0.7s cubic-bezier(0.25, 0.1, 0.25, 1),
-        opacity 0.7s cubic-bezier(0.25, 0.1, 0.25, 1),
-        transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
+  border-top: 1px solid $border-color;
+  padding-top: 12px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideIn 0.7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  max-height: 0;
+  transition: max-height 0.7s cubic-bezier(0.25, 0.1, 0.25, 1),
+    opacity 0.7s cubic-bezier(0.25, 0.1, 0.25, 1),
+    transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .chat-item:hover .chat-preview {
-    max-height: 500px;
+  max-height: 500px;
 }
 
 @keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .preview-message {
-    font-size: 14px;
-    line-height: 1.4;
-    color: $text-dark;
-    padding: 8px;
-    border-radius: 6px;
-    // background-color: rgba($bg-dark, 0.5);
-    opacity: 0;
-    animation: fadeIn 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-    animation-delay: 0.3s;
-    display: -webkit-box;
-    -webkit-line-clamp: 10;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: 14px;
+  line-height: 1.4;
+  color: $text-dark;
+  padding: 8px;
+  border-radius: 6px;
+  opacity: 0;
+  animation: fadeIn 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  animation-delay: 0.3s;
+  display: -webkit-box;
+  -webkit-line-clamp: 10;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
-    &.user {
-        border: 1.5px solid rgba(darken($illusion, 15%), 0.3);
-        border-left: 4px solid darken($illusion, 15%);
-        
+  &.user {
+    border: 1.5px solid rgba(darken($illusion, 15%), 0.3);
+    border-left: 4px solid darken($illusion, 15%);
+  }
 
-    }
+  &.assistant {
+    border: 1, 5px solid rgba(lighten($illusion-night, 40%), 0.3);
+    border-left: 4px solid lighten($illusion-night, 40%);
+    animation-delay: 0.5s;
+  }
 
-    &.assistant {
-        border: 1,5px solid rgba(lighten($illusion-night, 40%), 0.3);
-        border-left: 4px solid lighten($illusion-night, 40%);
-        animation-delay: 0.5s;
-    }
+  strong {
+    color: $illusion;
+    margin-right: 8px;
+  }
 
-    strong {
-        color: $illusion;
-        margin-right: 8px;
-    }
-
-    .more-lines {
-        display: block;
-        color: lighten($text-dark, 20%);
-        font-style: italic;
-        margin-top: 4px;
-        text-align: center;
-    }
+  .more-lines {
+    display: block;
+    color: lighten($text-dark, 20%);
+    font-style: italic;
+    margin-top: 4px;
+    text-align: center;
+  }
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
+  from {
+    opacity: 0;
+  }
 
-    to {
-        opacity: 1;
-    }
+  to {
+    opacity: 1;
+  }
 }
