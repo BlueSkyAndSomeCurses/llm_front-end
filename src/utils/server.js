@@ -334,17 +334,6 @@ app.post("/api/register", async (req, res) => {
                 message: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
             });
         }
-        //         return res.status(400).json({
-        //             message: "Email is not valid"
-        //         });
-        //     }
-
-        // } catch (error) {
-        //     console.error("Error during email check:", error);
-        //     return res.status(500).json({
-        //         message: "Email check failed"
-        //     });
-        // }
 
         const newUser = new User({
             name,
@@ -409,22 +398,6 @@ app.post("/api/messages", authenticateToken, async (req, res) => {
         const userId = req.user.id;
 
         let selectedModelName = modelName;
-        if (!selectedModelName) {
-            const lastMessage = await Message.findOne({
-                userId: userId,
-                chatId
-            }, {}, {
-                sort: {
-                    messageNum: -1
-                }
-            });
-
-            if (lastMessage) {
-                selectedModelName = lastMessage.modelName;
-            } else if (messageType === "question") {
-                selectedModelName = modelName || "DeepSeek R1";
-            }
-        }
 
         const newMessage = new Message({
             userId,
@@ -469,6 +442,35 @@ app.get("/api/messages/:chatId", authenticateToken, async (req, res) => {
         console.error("Error fetching messages:", error);
         res.status(500).json({
             message: "Failed to fetch messages"
+        });
+    }
+});
+
+app.get("/api/chat/:chatId/model", authenticateToken, async (req, res) => {
+    try {
+        const { chatId } = req.params;
+        const userId = req.user.id;
+
+        // Get just the first message (usually has the model selection)
+        const firstMessage = await Message.findOne({
+            userId,
+            chatId,
+            messageNum: 0 // The first message in a chat
+        });
+
+        if (!firstMessage) {
+            return res.status(404).json({
+                message: "Chat not found"
+            });
+        }
+
+        res.status(200).json({
+            modelName: firstMessage.modelName
+        });
+    } catch (error) {
+        console.error("Error fetching model name:", error);
+        res.status(500).json({
+            message: "Failed to fetch model name"
         });
     }
 });

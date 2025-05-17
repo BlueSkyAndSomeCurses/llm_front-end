@@ -8,11 +8,37 @@ export const cancelRequest = (cancelTokenSource, reason) => {
   return cancelTokenSource;
 };
 
-export const fetchMessages = async (chatId, signal) => {
-  const savedMessages = localStorage.getItem(`chat_${chatId}`);
-  if (savedMessages) {
-    return JSON.parse(savedMessages);
+export const fetchModelName = async (chatId, signal) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const response = await axios.get(
+        `/api/chat/${chatId}/model`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          signal: signal,
+        }
+      );
+
+      if (response.data && response.data.modelName) {
+        return response.data.modelName;
+      }
+    }
+  } catch (error) {
+    if (error.name === 'AbortError' || axios.isCancel(error)) {
+      console.log("Model fetch aborted:", error.message);
+      throw error;
+    }
+    console.error("Error fetching model from server:", error);
   }
+
+  return "DeepSeek R1";
+};
+
+export const fetchMessages = async (chatId, signal) => {
+
 
   try {
     const token = localStorage.getItem("token");
@@ -41,11 +67,6 @@ export const fetchMessages = async (chatId, signal) => {
           })
         );
 
-        localStorage.setItem(
-          `chat_${chatId}`,
-          JSON.stringify(serverMessages)
-        );
-
         return serverMessages;
       }
     }
@@ -60,14 +81,13 @@ export const fetchMessages = async (chatId, signal) => {
   return [];
 };
 
-export const saveMessage = async (messageText, messageType, chatId) => {
+export const saveMessage = async (messageText, messageType, chatId, currentModel) => {
   try {
     const token = localStorage.getItem("token");
     if (token) {
       const currentMessageText = messageText;
       const currentMessageType = messageType;
       const currentChatId = chatId;
-      const currentModel = localStorage.getItem("selectedModel");
 
       await axios.post(
         "/api/messages",
@@ -89,7 +109,7 @@ export const saveMessage = async (messageText, messageType, chatId) => {
   }
 };
 
-export const getAssistantResponse = async (userMessage, context, options = {}) => {
+export const getAssistantResponse = async (userMessage, context, currentModel, options = {}) => {
   const currentUserMessage = userMessage;
   const currentContext = [...context];
 
@@ -104,9 +124,6 @@ export const getAssistantResponse = async (userMessage, context, options = {}) =
 
   try {
     const token = localStorage.getItem("token");
-    const currentModel = localStorage.getItem("selectedModel");
-
-    console.log("DEBUG:", currentModel)
 
     await axios.post(
       "/api/chat",
@@ -133,7 +150,7 @@ export const getAssistantResponse = async (userMessage, context, options = {}) =
     );
 
     if (completeMessage) {
-      await saveMessage(completeMessage, "response", chatId);
+      await saveMessage(completeMessage, "response", chatId, currentModel);
     }
 
   } catch (err) {
