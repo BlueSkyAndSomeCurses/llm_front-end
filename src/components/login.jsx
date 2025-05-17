@@ -68,8 +68,15 @@ function Login() {
                 navigate("/chat");
             }
         } catch (error) {
-            console.error("Error:", error);
-            setError(error.response?.data?.message || "Authentication failed");
+            if (error.response &&
+                error.response.status === 400 &&
+                (error.response.data.errorType === "weak_password" ||
+                    error.response.data.errorType === "email_exists")) {
+                setError(error.response.data.message);
+            } else {
+                console.error("Error:", error);
+                setError(error.response?.data?.message || "Authentication failed");
+            }
         }
     };
 

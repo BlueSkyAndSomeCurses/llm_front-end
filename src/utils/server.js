@@ -327,11 +327,13 @@ app.post("/api/register", async (req, res) => {
             return res
                 .status(400)
                 .json({
-                    message: "User with this email already exists"
+                    message: "User with this email already exists",
+                    errorType: "email_exists"
                 });
         } if (!strongPasswordRegex.test(password)) {
             return res.status(400).json({
-                message: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+                message: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+                errorType: "weak_password"
             });
         }
 
@@ -343,7 +345,6 @@ app.post("/api/register", async (req, res) => {
 
         await newUser.save();
 
-        // Create access token (short-lived)
         const accessToken = jwt.sign({
             id: newUser._id,
             email: newUser.email,
