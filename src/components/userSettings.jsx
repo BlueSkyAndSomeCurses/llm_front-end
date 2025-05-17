@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { X, Upload, Save, Trash2, CheckCircle } from "lucide-react";
+import { X, Upload, Save, Trash2 } from "lucide-react";
 import "../styles/usersettings.scss";
 import axios from "axios";
+import useToast from "../utils/useToast";
 
 function UserSettings({ onClose, user }) {
     const [name, setName] = useState(user?.name || "");
@@ -11,11 +12,10 @@ function UserSettings({ onClose, user }) {
     const [avatar, setAvatar] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null);
     const [avatarLoading, setAvatarLoading] = useState(false);
-    const [successMessage, setSuccessMessage] = useState("");
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const fileInputRef = useRef(null);
-    const successTimerRef = useRef(null);
+    const toast = useToast();
 
     useEffect(() => {
         const handleEscKey = (event) => {
@@ -40,14 +40,6 @@ function UserSettings({ onClose, user }) {
         return () => {
             document.body.classList.remove('no-scroll');
             window.scrollTo(0, scrollY);
-        };
-    }, []);
-
-    useEffect(() => {
-        return () => {
-            if (successTimerRef.current) {
-                clearTimeout(successTimerRef.current);
-            }
         };
     }, []);
 
@@ -123,14 +115,7 @@ function UserSettings({ onClose, user }) {
                 console.error("Error updating localStorage:", storageError);
             }
 
-            setSuccessMessage("Avatar updated successfully!");
-
-            if (successTimerRef.current) {
-                clearTimeout(successTimerRef.current);
-            } successTimerRef.current = setTimeout(() => {
-                setSuccessMessage("");
-            }, 1500);
-
+            toast.success("Avatar updated successfully!");
             setAvatar(null);
 
             setErrors((prevErrors) => {
@@ -144,6 +129,7 @@ function UserSettings({ onClose, user }) {
                 ...prevErrors,
                 avatar: "Failed to upload avatar. Please try again."
             }));
+            toast.error("Failed to upload avatar. Please try again.");
         } finally {
             setAvatarLoading(false);
         }
@@ -258,13 +244,7 @@ function UserSettings({ onClose, user }) {
                 }
 
                 if (profileUpdated && passwordUpdated) {
-                    setSuccessMessage("Settings updated successfully!");
-
-                    const timeoutId = setTimeout(() => {
-                        setSuccessMessage("");
-                    }, 1500);
-
-                    successTimerRef.current = timeoutId;
+                    toast.success("Settings updated successfully!");
                 }
             } catch (error) {
                 console.error("Error updating user:", error);
@@ -272,6 +252,7 @@ function UserSettings({ onClose, user }) {
                     ...prevErrors,
                     submit: "An error occurred while saving your settings"
                 }));
+                toast.error("Failed to update settings");
             } finally {
                 setLoading(false);
             }
@@ -336,13 +317,6 @@ function UserSettings({ onClose, user }) {
                             style={{ display: 'none' }}
                         />
                         {errors.avatar && <span className="error">{errors.avatar}</span>}
-                        {successMessage && (
-                            <span className="success-message">
-                                <CheckCircle size={16} />
-                                {successMessage}
-                            </span>
-                        )}
-
                     </div>
 
                     <div className="form-group">
