@@ -1,4 +1,5 @@
-@import "./colors.scss";
+@use "./colors.scss" as *;
+@use "sass:color";
 
 .settings-overlay {
   position: fixed;
@@ -285,10 +286,8 @@
     gap: 8px;
     background-color: $illusion;
     border: none;
-    color: white;
-
-    &:hover {
-      background-color: darken($illusion, 5%);
+    color: white;    &:hover {
+      background-color: color.adjust($illusion, $lightness: -5%);
       transform: translateY(-1px);
       box-shadow: 0 2px 8px rgba($illusion, 0.4);
     }

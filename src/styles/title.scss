@@ -1,4 +1,5 @@
-@import "./colors.scss";
+@use "./colors.scss" as *;
+@use "sass:color";
 
 .title-page {
   background: linear-gradient(to bottom, $bg 0%, white 100%);

@@ -1,4 +1,5 @@
-@import "./colors.scss";
+@use "./colors.scss" as *;
+@use "sass:color";
 
 .form-wrapper {
   position: fixed;
@@ -55,9 +56,8 @@
     line-height: 1.4;
     font-family: inherit;
   }
-
   &::placeholder {
-    color: lighten($text-dark, 30%);
+    color: color.adjust($text-dark, $lightness: 30%);
   }
 }
 
