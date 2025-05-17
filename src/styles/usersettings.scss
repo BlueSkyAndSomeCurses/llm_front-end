@@ -57,15 +57,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  position: sticky;
+  margin-bottom: 30px;  position: sticky;
   top: 0;
   z-index: 1010;
   background-color: $bg-secondary;
-  padding: 20px 0;
+  padding: 20px 35px;
   margin: 0 -35px 30px;
-  padding-left: 35px;
-  padding-right: 35px;
   box-shadow: 0 2px 10px $shadow;
 
   h2 {

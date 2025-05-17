@@ -1,7 +1,6 @@
 @import "./colors.scss";
 
-.form-wrapper {
-  position: fixed;
+.form-wrapper {  position: fixed;
   bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
@@ -11,9 +10,8 @@
   align-items: center;
   justify-content: center;
   background-color: $bg-dark;
-  padding: 0.75rem;
+  padding: 0.75rem 0.75rem 0.75rem calc(57px + 0.75rem);
   z-index: 100;
-  padding-left: calc(57px + 0.75rem);
 }
 
 .active-chat-input {

@@ -8,7 +8,7 @@
 
 .history-container {
   flex: 1;
-  padding: 20px;
+  padding: 16px;
   margin-left: 57px;
   overflow-y: auto;
   transition: margin-left 0.3s ease;
@@ -30,7 +30,7 @@
 
 .SearchInput {
   width: 100%;
-  padding: 12px 20px;
+  padding: 8px 16px;
   border: 1px solid $border-color;
   border-radius: 8px;
   background-color: $bg-light;

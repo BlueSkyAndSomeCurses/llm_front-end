@@ -112,28 +112,23 @@
   svg {
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
-
   .icon-enter {
     opacity: 0;
-    transform: scale(0.8) rotate(-90deg);
+    transform: scale(0.8) rotate(-90deg) translate(-50%, -50%);
     position: absolute;
     top: 50%;
     left: 50%;
-    margin-top: -12.5px;
-    margin-left: -12.5px;
   }
 
   .icon-exit {
     opacity: 1;
     transform: scale(1) rotate(0);
   }
-
   .chevron-icon {
     position: absolute;
     top: 50%;
     left: 50%;
-    margin-top: -12.5px;
-    margin-left: -12.5px;
+    transform: translate(-50%, -50%);
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
 
@@ -174,18 +169,16 @@
       transform: scale(0.8);
     }
   }
-
   .chevron-icon {
     position: absolute;
     top: 50%;
     left: 50%;
-    margin-top: -12.5px;
-    margin-left: -12.5px;
+    transform: translate(-50%, -50%);
     transition: opacity 0.3s ease, transform 0.3s ease;
 
     &.show {
       opacity: 1;
-      transform: scale(1);
+      transform: translate(-50%, -50%) scale(1);
     }
 
     &.hide {

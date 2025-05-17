@@ -84,9 +84,8 @@
     background-color: rgba($bg-dark, 0.7);
     border-radius: 2px;
   }
-
   pre {
-    background-color: #282c34;
+    background-color: $code-bg;
     border-radius: 3px;
     padding: 0.2em;
     margin: 0.1em 0;
@@ -96,7 +95,7 @@
       background-color: transparent;
       padding: 0;
       font-size: 90%;
-      color: #abb2bf;
+      color: $code-text;
       display: block;
       line-height: 1.2;
     }
