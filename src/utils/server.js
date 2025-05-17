@@ -12,12 +12,14 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import OpenAI from "openai";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
 const app = express();
 const PORT = 3001;
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "your-refresh-secret-key";
 
 const strongPasswordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+={}[\]|\\:;"'<>,.?/~`]).{8,}$/;
@@ -36,6 +38,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(cookieParser());
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
@@ -57,19 +60,87 @@ db.once("open", () => {
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
+    const refreshToken = req.cookies.refreshToken;
 
-    if (!token)
+    if (!token && !refreshToken) {
         return res.status(401).json({
             message: "Authentication token required"
         });
+    }
 
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err)
+    if (token) {
+        jwt.verify(token, JWT_SECRET, (err, user) => {
+            if (err) {
+                // Access token expired or invalid, try refresh token
+                if (!refreshToken) {
+                    return res.status(403).json({
+                        message: "Invalid or expired token"
+                    });
+                }
+
+                return handleRefreshToken(req, res, next);
+            }
+
+            req.user = user;
+            next();
+        });
+    } else if (refreshToken) {
+        handleRefreshToken(req, res, next);
+    }
+};
+
+const handleRefreshToken = (req, res, next) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+        return res.status(401).json({
+            message: "Refresh token required"
+        });
+    }
+
+    jwt.verify(refreshToken, JWT_REFRESH_SECRET, async (err, userData) => {
+        if (err) {
             return res.status(403).json({
-                message: "Invalid or expired token"
+                message: "Invalid or expired refresh token",
+                tokenExpired: true
             });
-        req.user = user;
-        next();
+        }
+
+        try {
+            // Get fresh user data
+            const user = await User.findById(userData.id);
+
+            if (!user) {
+                return res.status(404).json({
+                    message: "User not found"
+                });
+            }
+
+            // Generate new access token
+            const accessToken = jwt.sign({
+                id: user._id,
+                email: user.email,
+                name: user.name,
+            }, JWT_SECRET, {
+                expiresIn: "24h"
+            });
+
+            // Set the token in the response header to be picked up by the frontend
+            res.set("X-New-Access-Token", accessToken);
+
+            req.user = {
+                id: user._id,
+                email: user.email,
+                name: user.name
+            };
+
+            next();
+        } catch (error) {
+            console.error("Error refreshing token:", error);
+            return res.status(500).json({
+                message: "Error refreshing authentication"
+            });
+        }
     });
 };
 
@@ -88,6 +159,97 @@ app.get("/api/protected", authenticateToken, (req, res) => {
         user: req.user
     });
 });
+
+// Check authentication status endpoint
+app.get("/api/check-auth", (req, res) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!token && !refreshToken) {
+        return res.status(401).json({
+            authenticated: false,
+            message: "No authentication tokens found"
+        });
+    }
+
+    if (token) {
+        jwt.verify(token, JWT_SECRET, (err, user) => {
+            if (err) {
+                if (!refreshToken) {
+                    return res.status(403).json({
+                        authenticated: false,
+                        message: "Invalid or expired token"
+                    });
+                } else {
+                    // Try with refresh token
+                    verifyRefreshToken(req, res);
+                }
+            } else {
+                // Valid access token
+                return res.status(200).json({
+                    authenticated: true,
+                    user: {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email
+                    }
+                });
+            }
+        });
+    } else if (refreshToken) {
+        verifyRefreshToken(req, res);
+    }
+});
+
+const verifyRefreshToken = (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    jwt.verify(refreshToken, JWT_REFRESH_SECRET, async (err, userData) => {
+        if (err) {
+            return res.status(403).json({
+                authenticated: false,
+                message: "Invalid or expired refresh token"
+            });
+        }
+
+        try {
+            const user = await User.findById(userData.id);
+
+            if (!user) {
+                return res.status(404).json({
+                    authenticated: false,
+                    message: "User not found"
+                });
+            }
+
+            const accessToken = jwt.sign({
+                id: user._id,
+                email: user.email,
+                name: user.name,
+            }, JWT_SECRET, {
+                expiresIn: "24h"
+            });
+
+            return res.status(200).json({
+                authenticated: true,
+                newAccessToken: accessToken,
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    avatar: user.avatar
+                }
+            });
+        } catch (error) {
+            console.error("Error during refresh token verification:", error);
+            return res.status(500).json({
+                authenticated: false,
+                message: "Error verifying authentication"
+            });
+        }
+    });
+};
 
 app.post("/api/login", async (req, res) => {
     try {
@@ -111,28 +273,42 @@ app.post("/api/login", async (req, res) => {
             });
         }
 
-        const token = jwt.sign({
+        // Create access token (short-lived)
+        const accessToken = jwt.sign({
             id: user._id,
             email: user.email,
             name: user.name,
-        },
-            JWT_SECRET, {
+        }, JWT_SECRET, {
             expiresIn: "24h"
-        }
-        );
+        });
+
+        // Create refresh token (long-lived)
+        const refreshToken = jwt.sign({
+            id: user._id,
+            email: user.email
+        }, JWT_REFRESH_SECRET, {
+            expiresIn: "30d"
+        });
+
+        // Set refresh token in HTTP-only cookie
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // true in production
+            sameSite: "strict",
+            maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
+        });
 
         const userResponse = {
             _id: user._id,
             name: user.name,
             email: user.email,
-
             avatar: user.avatar
         };
 
         res.status(200).json({
             message: "Login successful",
             user: userResponse,
-            token: token,
+            token: accessToken,
         });
     } catch (error) {
         console.error("Login error:", error);
@@ -140,6 +316,15 @@ app.post("/api/login", async (req, res) => {
             message: "Login failed"
         });
     }
+});
+
+app.post("/api/logout", (req, res) => {
+    // Clear the refresh token cookie
+    res.clearCookie("refreshToken");
+
+    res.status(200).json({
+        message: "Logout successful"
+    });
 });
 
 app.post("/api/register", async (req, res) => {
@@ -204,7 +389,8 @@ app.post("/api/register", async (req, res) => {
 
         await newUser.save();
 
-        const token = jwt.sign({
+        // Create access token (short-lived)
+        const accessToken = jwt.sign({
             id: newUser._id,
             email: newUser.email,
             name: newUser.name
@@ -213,6 +399,24 @@ app.post("/api/register", async (req, res) => {
             expiresIn: "24h"
         }
         );
+
+        // Create refresh token (long-lived)
+        const refreshToken = jwt.sign({
+            id: newUser._id,
+            email: newUser.email
+        },
+            JWT_SECRET, {
+            expiresIn: "30d"
+        }
+        );
+
+        // Set refresh token in HTTP-only cookie
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: false, // Set to true in production
+            sameSite: "strict",
+            maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
+        });
 
         const userResponse = {
             _id: newUser._id,
@@ -223,7 +427,7 @@ app.post("/api/register", async (req, res) => {
         res.status(201).json({
             message: "Registration successful",
             user: userResponse,
-            token: token,
+            token: accessToken,
         });
     } catch (error) {
         console.error("Registration error:", error);
