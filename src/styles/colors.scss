@@ -1,21 +1,41 @@
+@use "sass:color";
+
 $illusion: #e45b98;
 $illusion-night: #d0005e;
+$illusion-hover: rgba($illusion, 0.1);
 $wewak: #ef9fc3;
 $kobi: #f0b4d0;
 $dairy-cream: #fae6c2;
 $soft-peach: #faf5f5;
 
+$pink-bg: #dd90b3;
+$pink-bg-dark: #c87a9d;
+$pink-bg-light: #e6b7cd;
+$pink-transparent: rgba(221, 144, 179, 0.27);
+
 $primary: $illusion;
 $bg: $soft-peach;
 $bg-light: #f8f8f8;
 $bg-dark: #fff3f3;
+$bg-secondary: #fff5f7;
+$bg-input: $bg-light;
 
 $text-primary: #000000;
-$text-selection: $illusion-night;
-$border-color: #e0e0e0;
 $text-dark: #333333;
 $text-light: #ffffff;
 $text-muted: #666666;
+$text-error: #e74c3c;
+$code-text: #abb2bf;
+
+$red-accent: #e74c3c;
+$red-secondary: #c0392b;
+$green-accent: #2ecc71;
+$code-bg: #282c34;
+$link-color: #646cff;
+
+$border-color: #e0e0e0;
+$border-gray: #e5e7eb;
 $border-light: rgba(0, 0, 0, 0.1);
 $shadow: rgba(0, 0, 0, 0.05);
 $hover-bg: rgba(0, 0, 0, 0.02);
+$chat-shadow: rgba(0, 0, 0, 0.2);

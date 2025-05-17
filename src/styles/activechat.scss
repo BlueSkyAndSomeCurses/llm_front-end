@@ -1,4 +1,5 @@
-@import "./colors.scss";
+@use "./colors.scss" as *;
+@use "sass:color";
 .active-chat-container {
   display: flex;
   min-height: 100vh;
@@ -10,22 +11,21 @@
   display: flex;
   justify-content: center;
   flex: 1;
-  padding: 20px;
+  padding: 16px 16px 100px;
   background-color: $bg-dark;
-  padding-bottom: 100px;
   margin-left: 57px;
   transition: margin-left 0.3s ease;
 }
 
 .sidebar-expanded .active-chat-content {
-  margin-left: 250px; /* Match the expanded sidebar width */
+  margin-left: 250px;
 }
 .active-chatbox-container {
   width: 100%;
   max-width: 800px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 .active-chat-box {
   position: relative;

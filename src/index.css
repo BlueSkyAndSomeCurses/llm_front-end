@@ -13,6 +13,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+::selection {
+  background-color: rgba(221, 144, 179, 0.3);
+  color: #666666;
+}
+
 html {
   background-color: #faf5f5;
   height: 100%;
@@ -112,7 +117,10 @@ button:hover {
   border-color: #646cff;
 }
 
-button:focus,
+button:focus {
+  outline: none;
+}
+
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }

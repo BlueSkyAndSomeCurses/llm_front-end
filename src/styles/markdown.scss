@@ -1,10 +1,10 @@
-@import "./colors.scss";
+@use "./colors.scss" as *;
+@use "sass:color";
 
 .markdown-content {
   line-height: 1.2;
   color: $text-dark;
   overflow-wrap: break-word;
-
   h1,
   h2,
   h3,
@@ -13,7 +13,7 @@
   h6 {
     margin-top: 0.2em;
     margin-bottom: 0.1em;
-    color: darken($text-dark, 10%);
+    color: color.adjust($text-dark, $lightness: -10%);
     font-weight: 600;
     line-height: 1.1;
   }
@@ -71,7 +71,7 @@
     border-left: 2px solid $illusion;
     padding-left: 0.3em;
     margin: 0;
-    color: lighten($text-dark, 15%);
+    color: color.adjust($text-dark, $lightness: 15%);
     font-style: italic;
   }
 
@@ -84,9 +84,8 @@
     background-color: rgba($bg-dark, 0.7);
     border-radius: 2px;
   }
-
   pre {
-    background-color: #282c34;
+    background-color: $code-bg;
     border-radius: 3px;
     padding: 0.2em;
     margin: 0.1em 0;
@@ -96,7 +95,7 @@
       background-color: transparent;
       padding: 0;
       font-size: 90%;
-      color: #abb2bf;
+      color: $code-text;
       display: block;
       line-height: 1.2;
     }
@@ -113,9 +112,8 @@
     padding: 0.1em 0.2em;
     border: 1px solid $border-color;
   }
-
   th {
-    background-color: lighten($bg-light, 3%);
+    background-color: color.adjust($bg-light, $lightness: 3%);
     font-weight: 600;
   }
 
@@ -159,15 +157,15 @@
 }
 
 .katex-error {
-  background-color: rgba(#ff0000, 0.1);
+  background-color: rgba($red-accent, 0.1);
   padding: 0;
   border-radius: 2px;
-  color: #e91e63;
+  color: $red-secondary;
   font-family: monospace;
 }
 
 .hljs {
-  background-color: #282c34 !important;
+  background-color: $text-dark !important;
   border-radius: 2px;
   padding: 0.1em !important;
 }

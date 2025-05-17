@@ -1,0 +1,93 @@
+@import "./colors.scss";
+
+.toast-notification {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: calc(100% - 20px);
+  min-width: 280px;
+  max-width: 350px;
+  animation: toast-slide-in 0.3s ease-out forwards;
+  transition: all 0.3s ease;
+  
+  &.success {
+    background-color: white;
+    border-left: 4px solid $green-accent;
+    border-bottom: 1px solid rgba($green-accent, 0.2);
+    
+    .toast-icon {
+      color: $green-accent;
+    }
+  }
+  
+  &.error {
+    background-color: white;
+    border-left: 4px solid $red-accent;
+    border-bottom: 1px solid rgba($red-accent, 0.2);
+    
+    .toast-icon {
+      color: $red-accent;
+    }
+  }
+  
+  .toast-icon {
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(white, 0.8);
+    border-radius: 50%;
+    padding: 4px;
+  }
+  
+  .toast-message {
+    flex: 1;
+    font-size: 14px;
+    color: $text-dark;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  
+  .toast-close {
+    background: transparent;
+    border: none;
+    padding: 4px;
+    margin-left: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-muted;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: $hover-bg;
+      color: $text-dark;
+    }
+  }
+}
+
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
