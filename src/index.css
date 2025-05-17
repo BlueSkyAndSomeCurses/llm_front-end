@@ -13,6 +13,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+::selection {
+  background-color: rgba(221, 144, 179, 0.3);
+  color: #666666;
+}
+
 html {
   background-color: #faf5f5;
   height: 100%;
