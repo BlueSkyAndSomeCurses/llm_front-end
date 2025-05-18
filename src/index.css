@@ -26,29 +26,32 @@ html {
 }
 
 body.no-scroll {
-  /* Set position to fixed to prevent scrolling */
-  position: fixed !important;
-  /* Maintain full width */
-  width: 100% !important;
-  /* Prevent scrolling behavior */
   overflow: hidden !important;
-  /* Ensure it takes the full height */
   height: 100% !important;
-  /* Position from top should match the current scroll position */
-  top: calc(-1 * var(--scroll-position));
-  /* Disable touch scrolling on mobile */
+  position: fixed !important;
+  width: 100% !important;
+  inset: 0 !important;
   touch-action: none !important;
   -webkit-overflow-scrolling: none !important;
   overscroll-behavior: none !important;
-  /* Ensure the left and right are at 0 */
-  left: 0;
-  right: 0;
+}
+
+body.no-scroll {
+  --scroll-position: 0px;
+  top: var(--scroll-position);
 }
 
 a {
   font-weight: 500;
   color: #646cff;
   text-decoration: inherit;
+}
+
+body.no-scroll {
+  overflow: hidden;
+  height: 100%;
+  position: fixed;
+  width: 100%;
 }
 
 a {
