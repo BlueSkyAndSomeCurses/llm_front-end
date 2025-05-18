@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Toast from './Toast';
 import '../styles/toastContainer.scss';
-import { showToast } from '../utils/ToastContainer';
+import { showToast } from '../utils/toastContainer.js';
 
 function ToastContainer() {
   const [toasts, setToasts] = useState([]);
