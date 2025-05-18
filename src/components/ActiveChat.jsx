@@ -77,18 +77,55 @@ function ActiveChat() {
         setIsLoading(false);
     };
 
+    const initializeAssistantMessage = () => {
+        setMessages((prev) => [
+            ...prev,
+            {
+                content: `Thinking...`,
+                role: "assistant"
+            },
+        ]);
+    };
+
+    const updateAssistantMessage = useCallback((newText) => {
+        setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages];
+            const lastIndex = updatedMessages.length - 1;
+
+            if (lastIndex >= 0 && updatedMessages[lastIndex].role === "assistant") {
+                updatedMessages[lastIndex] = {
+                    ...updatedMessages[lastIndex],
+                    content: newText
+                };
+            }
+
+            return updatedMessages;
+        });
+    }, []);
+
+    const handleResponseError = useCallback((error) => {
+        setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages];
+            const lastIndex = updatedMessages.length - 1;
+
+            if (lastIndex >= 0 && updatedMessages[lastIndex].role === "assistant") {
+                updatedMessages[lastIndex] = {
+                    ...updatedMessages[lastIndex],
+                    content: error.isCancel
+                        ? `There was an error when generating response: ${error.message}`
+                        : "There was an error when generating response."
+                };
+            }
+            return updatedMessages;
+        });
+    }, []);
+
     const handleAssistantResponse = useCallback(
         async (userMessage) => {
             cancelTokenSourceRef.current = cancelRequest(cancelTokenSourceRef.current);
             setIsLoading(true);
 
-            setMessages((prev) => [
-                ...prev,
-                {
-                    content: `Thinking...`,
-                    role: "assistant"
-                },
-            ]);
+            initializeAssistantMessage();
 
             cancelTokenSourceRef.current = axios.CancelToken.source();
 
@@ -99,47 +136,18 @@ function ActiveChat() {
                 {
                     cancelTokenSource: cancelTokenSourceRef.current,
                     chatId,
-                    onProgress: (newText) => {
-                        setMessages((prevMessages) => {
-                            const updatedMessages = [...prevMessages];
-                            const lastIndex = updatedMessages.length - 1;
-
-                            if (lastIndex >= 0 && updatedMessages[lastIndex].role === "assistant") {
-                                updatedMessages[lastIndex] = {
-                                    ...updatedMessages[lastIndex],
-                                    content: newText
-                                };
-                            }
-
-                            return updatedMessages;
-                        });
-                    }
+                    onProgress: updateAssistantMessage
                 }
             );
 
-
             if (error) {
-                setMessages((prevMessages) => {
-                    const updatedMessages = [...prevMessages];
-                    const lastIndex = updatedMessages.length - 1;
-
-                    if (lastIndex >= 0 && updatedMessages[lastIndex].role === "assistant") {
-                        updatedMessages[lastIndex] = {
-                            ...updatedMessages[lastIndex],
-                            content: error.isCancel
-                                ? `There was an error when generating response: ${error.message}`
-                                : "There was an error when generating response."
-                        };
-
-                    }
-                    return updatedMessages;
-                });
+                handleResponseError(error);
             }
 
             setIsLoading(false);
             cancelTokenSourceRef.current = null;
         },
-        [chatId, selectedModel]
+        [chatId, selectedModel, updateAssistantMessage, handleResponseError]
     );
 
     useEffect(() => {
