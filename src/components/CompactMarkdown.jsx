@@ -6,61 +6,41 @@ import remarkBreaks from 'remark-breaks';
 import rehypeKatex from 'rehype-katex';
 import rehypeHighlight from 'rehype-highlight';
 import 'katex/dist/katex.min.css';
-import 'highlight.js/styles/github-dark.css';
-import '../styles/compact-markdown.scss';
+import '../styles/codeTheme.scss';
+import '../styles/markdown.scss';
 
-// Custom processor for line breaks
-const processContent = (content) => {
-  // Just process math delimiters without affecting line breaks
-  return content
-    .replace(/\\\[/g, '$$')
-    .replace(/\\\]/g, '$$')
-    .replace(/\\\(/g, '$')
-    .replace(/\\\)/g, '$');
-};
+function CompactMarkdown({ content }) {
+    // Custom components for markdown rendering with pink theme
+    const components = {
+        code({node, inline, className, children, ...props}) {
+            // For inline code (single backtick) - use simple inline display
+            if (inline) {
+                return <code className="inline-code" {...props}>{children}</code>;
+            }
+            
+            // Code blocks (triple backtick) are already wrapped in pre by react-markdown
+            return <code className={className} {...props}>{children}</code>;
+        }
+    };
 
-const CompactMarkdown = ({ content }) => {
-  const processedContent = processContent(content);
-  
-  return (
-    <div className="compact-markdown">
-      <ReactMarkdown
-        remarkPlugins={[
-          remarkGfm, 
-          [remarkMath, {
-            inlineMath: [['\\(', '\\)']],
-            displayMath: [['\\[', '\\]']]
-          }],
-          remarkBreaks
-        ]}
-        rehypePlugins={[rehypeKatex, rehypeHighlight]}
-        components={{
-          p: ({node, ...props}) => (
-            <p 
-              style={{
-                margin: '0.1em 0',
-                lineHeight: '1.1',
-              }} 
-              {...props} 
-            />
-          ),
-          br: ({node, ...props}) => (
-            <br 
-              style={{
-                display: 'block',
-                content: '""',
-                marginTop: '0.05em', // Super tiny margin
-                height: '0.05em'
-              }} 
-              {...props} 
-            />
-          ),
-        }}
-      >
-        {processedContent}
-      </ReactMarkdown>
-    </div>
-  );
-};
+    return (
+        <div className="markdown-content">
+            <ReactMarkdown
+                remarkPlugins={[remarkGfm, [remarkMath, {
+                    inlineMath: [['\\(', '\\)']],
+                    displayMath: [['\\[', '\\]']]
+                }], remarkBreaks]}
+                rehypePlugins={[rehypeKatex, [rehypeHighlight, { 
+                            detect: true,
+                            ignoreMissing: true,
+                            subset: false
+                        }]]}
+                components={components}
+            >
+                {content}
+            </ReactMarkdown>
+        </div>
+    );
+}
 
 export default CompactMarkdown;

@@ -111,31 +111,88 @@
       monospace;
     padding: 0.1em 0.4em;
     margin: 0 0.2em;
-    font-size: 85%;
-    background-color: rgba($code-bg, 0.1);
-    color: color.adjust($text-dark, $lightness: -5%);
-    border-radius: 3px;
-    border: 1px solid rgba($code-bg, 0.2);
+    font-size: 90%;
+    background-color: rgba($illusion, 0.08);
+    color: $illusion-night;
+    border-radius: 4px;
+    border: 1px solid rgba($illusion, 0.2);
+    box-shadow: 0 1px 2px rgba($illusion, 0.1);
+    transition: all 0.2s ease;
+    display: inline; 
+    white-space: normal;
+    
+    &:hover {
+      background-color: rgba($illusion, 0.12);
+    }
+  }
+  
+  // Ensure inline code elements are properly displayed inline
+  code:not(pre code) {
+    display: inline !important;
+    vertical-align: baseline !important; 
+    white-space: normal !important;
+  }
+  
+  .inline-code {
+    display: inline !important;
+    vertical-align: baseline !important;
+    white-space: normal !important;
   }
   
   pre {
-    background-color: $code-bg;
+    background-color: rgba($illusion, 0.08);
     border-radius: 6px;
     padding: 1em;
     margin: 1em 0;
     overflow-x: auto;
-    border: 1px solid rgba($illusion, 0.1);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba($illusion, 0.2);
+    box-shadow: 0 2px 8px rgba($illusion, 0.15);
+    position: relative;
+    display: block;
+    
+    &.with-line-numbers {
+      counter-reset: line;
+      padding-left: 3.5em;
+      
+      code {
+        position: relative;
+        
+        .line {
+          display: inline-block;
+          width: 100%;
+          
+          &::before {
+            counter-increment: line;
+            content: counter(line);
+            position: absolute;
+            left: -2.5em;
+            color: rgba($text-light, 0.4);
+            text-align: right;
+            width: 2em;
+            border-right: 1px solid rgba($text-light, 0.1);
+            padding-right: 0.5em;
+            user-select: none;
+          }
+        }
+      }
+    }
 
     code {
       background-color: transparent;
       padding: 0;
       margin: 0;
       font-size: 90%;
-      color: $code-text;
+      color: $text-dark;
       display: block;
       line-height: 1.5;
       border: none;
+      box-shadow: none;
+      white-space: pre;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      
+      &:hover {
+        background-color: transparent;
+      }
     }
   }
 
@@ -235,59 +292,12 @@
 }
 
 .hljs {
-  background-color: $code-bg !important;
-  border-radius: 6px;
-  padding: 1em !important;
+  background: transparent !important;
+  padding: 0 !important;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
   line-height: 1.5;
   tab-size: 2;
   position: relative;
-  
-  &::before {
-    content: attr(class);
-    text-transform: uppercase;
-    font-size: 0.7em;
-    color: rgba($text-light, 0.6);
-    position: absolute;
-    top: 0.3em;
-    right: 0.7em;
-    background-color: rgba($text-light, 0.1);
-    padding: 0.2em 0.5em;
-    border-radius: 3px;
-  }
-  
-  .keyword {
-    color: #c678dd;
-  }
-  
-  .string, .regexp {
-    color: #98c379;
-  }
-  
-  .number, .literal {
-    color: #d19a66;
-  }
-  
-  .function, .params {
-    color: #61afef;
-  }
-  
-  .comment {
-    color: #5c6370;
-    font-style: italic;
-  }
-  
-  .operator, .punctuation {
-    color: #abb2bf;
-  }
-  
-  .variable, .attr-name {
-    color: #e06c75;
-  }
-  
-  .class, .title, .type {
-    color: #e5c07b;
-  }
 }
 
 .markdown-content {
@@ -353,5 +363,94 @@
     border-radius: 3px;
     box-shadow: 0 1px 1px rgba($text-dark, 0.2);
     margin: 0 0.2em;
+  }
+}
+
+.language-javascript, .language-js, .language-jsx,
+.language-python, .language-py,
+.language-json,
+.language-css, .language-scss,
+.language-typescript, .language-ts, .language-tsx,
+.language-html, .language-markdown, .language-md,
+.language-ruby, .language-java, .language-csharp,
+.language-php, .language-go, .language-swift {
+  .keyword { color: $illusion-night; font-weight: bold; }
+  .string { color: #9c4668; }
+  .number { color: #c87a9d; }
+  .function { color: #8a3057; }
+  .class { color: #e6007c; }
+  .comment { color: #b089a0; font-style: italic; }
+  .operator { color: #73385a; }
+  .punctuation { color: #73385a; }
+  .variable { color: #a64675; }
+  .parameter { color: #9d5a79; }
+  .property { color: #9a486d; }
+  .selector { color: #ac3a6c; }
+  .tag { color: #e6007c; font-weight: bold; }
+  .attr-name { color: #a64675; }
+  .attr-value { color: #9c4668; }
+  .decorator { color: #c87a9d; font-style: italic; }
+  .regex { color: #e6b7cd; }
+  .boolean { color: #c87a9d; font-weight: bold; }
+  .self, .this { color: #e6007c; font-weight: bold; }
+  .builtin { color: #dd90b3; }
+  .entity { color: #c87a9d; }
+  .url { color: #9c4668; text-decoration: underline; }
+  .symbol { color: #dd90b3; }
+  .doctype { color: #b089a0; }
+  .namespace { color: #c87a9d; }
+}
+
+pre.language-javascript, pre.language-js, pre.language-jsx, pre.language-typescript, pre.language-ts, pre.language-tsx {
+  border-left: 3px solid rgba($illusion-night, 0.6);
+}
+
+pre.language-python, pre.language-py {
+  border-left: 3px solid rgba($kobi, 0.8);
+}
+
+pre.language-json {
+  border-left: 3px solid rgba($pink-bg, 0.7);
+}
+
+pre.language-css, pre.language-scss, pre.language-html {
+  border-left: 3px solid rgba($wewak, 0.7);
+}
+
+pre.language-bash, pre.language-shell, pre.language-sh {
+  border-left: 3px solid rgba($dairy-cream, 0.8);
+}
+
+pre {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.markdown-content {
+  pre {
+    display: block;
+  }
+
+  pre code {
+    display: block;
+    white-space: pre;
+  }
+
+  pre::-webkit-scrollbar {
+    height: 6px;
+    background-color: rgba($illusion, 0.05);
+    border-radius: 3px;
+  }
+
+  pre::-webkit-scrollbar-thumb {
+    background-color: rgba($illusion, 0.3);
+    border-radius: 3px;
+    
+    &:hover {
+      background-color: rgba($illusion, 0.5);
+    }
   }
 }

@@ -1,0 +1,126 @@
+@use "./colors.scss" as *;
+@use "sass:color";
+
+.hljs {
+  display: block;
+  color: #73385a;
+  
+  &-keyword,
+  &-selector-tag,
+  &-literal,
+  &-name {
+    color: $illusion-night;
+    font-weight: bold;
+  }
+  
+  &-function {
+    color: #8a3057;
+  }
+  
+  &-string,
+  &-regexp,
+  &-addition,
+  &-attribute,
+  &-meta-string {
+    color: #9c4668;
+  }
+  
+  &-built_in,
+  &-class &-title {
+    color: #e6007c;
+  }
+  
+  &-attr,
+  &-variable,
+  &-template-variable,
+  &-type,
+  &-selector-class,
+  &-selector-id {
+    color: #a64675;
+  }
+  
+  &-symbol,
+  &-bullet,
+  &-subst,
+  &-meta,
+  &-meta &-keyword,
+  &-selector-attr,
+  &-selector-pseudo,
+  &-number {
+    color: #c87a9d;
+  }
+  
+  &-emphasis {
+    font-style: italic;
+  }
+  
+  &-strong {
+    font-weight: bold;
+  }
+  
+  &-comment {
+    color: #b089a0;
+    font-style: italic;
+  }
+  
+  &-deletion {
+    color: #e45b98;
+    background-color: rgba(#e45b98, 0.2);
+  }
+  
+  &-addition {
+    color: #9c4668;
+    background-color: rgba(#9c4668, 0.2);
+  }
+  
+  &-title.function_ {
+    color: #8a3057;
+    font-weight: bold;
+  }
+  
+  &-title.class_ {
+    color: #e6007c;
+  }
+  
+  &-property {
+    color: #9a486d;
+  }
+  
+  &-doctag, &-section, &-title.module {
+    color: #e6007c;
+  }
+  
+  &-params {
+    color: #9d5a79;
+  }
+  
+  &-link {
+    color: #9c4668;
+    text-decoration: underline;
+  }
+  
+  &-template-tag {
+    color: #c87a9d;
+  }
+  
+  &-tag {
+    color: #e6007c;
+  }
+  
+  &-name {
+    color: #d0005e;
+  }
+  
+  &-attr {
+    color: #a64675;
+  }
+  
+  &-string {
+    color: #9c4668;
+  }
+}
+
+pre code::selection, pre::selection, code::selection {
+  background-color: rgba($illusion, 0.3);
+  color: inherit;
+}
