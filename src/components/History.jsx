@@ -4,7 +4,7 @@ import "../styles/chat.scss";
 import "../styles/sidebar.scss";
 import "../styles/history.scss";
 import Sidebar from "./Sidebar.jsx";
-import { fetchChats, fetchMessages } from "../utils/ChatAPI.js";
+import { fetchChats, fetchMessages } from "../utils/chatAPI.js";
 
 const History = () => {
     const [chats, setChats] = useState([]);

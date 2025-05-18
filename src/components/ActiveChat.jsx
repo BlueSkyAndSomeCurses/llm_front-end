@@ -6,7 +6,7 @@ import "../styles/sidebar.scss";
 import Sidebar from "./Sidebar.jsx";
 import MessageList from "./MessageList";
 import MessageInput from "./MessageInput";
-import { fetchMessages, fetchModelName, saveMessage, getAssistantResponse, cancelRequest } from "../utils/ChatAPI";
+import { fetchMessages, fetchModelName, saveMessage, getAssistantResponse, cancelRequest } from "../utils/chatAPI.js";
 
 function ActiveChat() {
     const { chatId } = useParams();

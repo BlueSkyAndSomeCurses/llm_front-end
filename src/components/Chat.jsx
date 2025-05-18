@@ -6,7 +6,7 @@ import "../styles/sidebar.scss";
 import Sidebar from "./Sidebar.jsx";
 import ModelButton from "./Model.jsx";
 import "../styles/popups.scss";
-import { saveMessage } from "../utils/ChatAPI";
+import { saveMessage } from "../utils/chatAPI.js";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
