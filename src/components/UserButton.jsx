@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Settings, LogOut, User, LogIn } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import UserSettings from "./userSettings";
+import UserSettings from "./UserSettings.jsx";
 
 import "../styles/sidebar.scss";
 import "../styles/popups.scss";

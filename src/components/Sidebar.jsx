@@ -1,6 +1,6 @@
 import { Menu, PlusCircle, MessageSquare, ChevronRight, ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import UserButton from "./userbutton";
+import UserButton from "./UserButton.jsx";
 import "../styles/sidebar.scss";
 import "../styles/popups.scss";
 import { useState, useEffect } from "react";

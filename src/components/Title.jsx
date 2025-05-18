@@ -4,8 +4,8 @@ import "../styles/title.scss";
 import "../styles/popups.scss";
 import { useNavigate } from "react-router-dom";
 import helloKittyLogo from "../assets/hello-kitty.png";
-import UserButton from "./userbutton";
-import UserSettings from "./userSettings";
+import UserButton from "./UserButton.jsx";
+import UserSettings from "./UserSettings.jsx";
 
 function TitlePage() {
     const navigate = useNavigate();

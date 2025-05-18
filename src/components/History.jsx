@@ -4,7 +4,7 @@ import axios from "axios";
 import "../styles/chat.scss";
 import "../styles/sidebar.scss";
 import "../styles/history.scss";
-import Sidebar from "./sidebar";
+import Sidebar from "./Sidebar.jsx";
 
 const History = () => {
     const [chats, setChats] = useState([]);
