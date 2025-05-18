@@ -2,11 +2,11 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
-import Chat from "./components/chat.jsx";
-import ActiveChat from "./components/activechat.jsx";
-import Login from "./components/login.jsx";
-import Title from "./components/title.jsx";
-import History from "./components/history.jsx";
+import Chat from "./components/Chat.jsx";
+import ActiveChat from "./components/ActiveChat.jsx";
+import Login from "./components/Login.jsx";
+import Title from "./components/Title.jsx";
+import History from "./components/History.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 import "./utils/authHelpers.js";
