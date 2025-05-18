@@ -1,20 +1,22 @@
-import { useState, useRef, useEffect } from "react";
-import { X, Upload, Save, Trash2 } from "lucide-react";
+import { useState, useEffect } from "react";
 import "../styles/usersettings.scss";
 import axios from "axios";
 import useToast from "../utils/useToast";
+import {
+    SettingsHeader,
+    AvatarSection,
+    ProfileSection,
+    PasswordSection,
+    SettingsActions
+} from "./settings";
 
 function UserSettings({ onClose, user }) {
     const [name, setName] = useState(user?.name || "");
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [avatar, setAvatar] = useState(null);
-    const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null);
-    const [avatarLoading, setAvatarLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
-    const fileInputRef = useRef(null);
     const toast = useToast();
 
     useEffect(() => {
@@ -41,103 +43,7 @@ function UserSettings({ onClose, user }) {
             document.body.classList.remove('no-scroll');
             window.scrollTo(0, scrollY);
         };
-    }, []);
-
-    const handleAvatarChange = (e) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-
-            if (file.size > 2 * 1024 * 1024) {
-                setErrors((prevErrors) => ({
-                    ...prevErrors,
-                    avatar: "Image size should be less than 2MB"
-                }));
-                return;
-            }
-
-            setAvatar(file);
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const result = e.target.result;
-                setAvatarPreview(result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const handleResetAvatar = () => {
-        setAvatar(null);
-        setAvatarPreview(null);
-
-        setErrors((prevErrors) => {
-            const newErrors = { ...prevErrors };
-            delete newErrors.avatar;
-            return newErrors;
-        });
-    };
-
-    const handleAvatarUpload = async () => {
-        const currentAvatar = avatar;
-        const currentAvatarPreview = avatarPreview;
-
-        if (!currentAvatar && !currentAvatarPreview) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                avatar: "No avatar to upload"
-            }));
-            return;
-        }
-
-        setAvatarLoading(true);
-        try {
-            const token = localStorage.getItem("token");
-            const response = await axios.put("/api/user/profile",
-                { avatar: currentAvatarPreview },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-
-            try {
-                const currentUser = JSON.parse(localStorage.getItem("user"));
-                if (currentUser) {
-                    const updatedUser = {
-                        ...currentUser,
-                        avatar: response.data.avatar || currentAvatarPreview
-                    };
-                    localStorage.setItem("user", JSON.stringify(updatedUser));
-
-                    const userDataChangedEvent = new CustomEvent('userDataChanged', {
-                        detail: { user: updatedUser }
-                    });
-                    window.dispatchEvent(userDataChangedEvent);
-                }
-            } catch (storageError) {
-                console.error("Error updating localStorage:", storageError);
-            }
-
-            toast.success("Avatar updated successfully!");
-            setAvatar(null);
-
-            setErrors((prevErrors) => {
-                const newErrors = { ...prevErrors };
-                delete newErrors.avatar;
-                return newErrors;
-            });
-        } catch (error) {
-            console.error("Error uploading avatar:", error);
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                avatar: "Failed to upload avatar. Please try again."
-            }));
-            toast.error("Failed to upload avatar. Please try again.");
-        } finally {
-            setAvatarLoading(false);
-        }
-    };
-
-    const triggerFileInput = () => {
-        fileInputRef.current.click();
-    }; const validateForm = () => {
+    }, []); const validateForm = () => {
         const currentName = name;
         const currentNewPassword = newPassword;
         const currentConfirmPassword = confirmPassword;
@@ -262,125 +168,37 @@ function UserSettings({ onClose, user }) {
     return (
         <div className="settings-overlay">
             <div className="settings-modal">
-                <div className="settings-header">
-                    <h2>User Settings</h2>
-                    <button className="close-button" onClick={onClose}>
-                        <X size={24} />
-                    </button>
-                </div>
+                <SettingsHeader onClose={onClose} />
 
                 <form onSubmit={handleSubmit}>
-                    <div className="avatar-section">
-                        <div className="avatar-preview">
-                            {avatarPreview ? (
-                                <img src={avatarPreview} alt="Avatar preview" />
-                            ) : (
-                                <div className="avatar-placeholder">
-                                    {user?.name?.charAt(0).toUpperCase() || "U"}
-                                </div>
-                            )}
-                        </div>
-                        <div className="avatar-buttons">
-                            <button type="button" className="upload-button" onClick={triggerFileInput}>
-                                <Upload size={16} />
-                                Select Avatar
-                            </button>
-                            {avatarPreview && (
-                                <>
-                                    <button
-                                        type="button"
-                                        className="save-avatar-button"
-                                        onClick={handleAvatarUpload}
-                                        disabled={avatarLoading}
-                                    >
-                                        <Save size={16} />
-                                        {avatarLoading ? "Uploading..." : "Upload Avatar"}
-                                    </button>
+                    <AvatarSection
+                        user={user}
+                        errors={errors}
+                        setErrors={setErrors}
+                    />
 
-                                    <button
-                                        type="button"
-                                        className="reset-button"
-                                        onClick={handleResetAvatar}
-                                        title="Remove avatar"
-                                    >
-                                        <Trash2 size={16} />
-                                        Reset
-                                    </button>
-                                </>
-                            )}
-                        </div>
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={handleAvatarChange}
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                        />
-                        {errors.avatar && <span className="error">{errors.avatar}</span>}
-                    </div>
+                    <ProfileSection
+                        name={name}
+                        setName={setName}
+                        errors={errors}
+                    />
 
-                    <div className="form-group">
-                        <label htmlFor="name">Name</label>
-                        <input
-                            type="text"
-                            id="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            placeholder="Your name"
-                        />
-                        {errors.name && <span className="error">{errors.name}</span>}
-                    </div>
-
-                    <div className="password-section">
-                        <h3>Change Password</h3>
-                        <div className="form-group">
-                            <label htmlFor="currentPassword">Current Password</label>
-                            <input
-                                type="password"
-                                id="currentPassword"
-                                value={currentPassword}
-                                onChange={(e) => setCurrentPassword(e.target.value)}
-                                placeholder="Enter current password"
-                            />
-                            {errors.currentPassword && <span className="error">{errors.currentPassword}</span>}
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="newPassword">New Password</label>
-                            <input
-                                type="password"
-                                id="newPassword"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                placeholder="Enter new password"
-                            />
-                            {errors.newPassword && <span className="error">{errors.newPassword}</span>}
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="confirmPassword">Confirm New Password</label>
-                            <input
-                                type="password"
-                                id="confirmPassword"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                placeholder="Confirm new password"
-                            />
-                            {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
-                        </div>
-                    </div>
+                    <PasswordSection
+                        currentPassword={currentPassword}
+                        setCurrentPassword={setCurrentPassword}
+                        newPassword={newPassword}
+                        setNewPassword={setNewPassword}
+                        confirmPassword={confirmPassword}
+                        setConfirmPassword={setConfirmPassword}
+                        errors={errors}
+                    />
 
                     {errors.submit && <div className="error-message">{errors.submit}</div>}
 
-                    <div className="settings-actions">
-                        <button type="button" className="cancel-button" onClick={onClose}>
-                            Cancel
-                        </button>
-                        <button type="submit" className="save-button" disabled={loading}>
-                            <Save size={16} />
-                            {loading ? "Saving..." : "Save Changes"}
-                        </button>
-                    </div>
+                    <SettingsActions
+                        onClose={onClose}
+                        loading={loading}
+                    />
                 </form>
             </div>
         </div>
