@@ -234,7 +234,6 @@
   margin: 1em 0;
 }
 
-/* Syntax highlighting */
 .hljs {
   background-color: $code-bg !important;
   border-radius: 6px;
@@ -244,7 +243,6 @@
   tab-size: 2;
   position: relative;
   
-  /* Add language indicator */
   &::before {
     content: attr(class);
     text-transform: uppercase;
@@ -258,7 +256,6 @@
     border-radius: 3px;
   }
   
-  /* Code highlighting colors */
   .keyword {
     color: #c678dd;
   }
@@ -293,9 +290,7 @@
   }
 }
 
-/* Additional markdown improvements */
 .markdown-content {
-  /* Better list styling */
   ul {
     list-style-type: disc;
     
@@ -320,7 +315,6 @@
     }
   }
   
-  /* Definition lists */
   dl {
     margin: 1em 0;
     
@@ -335,7 +329,6 @@
     }
   }
   
-  /* Task lists */
   ul.contains-task-list {
     list-style-type: none;
     padding-left: 0.5em;
@@ -349,7 +342,6 @@
     }
   }
   
-  /* Keyboard shortcuts styling */
   kbd {
     display: inline-block;
     padding: 0.1em 0.4em;
