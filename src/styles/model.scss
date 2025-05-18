@@ -52,10 +52,12 @@
   }
 
   &.active {
-    background: $bg-dark;
+    background: rgba($illusion, 0.15);
+    border-left: 3px solid $illusion;
 
     span {
-      font-weight: 500;
+      font-weight: 600;
+      color: $illusion;
     }
   }
 

@@ -343,6 +343,13 @@
   border-radius: 50%;
 }
 
+.user-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
 .kitty-chat-text {
   font-size: 22px;
   font-weight: 700;

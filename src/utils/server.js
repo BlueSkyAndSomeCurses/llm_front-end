@@ -459,11 +459,10 @@ app.get("/api/chat/:chatId/model", authenticateToken, async (req, res) => {
         const {chatId} = req.params;
         const userId = req.user.id;
 
-        // Get just the first message (usually has the model selection)
         const firstMessage = await Message.findOne({
             userId,
             chatId,
-            messageNum: 0 // The first message in a chat
+            messageNum: 0
         });
 
         if (!firstMessage) {

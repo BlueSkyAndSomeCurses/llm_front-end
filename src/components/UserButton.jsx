@@ -107,7 +107,7 @@ function UserButton({size, expanded}) {
                             </div>
                             {expanded && (
                                 <span className="user-name">
-                                    {user.name}
+                                    {user.name.length > 10 ? `${user.name.substring(0, 10)}...` : user.name}
                                 </span>
                             )}
                         </>

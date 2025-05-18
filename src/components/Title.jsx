@@ -99,7 +99,7 @@ function TitlePage() {
 
             <header className="header">
                 <div className="header-content">
-                    <span className="logo">FC Slavuta</span>
+                    <span className="logo" onClick={() => window.open("https://github.com/BlueSkyAndSomeCurses/llm_front-end", "_blank")} role="button">FC Slavuta</span>
                     <div className="header-right">
                         {user ? (
                             <div className="user-header-container" ref={menuRef}>

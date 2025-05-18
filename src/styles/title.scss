@@ -16,7 +16,8 @@
   font-size: 24px;
   font-weight: 1000;
   color: $illusion;
-  margin: 30px;
+  margin: 40px;
+  cursor: pointer;
 }
 
 .header-right {
@@ -31,7 +32,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 15px;
+  padding: 10px 25px;
   background: transparent;
   border: 1px solid $border-color;
   color: $illusion;
@@ -168,7 +169,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 140px;
+  margin-top: 60px;
   margin-bottom: 20px;
 
   &:hover {
@@ -182,7 +183,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 80px 20px;
+  padding: 20px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -192,7 +193,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
+  padding: 40px 20px;
   text-align: center;
   margin-bottom: 0px;
 }
@@ -235,7 +236,7 @@
 
 .features {
   display: flex;
-  gap: 30px;
+  gap: 70px;
   width: 100%;
   max-width: 1200px;
   flex-wrap: wrap;
@@ -295,14 +296,13 @@
   width: 100%;
   height: 0;
   background-color: $illusion;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 90%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 85%);
   transition: height 0.5s ease-in-out;
-  opacity: 0.7;
 }
 
 .feature-text {
   position: absolute;
-  top: 30%;
+  top: 15%;
   left: 50%;
   transform: translate(-50%, 30px);
   width: 80%;
@@ -378,8 +378,8 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 60px 20px;
-  margin-bottom: 70px;
+  padding: 25px 20px;
+  margin-bottom: 40px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -398,7 +398,7 @@
 .about-title {
   color: $illusion;
   font-size: 3.5rem;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   text-align: center;
 }
 
@@ -415,7 +415,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
-  gap: 20px;
+  gap: 50px;
   width: 100%;
   flex-wrap: wrap;
 }
@@ -423,7 +423,7 @@
 .value-item {
   flex: 1;
   padding: 15px;
-  min-width: 250px;
+  min-width: 200px;
 
   h3 {
     color: $illusion;
