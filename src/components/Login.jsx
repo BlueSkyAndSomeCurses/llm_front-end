@@ -27,12 +27,10 @@ function Login() {
 
         try {
             if (currentIsLogin) {
-                console.log("Login button pressed", currentEmail, currentPassword);
                 const response = await axios.post("/api/login", {
                     email: currentEmail,
                     password: currentPassword,
                 });
-                console.log(response.data);
 
                 if (response.data.token) {
                     localStorage.setItem("token", response.data.token);
@@ -68,8 +66,9 @@ function Login() {
                 navigate("/chat");
             }
         } catch (error) {
-            if (error.response &&
-                error.response.status === 400 &&
+            if (error.response && error.response.data.name === "RejectedCreds") {
+                setError(error.response.data.message);
+            } else if (error.response.status === 400 &&
                 (error.response.data.errorType === "weak_password" ||
                     error.response.data.errorType === "email_exists")) {
                 setError(error.response.data.message);

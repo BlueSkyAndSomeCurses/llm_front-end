@@ -255,12 +255,15 @@ app.post("/api/login", async (req, res) => {
 
         if (!user) {
             return res.status(401).json({
-                message: "The user does not exist"
+                message: "The user does not exist",
+                name: "RejectedCreds"
             });
         }
         if (user.password !== password) {
             return res.status(401).json({
-                message: "Invalid email or password"
+                message: "Invalid email or password",
+                name: "RejectedCreds"
+
             });
         }
 

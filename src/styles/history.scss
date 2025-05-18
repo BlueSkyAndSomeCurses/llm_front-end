@@ -10,7 +10,7 @@
 .history-container {
   flex: 1;
   padding: 16px;
-  margin-left: var(--sidebar-collapsed-width, 57px);
+  margin-left: var(--sidebar-collapsed-width);
   overflow-y: auto;
   transition: margin-left 0.3s ease;
 
@@ -22,7 +22,7 @@
 }
 
 .sidebar-expanded .history-container {
-  margin-left: 250px;
+  margin-left: var(--sidebar-expanded-width);
 }
 
 .SearchContainer {

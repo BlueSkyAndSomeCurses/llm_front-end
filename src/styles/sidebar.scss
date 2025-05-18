@@ -2,6 +2,11 @@
 @use "sass:color";
 @import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
 
+:root {
+  --sidebar-collapsed-width: 57px;
+  --sidebar-expanded-width: 250px;
+}
+
 .chat-sidebar {
   background-color: $bg-dark;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -19,12 +24,12 @@
   height: 100vh;
 
   &.collapsed {
-    width: 57px;
+    width: var(--sidebar-collapsed-width);
     align-items: flex-start;
   }
 
   &.expanded {
-    width: 250px;
+    width: var(--sidebar-expanded-width);
     background-color: $bg;
   }
 }

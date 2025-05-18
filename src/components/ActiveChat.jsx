@@ -240,6 +240,7 @@ function ActiveChat() {
                             handleSubmit={handleSubmit}
                             isLoading={isLoading}
                             handleCancel={handleCancel}
+                            sidebarExpanded={sidebarExpanded}
                         />
                     </div>
                 </div>

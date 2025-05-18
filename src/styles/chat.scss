@@ -29,7 +29,13 @@ body {
   align-items: center;
   flex: 1;
   padding: 16px;
+  margin-left: var(--sidebar-collapsed-width);
+  transition: margin-left 0.3s ease;
   background-color: $bg-dark;
+}
+
+.sidebar-expanded .chat-container {
+  margin-left: var(--sidebar-expanded-width);
 }
 
 .chatbox-container {

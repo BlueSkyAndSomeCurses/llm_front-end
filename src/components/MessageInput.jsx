@@ -7,7 +7,8 @@ function MessageInput({
   setInputValue,
   handleSubmit,
   isLoading,
-  handleCancel
+  handleCancel,
+  sidebarExpanded
 }) {
   const textareaRef = useRef(null);
 
@@ -18,30 +19,17 @@ function MessageInput({
     }
   };
 
-  const resizeTextarea = () => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      const scrollPos = window.scrollY;
-
-      textarea.style.height = 'auto';
-
-      textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
-
-      window.scrollTo(0, scrollPos);
-    }
-  };
   const handleChange = (e) => {
     setInputValue(e.target.value);
-    resizeTextarea();
   };
 
   return (
-    <div className="form-wrapper">
+    <div className={`form-wrapper ${sidebarExpanded ? "sidebar-expanded" : ""}`}>
       <form
         className="active-chat-input"
         onSubmit={handleSubmit}>
         <textarea
-          ref={textareaRef}          className="active-input-field multiline"
+          ref={textareaRef} className="active-input-field multiline"
           placeholder="Type a message... (Shift+Enter for new line)"
           value={inputValue}
           onChange={handleChange}

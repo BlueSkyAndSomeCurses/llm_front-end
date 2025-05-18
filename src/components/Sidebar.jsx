@@ -4,7 +4,7 @@ import UserButton from "./UserButton.jsx";
 import "../styles/sidebar.scss";
 import "../styles/popups.scss";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { fetchChats } from "../utils/ChatAPI";
 
 function Sidebar({ onToggle = () => { } }) {
     const [chats, setChats] = useState([]);
@@ -14,30 +14,26 @@ function Sidebar({ onToggle = () => { } }) {
 
     useEffect(() => {
         let isMounted = true;
+        const controller = new AbortController();
 
-        const fetchChats = async () => {
+        const loadChats = async () => {
             try {
-                const token = localStorage.getItem("token");
-                if (token) {
-                    const response = await axios.get("/api/chats", {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-
-                    if (isMounted) {
-                        setChats(response.data.chats);
-                    }
+                const chatsData = await fetchChats(controller.signal);
+                if (isMounted) {
+                    setChats(chatsData);
                 }
             } catch (error) {
-                console.error("Error fetching chats:", error);
+                if (error.name !== 'AbortError' && error.name !== 'CanceledError') {
+                    console.error("Error fetching chats:", error);
+                }
             }
         };
 
-        fetchChats();
+        loadChats();
 
         return () => {
             isMounted = false;
+            controller.abort();
         };
     }, []);
 
@@ -94,13 +90,13 @@ function Sidebar({ onToggle = () => { } }) {
                 </button>
                 {expanded && (
                     <div className="history">
-                        <span className="history-title">Recents...</span>
+                        <span className="history-title">Recents</span>
                         {chats.map((chat) => (
                             <div
                                 key={chat.chatId}
                                 className="history-item"
                                 onClick={() => handleChatClick(chat.chatId)}>
-                                {chat.messageText.substring(0, 30)}...
+                                {chat.messageText.substring(0, 30)}
                             </div>
                         ))}
                     </div>
