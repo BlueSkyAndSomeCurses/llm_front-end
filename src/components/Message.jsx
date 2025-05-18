@@ -10,28 +10,28 @@ import 'highlight.js/styles/github-dark.css';
 import '../styles/markdown.scss';
 import '../styles/message.scss';
 
-function Message({ message }) {
-  const { role, content } = message;
+function Message({message}) {
+    const {role, content} = message;
 
-  return (
-    <div className={`active-message ${role}-message`}>
-      {role === "assistant" ? (
-        <div className="markdown-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm, [remarkMath, {
-              inlineMath: [['\\(', '\\)']],
-              displayMath: [['\\[', '\\]']]
-            }], remarkBreaks]}
-            rehypePlugins={[rehypeKatex, rehypeHighlight]}
-          >
-            {content.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$').replace(/\\\(/g, '$').replace(/\\\)/g, '$')}
-          </ReactMarkdown>
+    return (
+        <div className={`active-message ${role}-message`}>
+            {role === "assistant" ? (
+                <div className="markdown-content">
+                    <ReactMarkdown
+                        remarkPlugins={[remarkGfm, [remarkMath, {
+                            inlineMath: [['\\(', '\\)']],
+                            displayMath: [['\\[', '\\]']]
+                        }], remarkBreaks]}
+                        rehypePlugins={[rehypeKatex, rehypeHighlight]}
+                    >
+                        {content.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$').replace(/\\\(/g, '$').replace(/\\\)/g, '$')}
+                    </ReactMarkdown>
+                </div>
+            ) : (
+                <div>{content}</div>
+            )}
         </div>
-      ) : (
-        <div>{content}</div>
-      )}
-    </div>
-  );
+    );
 }
 
 export default Message;

@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef } from "react";
-import { Settings, LogOut, User, LogIn } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {useState, useEffect, useRef} from "react";
+import {Settings, LogOut, User, LogIn} from "lucide-react";
+import {useNavigate} from "react-router-dom";
 import UserSettings from "./UserSettings.jsx";
 
 import "../styles/sidebar.scss";
 import "../styles/popups.scss";
 
-function UserButton({ size, expanded }) {
+function UserButton({size, expanded}) {
     const [user, setUser] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
@@ -25,7 +25,8 @@ function UserButton({ size, expanded }) {
                     console.error("Error parsing user data:", error);
                 }
             }
-        }; loadUserData();
+        };
+        loadUserData();
 
         const handleUserDataChanged = (event) => {
             if (isMounted && event.detail && event.detail.user) {
@@ -98,8 +99,8 @@ function UserButton({ size, expanded }) {
                             <div className="user-avatar">
                                 {user.avatar ? (
                                     <img src={user.avatar}
-                                        alt="User Avatar"
-                                        className="avatar-image" />
+                                         alt="User Avatar"
+                                         className="avatar-image"/>
                                 ) : (
                                     getInitial()
                                 )}
@@ -113,7 +114,7 @@ function UserButton({ size, expanded }) {
                     ) : (
                         <>
                             <div className="login-avatar">
-                                <LogIn size={20} />
+                                <LogIn size={20}/>
                             </div>
                             {expanded && (
                                 <span className="user-name">
@@ -127,17 +128,17 @@ function UserButton({ size, expanded }) {
                 {user && showPopup && (
                     <div className={`user-popup ${!expanded ? "popup-absolute" : ""}`} ref={popupRef}>
                         <div className="popup-item" onClick={handleSettings}>
-                            <Settings size={16} />
+                            <Settings size={16}/>
                             <span>Settings</span>
                         </div>
                         <div className="popup-item" onClick={handleLogout}>
-                            <LogOut size={16} />
+                            <LogOut size={16}/>
                             <span>Logout</span>
                         </div>
                     </div>
                 )}
             </div>
-            {showSettings && <UserSettings onClose={handleCloseSettings} user={user} />}
+            {showSettings && <UserSettings onClose={handleCloseSettings} user={user}/>}
         </>
     );
 }

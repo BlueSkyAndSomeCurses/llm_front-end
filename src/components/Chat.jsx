@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { Send } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {useState, useEffect} from "react";
+import {Send} from "lucide-react";
+import {useNavigate} from "react-router-dom";
 import "../styles/chat.scss";
 import "../styles/sidebar.scss";
 import Sidebar from "./Sidebar.jsx";
 import ModelButton from "./Model.jsx";
 import "../styles/popups.scss";
-import { saveMessage } from "../utils/chatAPI.js";
+import {saveMessage} from "../utils/chatAPI.js";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
@@ -27,7 +27,8 @@ function Chat() {
                     console.error("Error parsing user data:", error);
                 }
             }
-        }; loadUserData();
+        };
+        loadUserData();
 
         const handleUserDataChanged = (event) => {
             if (isMounted && event.detail && event.detail.user) {
@@ -82,7 +83,7 @@ function Chat() {
 
     return (
         <div className={`chatpage-container`}>
-            <Sidebar />
+            <Sidebar/>
             <div className="chat-container">
                 <div className="chatbox-container">
                     <div className="chat-header">
@@ -114,7 +115,7 @@ function Chat() {
                                     setSelectedModel={setSelectedModel}
                                 />
                                 <button type="submit" className="send-button">
-                                    <Send size={20} />
+                                    <Send size={20}/>
                                 </button>
                             </div>
                         </form>

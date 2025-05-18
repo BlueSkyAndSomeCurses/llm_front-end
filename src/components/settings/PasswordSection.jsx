@@ -1,4 +1,12 @@
-const PasswordSection = ({ currentPassword, setCurrentPassword, newPassword, setNewPassword, confirmPassword, setConfirmPassword, errors }) => {
+const PasswordSection = ({
+                             currentPassword,
+                             setCurrentPassword,
+                             newPassword,
+                             setNewPassword,
+                             confirmPassword,
+                             setConfirmPassword,
+                             errors
+                         }) => {
     return (
         <div className="password-section">
             <h3>Change Password</h3>

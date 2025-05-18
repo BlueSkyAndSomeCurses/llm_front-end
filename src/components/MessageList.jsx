@@ -1,43 +1,43 @@
-import React, { useRef, useEffect } from 'react';
+import React, {useRef, useEffect} from 'react';
 import Message from './Message';
 import HelloKittyAssistant from './HelloKittyAssistant';
 import '../styles/messageList.scss';
 
-function MessageList({ messages, isLoading }) {
-  const messagesEndRef = useRef(null);
-  
-  const hasAssistantMessage = messages && Array.isArray(messages) && messages.some(msg => msg.role === 'assistant');
+function MessageList({messages, isLoading}) {
+    const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'smooth'
-      });
-    }
-  };
+    const hasAssistantMessage = messages && Array.isArray(messages) && messages.some(msg => msg.role === 'assistant');
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      scrollToBottom();
-    }, 50);
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            window.scrollTo({
+                top: document.documentElement.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+    };
 
-    return () => clearTimeout(timer);
-  }, [messages]);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            scrollToBottom();
+        }, 50);
 
-  return (
-    <div className="active-messages-area">
-      {messages.map((msg, i) => (
-        <Message key={i} message={msg} />
-      ))}
+        return () => clearTimeout(timer);
+    }, [messages]);
 
-      {(hasAssistantMessage || isLoading) && (
-        <HelloKittyAssistant isThinking={isLoading} />
-      )}
+    return (
+        <div className="active-messages-area">
+            {messages.map((msg, i) => (
+                <Message key={i} message={msg}/>
+            ))}
 
-      <div ref={messagesEndRef} />
-    </div>
-  );
+            {(hasAssistantMessage || isLoading) && (
+                <HelloKittyAssistant isThinking={isLoading}/>
+            )}
+
+            <div ref={messagesEndRef}/>
+        </div>
+    );
 }
 
 export default MessageList;

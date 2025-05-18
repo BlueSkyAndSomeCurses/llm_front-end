@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import "../styles/chat.scss";
 import "../styles/sidebar.scss";
 import "../styles/history.scss";
 import Sidebar from "./Sidebar.jsx";
-import { fetchChats, fetchMessages } from "../utils/chatAPI.js";
+import {fetchChats, fetchMessages} from "../utils/chatAPI.js";
 
 const History = () => {
     const [chats, setChats] = useState([]);
@@ -32,18 +32,18 @@ const History = () => {
                 }
             } catch (error) {
                 if (!isMounted) return;
-                
+
                 if (error.name === "CanceledError" || error.name === "AbortError") {
                     console.log("Chat fetch aborted:", error.message);
                     return;
                 }
-                
+
                 if (error.response?.status === 401) {
                     console.error("Authentication error:", error.message);
                     navigate("/login");
                     return;
                 }
-                
+
                 console.error("Error fetching chats:", error);
             }
         };
@@ -67,7 +67,7 @@ const History = () => {
         if (hoverMessages[currentChatId]) return;
 
         const controller = new AbortController();
-        
+
         try {
             const serverMessages = await fetchMessages(currentChatId, controller.signal);
 
@@ -92,7 +92,7 @@ const History = () => {
                 console.log("Message fetch aborted:", error.message);
                 return;
             }
-            
+
             console.error("Error fetching messages:", error);
         } finally {
             if (hoveredChatId !== currentChatId) {
@@ -115,7 +115,7 @@ const History = () => {
                 {displayLines.map((line, index) => (
                     <span key={index}>
                         {line}
-                        {index < displayLines.length - 1 && <br />}
+                        {index < displayLines.length - 1 && <br/>}
                     </span>
                 ))}
                 {hasMoreLines && <span className="more-lines">...</span>}
@@ -129,7 +129,7 @@ const History = () => {
 
     return (
         <div className={`history-page ${sidebarExpanded ? "sidebar-expanded" : ""}`}>
-            <Sidebar onToggle={handleSidebarStateChange} />
+            <Sidebar onToggle={handleSidebarStateChange}/>
             <div className="history-container">
                 <h1>Chat History</h1>
                 <div className="chats-list">

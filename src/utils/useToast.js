@@ -1,18 +1,18 @@
-import { showToast } from './toastContainer.js';
+import {showToast} from './toastContainer.js';
 
 const useToast = () => {
-  const success = (message, duration = 3000) => {
-    showToast(message, 'success', duration);
-  };
+    const success = (message, duration = 3000) => {
+        showToast(message, 'success', duration);
+    };
 
-  const error = (message, duration = 3000) => {
-    showToast(message, 'error', duration);
-  };
+    const error = (message, duration = 3000) => {
+        showToast(message, 'error', duration);
+    };
 
-  return {
-    success,
-    error
-  };
+    return {
+        success,
+        error
+    };
 };
 
 export default useToast;

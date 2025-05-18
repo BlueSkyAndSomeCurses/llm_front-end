@@ -40,8 +40,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.json({limit: '10mb'}));
+app.use(express.urlencoded({limit: '10mb', extended: true}));
 
 app.use(express.json());
 
@@ -103,7 +103,8 @@ const handleRefreshToken = (req, res, next) => {
                 message: "Invalid or expired refresh token",
                 tokenExpired: true
             });
-        } try {
+        }
+        try {
             const user = await User.findById(userData.id);
 
             if (!user) {
@@ -273,7 +274,8 @@ app.post("/api/login", async (req, res) => {
             name: user.name,
         }, JWT_SECRET, {
             expiresIn: "24h"
-        }); const refreshToken = jwt.sign({
+        });
+        const refreshToken = jwt.sign({
             id: user._id,
             email: user.email
         }, JWT_REFRESH_SECRET, {
@@ -333,7 +335,8 @@ app.post("/api/register", async (req, res) => {
                     message: "User with this email already exists",
                     errorType: "email_exists"
                 });
-        } if (!strongPasswordRegex.test(password)) {
+        }
+        if (!strongPasswordRegex.test(password)) {
             return res.status(400).json({
                 message: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
                 errorType: "weak_password"
@@ -349,23 +352,24 @@ app.post("/api/register", async (req, res) => {
         await newUser.save();
 
         const accessToken = jwt.sign({
-            id: newUser._id,
-            email: newUser.email,
-            name: newUser.name
-        },
+                id: newUser._id,
+                email: newUser.email,
+                name: newUser.name
+            },
             JWT_SECRET, {
-            expiresIn: "24h"
-        }
+                expiresIn: "24h"
+            }
         );
 
         const refreshToken = jwt.sign({
-            id: newUser._id,
-            email: newUser.email
-        },
+                id: newUser._id,
+                email: newUser.email
+            },
             JWT_SECRET, {
-            expiresIn: "30d"
-        }
-        ); res.cookie("refreshToken", refreshToken, {
+                expiresIn: "30d"
+            }
+        );
+        res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: false,
             sameSite: "strict",
@@ -452,7 +456,7 @@ app.get("/api/messages/:chatId", authenticateToken, async (req, res) => {
 
 app.get("/api/chat/:chatId/model", authenticateToken, async (req, res) => {
     try {
-        const { chatId } = req.params;
+        const {chatId} = req.params;
         const userId = req.user.id;
 
         // Get just the first message (usually has the model selection)
@@ -562,20 +566,20 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
 
 app.put("/api/user/profile", authenticateToken, async (req, res) => {
     try {
-        const { name, avatar } = req.body;
+        const {name, avatar} = req.body;
         const userId = req.user.id;
 
         const updatedUser = await User.findByIdAndUpdate(
             userId,
             {
-                ...(name && { name }),
-                ...(avatar !== undefined && { avatar })
+                ...(name && {name}),
+                ...(avatar !== undefined && {avatar})
             },
-            { new: true, select: '-password' }
+            {new: true, select: '-password'}
         );
 
         if (!updatedUser) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({message: "User not found"});
         }
 
         const userResponse = {
@@ -588,9 +592,9 @@ app.put("/api/user/profile", authenticateToken, async (req, res) => {
         let token = req.headers.authorization.split(" ")[1];
         if (name) {
             token = jwt.sign(
-                { id: updatedUser._id, email: updatedUser.email, name: updatedUser.name },
+                {id: updatedUser._id, email: updatedUser.email, name: updatedUser.name},
                 JWT_SECRET,
-                { expiresIn: "24h" }
+                {expiresIn: "24h"}
             );
         }
 
@@ -601,22 +605,22 @@ app.put("/api/user/profile", authenticateToken, async (req, res) => {
         });
     } catch (error) {
         console.error("Profile update error:", error);
-        res.status(500).json({ message: "Failed to update profile" });
+        res.status(500).json({message: "Failed to update profile"});
     }
 });
 
 app.put("/api/user/password", authenticateToken, async (req, res) => {
     try {
-        const { currentPassword, newPassword } = req.body;
+        const {currentPassword, newPassword} = req.body;
         const userId = req.user.id;
 
         const user = await User.findById(userId);
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({message: "User not found"});
         }
 
         if (user.password !== currentPassword) {
-            return res.status(401).json({ message: "Current password is incorrect" });
+            return res.status(401).json({message: "Current password is incorrect"});
         }
 
         if (!strongPasswordRegex.test(newPassword)) {
@@ -633,7 +637,7 @@ app.put("/api/user/password", authenticateToken, async (req, res) => {
         });
     } catch (error) {
         console.error("Password update error:", error);
-        res.status(500).json({ message: "Failed to update password" });
+        res.status(500).json({message: "Failed to update password"});
     }
 });
 

@@ -33,7 +33,8 @@ axios.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-                const response = await axios.get("/api/check-auth"); if (response.data.authenticated && response.data.newAccessToken) {
+                const response = await axios.get("/api/check-auth");
+                if (response.data.authenticated && response.data.newAccessToken) {
                     localStorage.setItem("token", response.data.newAccessToken);
 
                     if (response.data.user) {
@@ -79,7 +80,8 @@ export const checkAuthentication = async () => {
             }
 
             return false;
-        } await axios.get("/api/protected");
+        }
+        await axios.get("/api/protected");
         return true;
     } catch (error) {
         console.error("Authentication check failed:", error);

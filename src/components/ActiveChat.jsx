@@ -12,7 +12,7 @@ function ActiveChat() {
     const user = useUserData();
     const {sidebarExpanded, handleSidebarStateChange} = useSidebarState();
     const {messages, isLoading, submitMessage, handleCancel} = useChatMessages(chatId);
-    
+
     return (
         <div className={`active-chat-container ${sidebarExpanded ? "sidebar-expanded" : ""}`}>
             <Sidebar onToggle={handleSidebarStateChange}/>

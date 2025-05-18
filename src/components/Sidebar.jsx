@@ -1,12 +1,15 @@
-import { Menu, PlusCircle, MessageSquare, ChevronRight, ChevronLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {Menu, PlusCircle, MessageSquare, ChevronRight, ChevronLeft} from "lucide-react";
+import {useNavigate} from "react-router-dom";
 import UserButton from "./UserButton.jsx";
 import "../styles/sidebar.scss";
 import "../styles/popups.scss";
-import { useState, useEffect } from "react";
-import { fetchChats } from "../utils/ChatAPI";
+import {useState, useEffect} from "react";
+import {fetchChats} from "../utils/ChatAPI";
 
-function Sidebar({ onToggle = () => { } }) {
+function Sidebar({
+                     onToggle = () => {
+                     }
+                 }) {
     const [chats, setChats] = useState([]);
     const [expanded, setExpanded] = useState(false);
     const [menuHovered, setMenuHovered] = useState(false);
@@ -63,11 +66,13 @@ function Sidebar({ onToggle = () => { } }) {
                         onMouseEnter={() => setMenuHovered(true)}
                         onMouseLeave={() => setMenuHovered(false)}
                     >
-                        <Menu className={`menu-icon ${menuHovered ? 'hide' : 'show'}`} size={25} />
+                        <Menu className={`menu-icon ${menuHovered ? 'hide' : 'show'}`} size={25}/>
                         {menuHovered && (
                             <>
-                                <ChevronLeft className={`chevron-icon chevron-left ${expanded ? 'show' : 'hide'}`} size={25} />
-                                <ChevronRight className={`chevron-icon chevron-right ${expanded ? 'hide' : 'show'}`} size={25} />
+                                <ChevronLeft className={`chevron-icon chevron-left ${expanded ? 'show' : 'hide'}`}
+                                             size={25}/>
+                                <ChevronRight className={`chevron-icon chevron-right ${expanded ? 'hide' : 'show'}`}
+                                              size={25}/>
                             </>
                         )}
                     </button>
@@ -81,11 +86,11 @@ function Sidebar({ onToggle = () => { } }) {
                     )}
                 </div>
                 <button className="sidebar-icon" onClick={handleNewChat}>
-                    <PlusCircle size={25} />
+                    <PlusCircle size={25}/>
                     {expanded && <span className="icon-text">New Chat</span>}
                 </button>
                 <button className="sidebar-icon" onClick={() => navigate("/history")}>
-                    <MessageSquare size={25} />
+                    <MessageSquare size={25}/>
                     {expanded && <span className="icon-text">History</span>}
                 </button>
                 {expanded && (
@@ -103,7 +108,7 @@ function Sidebar({ onToggle = () => { } }) {
                 )}
             </div>
             <div className="sidebar-bottom">
-                <UserButton size={30} expanded={expanded} />
+                <UserButton size={30} expanded={expanded}/>
             </div>
         </div>
     );

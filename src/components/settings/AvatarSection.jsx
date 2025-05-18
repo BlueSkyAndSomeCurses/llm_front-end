@@ -1,9 +1,9 @@
-import { useState, useRef } from "react";
-import { Upload, Save, Trash2 } from "lucide-react";
+import {useState, useRef} from "react";
+import {Upload, Save, Trash2} from "lucide-react";
 import axios from "axios";
 import useToast from "../../utils/useToast";
 
-const AvatarSection = ({ user, errors, setErrors }) => {
+const AvatarSection = ({user, errors, setErrors}) => {
     const [avatar, setAvatar] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null);
     const [avatarLoading, setAvatarLoading] = useState(false);
@@ -38,7 +38,7 @@ const AvatarSection = ({ user, errors, setErrors }) => {
         setAvatarPreview(null);
 
         setErrors((prevErrors) => {
-            const newErrors = { ...prevErrors };
+            const newErrors = {...prevErrors};
             delete newErrors.avatar;
             return newErrors;
         });
@@ -60,8 +60,8 @@ const AvatarSection = ({ user, errors, setErrors }) => {
         try {
             const token = localStorage.getItem("token");
             const response = await axios.put("/api/user/profile",
-                { avatar: currentAvatarPreview },
-                { headers: { Authorization: `Bearer ${token}` } }
+                {avatar: currentAvatarPreview},
+                {headers: {Authorization: `Bearer ${token}`}}
             );
 
             try {
@@ -74,7 +74,7 @@ const AvatarSection = ({ user, errors, setErrors }) => {
                     localStorage.setItem("user", JSON.stringify(updatedUser));
 
                     const userDataChangedEvent = new CustomEvent('userDataChanged', {
-                        detail: { user: updatedUser }
+                        detail: {user: updatedUser}
                     });
                     window.dispatchEvent(userDataChangedEvent);
                 }
@@ -86,7 +86,7 @@ const AvatarSection = ({ user, errors, setErrors }) => {
             setAvatar(null);
 
             setErrors((prevErrors) => {
-                const newErrors = { ...prevErrors };
+                const newErrors = {...prevErrors};
                 delete newErrors.avatar;
                 return newErrors;
             });
@@ -110,7 +110,7 @@ const AvatarSection = ({ user, errors, setErrors }) => {
         <div className="avatar-section">
             <div className="avatar-preview">
                 {avatarPreview ? (
-                    <img src={avatarPreview} alt="Avatar preview" />
+                    <img src={avatarPreview} alt="Avatar preview"/>
                 ) : (
                     <div className="avatar-placeholder">
                         {user?.name?.charAt(0).toUpperCase() || "U"}
@@ -119,7 +119,7 @@ const AvatarSection = ({ user, errors, setErrors }) => {
             </div>
             <div className="avatar-buttons">
                 <button type="button" className="upload-button" onClick={triggerFileInput}>
-                    <Upload size={16} />
+                    <Upload size={16}/>
                     Select Avatar
                 </button>
                 {avatarPreview && (
@@ -130,7 +130,7 @@ const AvatarSection = ({ user, errors, setErrors }) => {
                             onClick={handleAvatarUpload}
                             disabled={avatarLoading}
                         >
-                            <Save size={16} />
+                            <Save size={16}/>
                             {avatarLoading ? "Uploading..." : "Upload Avatar"}
                         </button>
 
@@ -140,7 +140,7 @@ const AvatarSection = ({ user, errors, setErrors }) => {
                             onClick={handleResetAvatar}
                             title="Remove avatar"
                         >
-                            <Trash2 size={16} />
+                            <Trash2 size={16}/>
                             Reset
                         </button>
                     </>
@@ -151,7 +151,7 @@ const AvatarSection = ({ user, errors, setErrors }) => {
                 ref={fileInputRef}
                 onChange={handleAvatarChange}
                 accept="image/*"
-                style={{ display: 'none' }}
+                style={{display: 'none'}}
             />
             {errors.avatar && <span className="error">{errors.avatar}</span>}
         </div>

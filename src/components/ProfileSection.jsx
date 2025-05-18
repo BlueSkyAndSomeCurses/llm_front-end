@@ -1,7 +1,7 @@
-import { useState } from "react";
+import {useState} from "react";
 import axios from "axios";
 
-function ProfileSection({ user, updateUser }) {
+function ProfileSection({user, updateUser}) {
     const [name, setName] = useState(user?.name || "");
     const [errors, setErrors] = useState({});
 
@@ -18,21 +18,21 @@ function ProfileSection({ user, updateUser }) {
 
     const updateProfile = async () => {
         if (!validateName()) {
-            return { success: false };
+            return {success: false};
         }
 
         try {
             const token = localStorage.getItem("token");
             const response = await axios.put("/api/user/profile",
-                { name: name.trim() },
-                { headers: { Authorization: `Bearer ${token}` } }
+                {name: name.trim()},
+                {headers: {Authorization: `Bearer ${token}`}}
             );
 
             if (response.data.user) {
                 localStorage.setItem("user", JSON.stringify(response.data.user));
 
                 const userDataChangedEvent = new CustomEvent('userDataChanged', {
-                    detail: { user: response.data.user }
+                    detail: {user: response.data.user}
                 });
                 window.dispatchEvent(userDataChangedEvent);
 
@@ -45,13 +45,13 @@ function ProfileSection({ user, updateUser }) {
                 localStorage.setItem("token", response.data.token);
             }
 
-            return { success: true };
+            return {success: true};
         } catch (error) {
             console.error("Error updating profile:", error);
             setErrors({
                 submit: "Failed to update profile. Please try again."
             });
-            return { success: false };
+            return {success: false};
         }
     };
 

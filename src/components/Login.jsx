@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { Send } from "lucide-react";
+import {useState} from "react";
+import {Send} from "lucide-react";
 import axios from "axios";
 import bcrypt from "bcryptjs";
 import "../styles/login.scss";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -144,7 +144,7 @@ function Login() {
                 )}
 
                 <button type="submit" className="submit-button">
-                    {isLogin ? "Login" : "Sign Up"} <Send size={16} />
+                    {isLogin ? "Login" : "Sign Up"} <Send size={16}/>
                 </button>
 
                 {error && <div className="error-message">{error}</div>}

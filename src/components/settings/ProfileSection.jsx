@@ -1,4 +1,4 @@
-const ProfileSection = ({ name, setName, errors }) => {
+const ProfileSection = ({name, setName, errors}) => {
     return (
         <div className="form-group">
             <label htmlFor="name">Name</label>

@@ -1,6 +1,6 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {StrictMode} from "react";
+import {createRoot} from "react-dom/client";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import "./index.css";
 import Chat from "./components/Chat.jsx";
 import ActiveChat from "./components/ActiveChat.jsx";
@@ -15,25 +15,25 @@ import "./utils/authHelpers.js";
 createRoot(document.getElementById("root")).render(
     <StrictMode>
         <BrowserRouter>
-            <ToastContainer />
+            <ToastContainer/>
             <Routes>
-                <Route path="/" element={<Title />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/" element={<Title/>}/>
+                <Route path="/login" element={<Login/>}/>
                 <Route path="/chat" element={
                     <ProtectedRoute>
-                        <Chat />
+                        <Chat/>
                     </ProtectedRoute>
-                } />
+                }/>
                 <Route path="/chat/:chatId" element={
                     <ProtectedRoute>
-                        <ActiveChat />
+                        <ActiveChat/>
                     </ProtectedRoute>
-                } />
+                }/>
                 <Route path="/history" element={
                     <ProtectedRoute>
-                        <History />
+                        <History/>
                     </ProtectedRoute>
-                } />
+                }/>
             </Routes>
         </BrowserRouter>
     </StrictMode>
