@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import MessageList from "./MessageList";
 import MessageInput from "./MessageInput";
 
-function ChatInterface({messages, isLoading, onSubmit, onCancel}) {
+function ChatInterface({messages, isLoading, onSubmit, onCancel, sidebarExpanded}) {
     const [inputValue, setInputValue] = useState("");
 
     const handleSubmit = async (e) => {
@@ -25,6 +25,7 @@ function ChatInterface({messages, isLoading, onSubmit, onCancel}) {
                     handleSubmit={handleSubmit}
                     isLoading={isLoading}
                     handleCancel={onCancel}
+                    sidebarExpanded={sidebarExpanded}
                 />
             </div>
         </div>

@@ -12,27 +12,18 @@ function ActiveChat() {
     const user = useUserData();
     const {sidebarExpanded, handleSidebarStateChange} = useSidebarState();
     const {messages, isLoading, submitMessage, handleCancel} = useChatMessages(chatId);
-
+    
     return (
         <div className={`active-chat-container ${sidebarExpanded ? "sidebar-expanded" : ""}`}>
             <Sidebar onToggle={handleSidebarStateChange}/>
             <div className="active-chat-content">
-                <div className="active-chatbox-container">
-                    <div className="active-chat-box">
-                        <MessageList
-                            messages={messages}
-                            isLoading={isLoading}
-                        />
-                        <MessageInput
-                            inputValue={inputValue}
-                            setInputValue={setInputValue}
-                            handleSubmit={handleSubmit}
-                            isLoading={isLoading}
-                            handleCancel={handleCancel}
-                            sidebarExpanded={sidebarExpanded}
-                        />
-                    </div>
-                </div>
+                <ChatInterface
+                    messages={messages}
+                    isLoading={isLoading}
+                    onSubmit={submitMessage}
+                    onCancel={handleCancel}
+                    sidebarExpanded={sidebarExpanded}
+                />
             </div>
         </div>
     );

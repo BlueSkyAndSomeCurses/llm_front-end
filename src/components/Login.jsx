@@ -47,8 +47,6 @@ function Login() {
                     return;
                 }
 
-                console.log("we are registering");
-
                 const response = await axios.post("/api/register", {
                     name: currentName,
                     email: currentEmail,

@@ -5,8 +5,8 @@ import '../styles/messageList.scss';
 
 function MessageList({ messages, isLoading }) {
   const messagesEndRef = useRef(null);
-
-  const hasAssistantMessage = messages.some(msg => msg.role === 'assistant');
+  
+  const hasAssistantMessage = messages && Array.isArray(messages) && messages.some(msg => msg.role === 'assistant');
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
