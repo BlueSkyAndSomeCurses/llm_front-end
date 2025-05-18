@@ -13,7 +13,7 @@
   flex: 1;
   padding: 16px 16px 100px;
   background-color: $bg-dark;
-  margin-left: 57px;
+  margin-left: var(--sidebar-collapsed-width, 57px);
   transition: margin-left 0.3s ease;
 }
 

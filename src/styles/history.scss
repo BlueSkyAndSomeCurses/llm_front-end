@@ -10,7 +10,7 @@
 .history-container {
   flex: 1;
   padding: 16px;
-  margin-left: 57px;
+  margin-left: var(--sidebar-collapsed-width, 57px);
   overflow-y: auto;
   transition: margin-left 0.3s ease;
 

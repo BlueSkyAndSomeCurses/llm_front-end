@@ -109,6 +109,36 @@ export const saveMessage = async (messageText, messageType, chatId, currentModel
   }
 };
 
+export const fetchChats = async (signal) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const response = await axios.get(
+        "/api/chats",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          signal: signal,
+        }
+      );
+
+      if (response.data && response.data.chats) {
+        return response.data.chats;
+      }
+    }
+  } catch (error) {
+    if (error.name === 'AbortError' || axios.isCancel(error)) {
+      console.log("Chats fetch aborted:", error.message);
+      throw error;
+    }
+    console.error("Error fetching chats from server:", error);
+    throw error;
+  }
+
+  return [];
+};
+
 export const getAssistantResponse = async (userMessage, context, currentModel, options = {}) => {
   const currentUserMessage = userMessage;
   const currentContext = [...context];

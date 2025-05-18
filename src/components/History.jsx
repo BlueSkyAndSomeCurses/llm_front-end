@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "../styles/chat.scss";
 import "../styles/sidebar.scss";
 import "../styles/history.scss";
 import Sidebar from "./Sidebar.jsx";
+import { fetchChats, fetchMessages } from "../utils/ChatAPI.js";
 
 const History = () => {
     const [chats, setChats] = useState([]);
@@ -15,8 +15,9 @@ const History = () => {
 
     useEffect(() => {
         let isMounted = true;
+        const controller = new AbortController();
 
-        const fetchChats = async () => {
+        const loadChats = async () => {
             try {
                 const token = localStorage.getItem("token");
                 if (!token) {
@@ -24,26 +25,34 @@ const History = () => {
                     return;
                 }
 
-                const response = await axios.get("/api/chats", {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+                const chatData = await fetchChats(controller.signal);
 
                 if (isMounted) {
-                    const chatData = response.data.chats;
                     setChats(chatData);
                 }
             } catch (error) {
-                console.error("Error fetching chats:", error);
-                if (error.response?.status === 401 && isMounted) {
-                    navigate("/login");
+                if (!isMounted) return;
+                
+                if (error.name === "CanceledError" || error.name === "AbortError") {
+                    console.log("Chat fetch aborted:", error.message);
+                    return;
                 }
+                
+                if (error.response?.status === 401) {
+                    console.error("Authentication error:", error.message);
+                    navigate("/login");
+                    return;
+                }
+                
+                console.error("Error fetching chats:", error);
             }
         };
 
-        fetchChats();
+        loadChats();
 
         return () => {
             isMounted = false;
+            controller.abort();
         };
     }, [navigate]);
 
@@ -57,16 +66,14 @@ const History = () => {
 
         if (hoverMessages[currentChatId]) return;
 
+        const controller = new AbortController();
+        
         try {
-            const token = localStorage.getItem("token");
-            const response = await axios.get(`/api/messages/${currentChatId}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const serverMessages = await fetchMessages(currentChatId, controller.signal);
 
-            const messages = response.data.messages;
-            if (messages && messages.length > 0) {
-                const lastUserMessage = messages.filter(m => m.messageType === "question").pop();
-                const lastResponse = messages.filter(m => m.messageType === "response").pop();
+            if (serverMessages && serverMessages.length > 0) {
+                const lastUserMessage = serverMessages.find(msg => msg.role === "user");
+                const lastResponse = serverMessages.find(msg => msg.role === "assistant");
 
                 setHoverMessages(prev => {
                     if (prev[currentChatId]) return prev;
@@ -74,14 +81,23 @@ const History = () => {
                     return {
                         ...prev,
                         [currentChatId]: {
-                            userMessage: lastUserMessage?.messageText || "",
-                            response: lastResponse?.messageText || ""
+                            userMessage: lastUserMessage?.content || "",
+                            response: lastResponse?.content || ""
                         }
                     };
                 });
             }
         } catch (error) {
+            if (error.name === "CanceledError" || error.name === "AbortError") {
+                console.log("Message fetch aborted:", error.message);
+                return;
+            }
+            
             console.error("Error fetching messages:", error);
+        } finally {
+            if (hoveredChatId !== currentChatId) {
+                controller.abort();
+            }
         }
     };
 
