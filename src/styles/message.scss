@@ -11,15 +11,25 @@
   animation: slideIn 0.3s ease-out forwards;
   transform: translateY(100%);
   opacity: 0;
+  
   &.user-message {
     align-self: flex-end;
     background-color: $illusion;
     color: $text-light;
     box-shadow: 0 2px 4px rgba($illusion, 0.2);
 
-    &:selection {
-      background-color: $pink-transparent;
-      color: $text-light;
+    &::selection {
+      background-color: $text-light;
+      color: $illusion;
+    }
+    
+    .user-content {
+      white-space: pre-wrap;
+      
+      &::selection {
+        background-color: $text-light;
+        color: $illusion;
+      }
     }
   }
 
@@ -28,6 +38,32 @@
     background-color: $bg-light;
     border: 2px solid $border-color;
     box-shadow: 0 2px 4px $shadow;
+    
+    .markdown-content {
+      color: $text-dark;
+      
+      pre {
+        margin: 0.8em 0;
+      }
+      
+      p:first-child {
+        margin-top: 0;
+      }
+      
+      p:last-child {
+        margin-bottom: 0;
+      }
+      
+      ul, ol {
+        margin-left: 0;
+      }
+      
+      h1, h2, h3, h4, h5, h6 {
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+    }
   }
 }
 

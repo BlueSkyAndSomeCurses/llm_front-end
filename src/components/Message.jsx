@@ -28,7 +28,7 @@ function Message({message}) {
                     </ReactMarkdown>
                 </div>
             ) : (
-                <div>{content}</div>
+                <div className="user-content">{content}</div>
             )}
         </div>
     );
