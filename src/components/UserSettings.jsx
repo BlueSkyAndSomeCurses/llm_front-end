@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import "../styles/usersettings.scss";
+import "../styles/userSettings.scss";
 import axios from "axios";
 import useToast from "../utils/useToast";
 import {
@@ -157,41 +157,41 @@ function UserSettings({onClose, user}) {
     };
 
     return (<div className="settings-overlay">
-            <div className="settings-modal">
-                <SettingsHeader onClose={onClose}/>
+        <div className="settings-modal">
+            <SettingsHeader onClose={onClose}/>
 
-                <form onSubmit={handleSubmit}>
-                    <AvatarSectionView
-                        user={user}
-                        errors={errors}
-                        setErrors={setErrors}
-                    />
+            <form onSubmit={handleSubmit}>
+                <AvatarSectionView
+                    user={user}
+                    errors={errors}
+                    setErrors={setErrors}
+                />
 
-                    <ProfileSectionView
-                        name={name}
-                        setName={setName}
-                        errors={errors}
-                    />
+                <ProfileSectionView
+                    name={name}
+                    setName={setName}
+                    errors={errors}
+                />
 
-                    <PasswordSectionView
-                        currentPassword={currentPassword}
-                        setCurrentPassword={setCurrentPassword}
-                        newPassword={newPassword}
-                        setNewPassword={setNewPassword}
-                        confirmPassword={confirmPassword}
-                        setConfirmPassword={setConfirmPassword}
-                        errors={errors}
-                    />
+                <PasswordSectionView
+                    currentPassword={currentPassword}
+                    setCurrentPassword={setCurrentPassword}
+                    newPassword={newPassword}
+                    setNewPassword={setNewPassword}
+                    confirmPassword={confirmPassword}
+                    setConfirmPassword={setConfirmPassword}
+                    errors={errors}
+                />
 
-                    {errors.submit && <div className="error-message">{errors.submit}</div>}
+                {errors.submit && <div className="error-message">{errors.submit}</div>}
 
-                    <SettingsActions
-                        onClose={onClose}
-                        loading={loading}
-                    />
-                </form>
-            </div>
-        </div>);
+                <SettingsActions
+                    onClose={onClose}
+                    loading={loading}
+                />
+            </form>
+        </div>
+    </div>);
 };
 
 export default UserSettings;

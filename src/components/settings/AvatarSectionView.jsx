@@ -32,15 +32,54 @@ const AvatarSectionView = ({user, errors, setErrors}) => {
         }
     };
 
-    const handleResetAvatar = () => {
-        setAvatar(null);
-        setAvatarPreview(null);
+    const handleResetAvatar = async () => {
+        setAvatarLoading(true);
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.put(
+                "/api/user/profile", 
+                { avatar: null }, 
+                { headers: { Authorization: `Bearer ${token}` }}
+            );
 
-        setErrors((prevErrors) => {
-            const newErrors = {...prevErrors};
-            delete newErrors.avatar;
-            return newErrors;
-        });
+            setAvatar(null);
+            setAvatarPreview(null);
+
+            try {
+                const currentUser = JSON.parse(localStorage.getItem("user"));
+                if (currentUser) {
+                    const updatedUser = {
+                        ...currentUser,
+                        avatar: null
+                    };
+                    localStorage.setItem("user", JSON.stringify(updatedUser));
+
+                    const userDataChangedEvent = new CustomEvent('userDataChanged', {
+                        detail: { user: updatedUser }
+                    });
+                    window.dispatchEvent(userDataChangedEvent);
+                }
+            } catch (storageError) {
+                console.error("Error updating localStorage:", storageError);
+            }
+
+            toast.success("Avatar removed successfully!");
+            
+            setErrors((prevErrors) => {
+                const newErrors = {...prevErrors};
+                delete newErrors.avatar;
+                return newErrors;
+            });
+        } catch (error) {
+            console.error("Error resetting avatar:", error);
+            setErrors((prevErrors) => ({
+                ...prevErrors, 
+                avatar: "Failed to reset avatar. Please try again."
+            }));
+            toast.error("Failed to reset avatar. Please try again.");
+        } finally {
+            setAvatarLoading(false);
+        }
     };
 
     const handleAvatarUpload = async () => {
