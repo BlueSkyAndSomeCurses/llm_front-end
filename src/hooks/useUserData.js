@@ -1,26 +1,6 @@
-import {useState, useEffect} from "react";
+import { useUser } from "../contexts/UserContext";
 
 export default function useUserData() {
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        const userData = localStorage.getItem("user");
-        if (userData) {
-            setUser(JSON.parse(userData));
-        }
-
-        const handleUserDataChanged = (event) => {
-            if (event.detail && event.detail.user) {
-                setUser(event.detail.user);
-            }
-        };
-
-        window.addEventListener('userDataChanged', handleUserDataChanged);
-
-        return () => {
-            window.removeEventListener('userDataChanged', handleUserDataChanged);
-        };
-    }, []);
-
+    const { user } = useUser();
     return user;
 }

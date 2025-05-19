@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import {Send} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 import "../styles/chat.scss";
@@ -6,43 +6,15 @@ import "../styles/sidebar.scss";
 import Sidebar from "./Sidebar.jsx";
 import ModelButton from "./Model.jsx";
 import "../styles/popups.scss";
-import {saveMessage} from "../utils/chatAPI.js";
+import {saveMessage} from "../utils/ChatAPI.js";
+import { useUser } from "../contexts/UserContext.jsx";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
-    const [user, setUser] = useState(null);
+    const { user } = useUser();
     const [selectedModel, setSelectedModel] = useState("DeepSeek R1");
     const navigate = useNavigate();
-
-    useEffect(() => {
-        let isMounted = true;
-
-        const loadUserData = () => {
-            const userData = localStorage.getItem("user");
-            if (userData && isMounted) {
-                try {
-                    setUser(JSON.parse(userData));
-                } catch (error) {
-                    console.error("Error parsing user data:", error);
-                }
-            }
-        };
-        loadUserData();
-
-        const handleUserDataChanged = (event) => {
-            if (isMounted && event.detail && event.detail.user) {
-                setUser(event.detail.user);
-            }
-        };
-
-        window.addEventListener('userDataChanged', handleUserDataChanged);
-
-        return () => {
-            isMounted = false;
-            window.removeEventListener('userDataChanged', handleUserDataChanged);
-        };
-    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -2,6 +2,7 @@ import {useState, useEffect} from "react";
 import "../styles/usersettings.scss";
 import axios from "axios";
 import useToast from "../utils/useToast";
+import { useUser } from "../contexts/UserContext.jsx";
 import {
     SettingsHeader,
     AvatarSection,
@@ -85,12 +86,8 @@ function UserSettings({onClose, user}) {
             );
 
             if (response.data.user) {
-                localStorage.setItem("user", JSON.stringify(response.data.user));
-
-                const userDataChangedEvent = new CustomEvent('userDataChanged', {
-                    detail: {user: response.data.user}
-                });
-                window.dispatchEvent(userDataChangedEvent);
+                const { updateUser } = useUser();
+                updateUser(response.data.user);
             }
 
             if (response.data.token) {
