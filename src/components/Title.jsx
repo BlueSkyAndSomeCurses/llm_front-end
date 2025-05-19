@@ -57,7 +57,11 @@ function TitlePage() {
     }, []);
 
     const handleTryNow = () => {
-        navigate("/chat");
+        if (user) {
+            navigate("/chat");
+        } else {
+            navigate("/login");
+        }
     };
 
     const toggleUserMenu = () => {
