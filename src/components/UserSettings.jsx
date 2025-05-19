@@ -4,9 +4,9 @@ import axios from "axios";
 import useToast from "../utils/useToast";
 import {
     SettingsHeader,
-    AvatarSection,
-    ProfileSection,
-    PasswordSection,
+    AvatarSection as AvatarSectionView,
+    ProfileSection as ProfileSectionView,
+    PasswordSection as PasswordSectionView,
     SettingsActions
 } from "./settings";
 
@@ -172,19 +172,19 @@ function UserSettings({onClose, user}) {
                 <SettingsHeader onClose={onClose}/>
 
                 <form onSubmit={handleSubmit}>
-                    <AvatarSection
+                    <AvatarSectionView
                         user={user}
                         errors={errors}
                         setErrors={setErrors}
                     />
 
-                    <ProfileSection
+                    <ProfileSectionView
                         name={name}
                         setName={setName}
                         errors={errors}
                     />
 
-                    <PasswordSection
+                    <PasswordSectionView
                         currentPassword={currentPassword}
                         setCurrentPassword={setCurrentPassword}
                         newPassword={newPassword}

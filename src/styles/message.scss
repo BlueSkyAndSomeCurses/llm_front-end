@@ -43,7 +43,7 @@
       color: $text-dark;
       
       pre {
-        margin: 0.8em 0;
+        margin: 0.1em 0;
       }
       
       p:first-child {
@@ -61,6 +61,22 @@
       h1, h2, h3, h4, h5, h6 {
         &:first-child {
           margin-top: 0;
+        }
+      }
+      
+      /* Make all line breaks render consistently */
+      br {
+        display: block;
+        content: "";
+        margin: 1em 0;
+      }
+      
+      /* Ensure backtick line breaks are treated the same as soft breaks */
+      code:only-child {
+        &:empty {
+          display: block;
+          content: "";
+          margin: 1em 0;
         }
       }
     }

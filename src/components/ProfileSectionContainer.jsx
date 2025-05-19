@@ -1,7 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
 
-function ProfileSection({user, updateUser}) {
+function ProfileSectionContainer({user, updateUser}) {
     const [name, setName] = useState(user?.name || "");
     const [errors, setErrors] = useState({});
 
@@ -77,4 +77,4 @@ function ProfileSection({user, updateUser}) {
     };
 }
 
-export default ProfileSection;
+export default ProfileSectionContainer;

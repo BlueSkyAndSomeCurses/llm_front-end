@@ -1,4 +1,4 @@
-const PasswordSection = ({
+const PasswordSectionView = ({
                              currentPassword,
                              setCurrentPassword,
                              newPassword,
@@ -49,4 +49,4 @@ const PasswordSection = ({
     );
 };
 
-export default PasswordSection;
+export default PasswordSectionView;

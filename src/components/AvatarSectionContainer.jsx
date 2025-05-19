@@ -2,7 +2,7 @@ import {useState, useRef} from "react";
 import {Upload, Save, Trash2} from "lucide-react";
 import axios from "axios";
 
-function AvatarSection({user, updateUser, onSuccess}) {
+function AvatarSectionContainer({user, updateUser, onSuccess}) {
     const [avatar, setAvatar] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null);
     const [avatarLoading, setAvatarLoading] = useState(false);
@@ -153,4 +153,4 @@ function AvatarSection({user, updateUser, onSuccess}) {
     );
 }
 
-export default AvatarSection;
+export default AvatarSectionContainer;

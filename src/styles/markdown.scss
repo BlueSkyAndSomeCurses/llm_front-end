@@ -2,7 +2,7 @@
 @use "sass:color";
 
 .markdown-content {
-  line-height: 1.5;
+  line-height: 1.2;
   color: $text-dark;
   overflow-wrap: break-word;
   font-size: 16px;
@@ -13,13 +13,13 @@
   h4,
   h5,
   h6 {
-    margin-top: 1em;
-    margin-bottom: 0.5em;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
     color: color.adjust($text-dark, $lightness: -10%);
     font-weight: 600;
-    line-height: 1.3;
+    line-height: 0.5;
     border-bottom: 1px solid rgba($illusion, 0.2);
-    padding-bottom: 0.3em;
+    padding-bottom: 0.1em;
   }
 
   h1 {
@@ -52,23 +52,37 @@
   }
 
   p {
-    margin-top: 0.5em;
-    margin-bottom: 0.7em;
-    line-height: 1.6;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    line-height: 1.3;
+    
+    &.single-line-paragraph {
+      margin: 0;
+      padding: 0;
+      line-height: 1.2;
+    }
   }
 
   ul,
   ol {
     padding-left: 1.5em;
-    margin-top: 0.5em;
-    margin-bottom: 0.7em;
+    margin-top: 0.05em;
+    margin-bottom: 0.05em;
   }
 
   li {
-    margin-bottom: 0.3em;
+    margin-bottom: 0.05em;
+    line-height: 1.2;
+    
+    &.compact-list-item {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding: 0;
+    }
     
     p {
-      margin-bottom: 0.4em;
+      margin-top: 0;
+      margin-bottom: 0.05em;
     }
   }
 
@@ -94,7 +108,7 @@
     border-radius: 0 4px 4px 0;
     
     p {
-      margin: 0.3em 0;
+      margin: 0.1em 0;
     }
     
     &:first-child {
@@ -110,7 +124,7 @@
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier,
       monospace;
     padding: 0.1em 0.4em;
-    margin: 0 0.2em;
+    margin: 0 0.1em;
     font-size: 90%;
     background-color: rgba($illusion, 0.08);
     color: $illusion-night;
@@ -343,7 +357,7 @@
     padding-left: 0.5em;
     
     .task-list-item {
-      margin-bottom: 0.5em;
+      margin-bottom: 0.1em;
       
       input[type="checkbox"] {
         margin-right: 0.5em;
@@ -451,5 +465,30 @@ pre {
     &:hover {
       background-color: rgba($illusion, 0.5);
     }
+  }
+  
+  .line-break {
+    display: block;
+    margin: 0.1em 0;
+    line-height: 1;
+    
+    &::after {
+      content: '';
+      display: block;
+      height: 0;
+      clear: both;
+    }
+  }
+  
+  .single-line-paragraph {
+    margin: 0;
+    padding: 0;
+    line-height: 1.3;
+  }
+  
+  br {
+    display: block;
+    content: "";
+    margin-top: 0.1em;
   }
 }

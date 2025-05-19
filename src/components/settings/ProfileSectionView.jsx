@@ -1,4 +1,4 @@
-const ProfileSection = ({name, setName, errors}) => {
+const ProfileSectionView = ({name, setName, errors}) => {
     return (
         <div className="form-group">
             <label htmlFor="name">Name</label>
@@ -14,4 +14,4 @@ const ProfileSection = ({name, setName, errors}) => {
     );
 };
 
-export default ProfileSection;
+export default ProfileSectionView;

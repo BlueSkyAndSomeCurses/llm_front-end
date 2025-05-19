@@ -1,7 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
 
-function PasswordSection({setParentErrors}) {
+function PasswordSectionContainer({setParentErrors}) {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -125,4 +125,4 @@ function PasswordSection({setParentErrors}) {
     };
 }
 
-export default PasswordSection;
+export default PasswordSectionContainer;

@@ -3,7 +3,7 @@ import {Upload, Save, Trash2} from "lucide-react";
 import axios from "axios";
 import useToast from "../../utils/useToast";
 
-const AvatarSection = ({user, errors, setErrors}) => {
+const AvatarSectionView = ({user, errors, setErrors}) => {
     const [avatar, setAvatar] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null);
     const [avatarLoading, setAvatarLoading] = useState(false);
@@ -158,4 +158,4 @@ const AvatarSection = ({user, errors, setErrors}) => {
     );
 };
 
-export default AvatarSection;
+export default AvatarSectionView;
