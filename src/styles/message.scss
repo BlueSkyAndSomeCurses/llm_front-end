@@ -38,9 +38,13 @@
     background-color: $bg-light;
     border: 2px solid $border-color;
     box-shadow: 0 2px 4px $shadow;
+    margin-top: 0.8rem;
+    padding: 0.8rem 1rem;
+    isolation: isolate;
     
     .markdown-content {
       color: $text-dark;
+      isolation: isolate;
       
       pre {
         margin: 0.1em 0;
