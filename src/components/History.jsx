@@ -1,10 +1,10 @@
-import {useState, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/chat.scss";
 import "../styles/sidebar.scss";
 import "../styles/history.scss";
 import Sidebar from "./Sidebar.jsx";
-import {fetchChats, fetchMessages} from "../utils/chatAPI.js";
+import { fetchChats, fetchMessages } from "../utils/chatAPI.js";
 
 const History = () => {
     const [chats, setChats] = useState([]);
@@ -109,12 +109,12 @@ const History = () => {
         const hasMoreLines = lines.length > 10;
 
         return (<>
-                {displayLines.map((line, index) => (<span key={index}>
-                        {line}
-                        {index < displayLines.length - 1 && <br/>}
-                    </span>))}
-                {hasMoreLines && <span className="more-lines">...</span>}
-            </>);
+            {displayLines.map((line, index) => (<span key={index}>
+                {line}
+                {index < displayLines.length - 1 && <br />}
+            </span>))}
+            {hasMoreLines && <span className="more-lines">...</span>}
+        </>);
     };
 
     const handleSidebarStateChange = (isExpanded) => {
@@ -122,39 +122,39 @@ const History = () => {
     };
 
     return (<div className={`history-page ${sidebarExpanded ? "sidebar-expanded" : ""}`}>
-            <Sidebar onToggle={handleSidebarStateChange}/>
-            <div className="history-container">
-                <h1>Chat History</h1>
-                <div className="chats-list">
-                    {chats && chats.length > 0 ? (chats.map((chat) => (<div
-                                key={chat._id}
-                                className="chat-item"
-                                onClick={() => handleChatClick(chat.chatId)}
-                                onMouseEnter={() => handleChatHover(chat.chatId)}
-                                onMouseLeave={handleChatLeave}>
-                                <div className="chat-content">
-                                    <div className="chat-main">
-                                        <p className="chat-message">
-                                            {chat.messageText}
-                                        </p>
-                                        <span className="chat-date">
-                                            {new Date(chat.timestamp).toLocaleDateString()}
-                                        </span>
-                                    </div>
-                                    {hoveredChatId === chat.chatId && hoverMessages[chat.chatId] && (
-                                        <div className="chat-preview">
-                                            <div className="preview-message user">
-                                                <strong>You:</strong> {formatMessage(hoverMessages[chat.chatId].userMessage)}
-                                            </div>
-                                            <div className="preview-message assistant">
-                                                <strong>Kitty:</strong> {formatMessage(hoverMessages[chat.chatId].response)}
-                                            </div>
-                                        </div>)}
+        <Sidebar onToggle={handleSidebarStateChange} />
+        <div className="history-container">
+            <h1>Chat History</h1>
+            <div className="chats-list">
+                {chats && chats.length > 0 ? (chats.map((chat) => (<div
+                    key={chat._id}
+                    className="chat-item"
+                    onClick={() => handleChatClick(chat.chatId)}
+                    onMouseEnter={() => handleChatHover(chat.chatId)}
+                    onMouseLeave={handleChatLeave}>
+                    <div className="chat-content">
+                        <div className="chat-main">
+                            <p className="chat-message">
+                                {chat.messageText}
+                            </p>
+                            <span className="chat-date">
+                                {new Date(chat.timestamp).toLocaleDateString()}
+                            </span>
+                        </div>
+                        {hoveredChatId === chat.chatId && hoverMessages[chat.chatId] && (
+                            <div className="chat-preview">
+                                <div className="preview-message user">
+                                    <strong>You:</strong> {formatMessage(hoverMessages[chat.chatId].userMessage)}
                                 </div>
-                            </div>))) : (<p className="no-chats">No chats found</p>)}
-                </div>
+                                <div className="preview-message assistant">
+                                    <strong>Kitty:</strong> {formatMessage(hoverMessages[chat.chatId].response)}
+                                </div>
+                            </div>)}
+                    </div>
+                </div>))) : (<p className="no-chats">No chats found</p>)}
             </div>
-        </div>);
+        </div>
+    </div>);
 };
 
 export default History;

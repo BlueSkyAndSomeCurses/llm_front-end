@@ -10,11 +10,11 @@ import '../styles/codeTheme.scss';
 import '../styles/markdown.scss';
 import '../styles/message.scss';
 
-function Message({message}) {
-    const {role, content} = message;
+function Message({ message }) {
+    const { role, content } = message;
 
     const components = {
-        code({node, inline, className, children, ...props}) {
+        code({ node, inline, className, children, ...props }) {
             if (inline) {
                 return <code className="inline-code" {...props}>{children}</code>;
             }

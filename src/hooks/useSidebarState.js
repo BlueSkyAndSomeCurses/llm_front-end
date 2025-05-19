@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 
 export default function useSidebarState() {
     const [sidebarExpanded, setSidebarExpanded] = useState(false);
@@ -7,5 +7,5 @@ export default function useSidebarState() {
         setSidebarExpanded(isExpanded);
     };
 
-    return {sidebarExpanded, handleSidebarStateChange};
+    return { sidebarExpanded, handleSidebarStateChange };
 }

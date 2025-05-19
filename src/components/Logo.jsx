@@ -1,5 +1,5 @@
 
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/logo.scss";
 
 function Logo() {
@@ -10,8 +10,8 @@ function Logo() {
     };
 
     return (<span className="logo" onClick={handleLogoClick} role="button">
-            FC Slavuta
-        </span>);
+        FC Slavuta
+    </span>);
 }
 
 export default Logo;

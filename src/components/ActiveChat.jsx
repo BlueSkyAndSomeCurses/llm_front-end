@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "../styles/activechat.scss";
 import "../styles/sidebar.scss";
 import Sidebar from "./Sidebar.jsx";
@@ -8,13 +8,13 @@ import useUserData from "../hooks/useUserData";
 import useSidebarState from "../hooks/useSidebarState";
 
 function ActiveChat() {
-    const {chatId} = useParams();
+    const { chatId } = useParams();
     const user = useUserData();
-    const {sidebarExpanded, handleSidebarStateChange} = useSidebarState();
-    const {messages, isLoading, submitMessage, handleCancel} = useChatMessages(chatId);
+    const { sidebarExpanded, handleSidebarStateChange } = useSidebarState();
+    const { messages, isLoading, submitMessage, handleCancel } = useChatMessages(chatId);
 
     return (<div className={`active-chat-container ${sidebarExpanded ? "sidebar-expanded" : ""}`}>
-        <Sidebar onToggle={handleSidebarStateChange}/>
+        <Sidebar onToggle={handleSidebarStateChange} />
         <div className="active-chat-content">
             <ChatInterface
                 messages={messages}

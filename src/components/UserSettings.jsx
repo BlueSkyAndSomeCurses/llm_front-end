@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import "../styles/userSettings.scss";
 import axios from "axios";
 import useToast from "../utils/useToast";
@@ -10,7 +10,7 @@ import {
     SettingsActions
 } from "./settings";
 
-function UserSettings({onClose, user}) {
+function UserSettings({ onClose, user }) {
     const [name, setName] = useState(user?.name || "");
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -78,13 +78,13 @@ function UserSettings({onClose, user}) {
 
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.put("/api/user/profile", {name: currentName}, {headers: {Authorization: `Bearer ${token}`}});
+            const response = await axios.put("/api/user/profile", { name: currentName }, { headers: { Authorization: `Bearer ${token}` } });
 
             if (response.data.user) {
                 localStorage.setItem("user", JSON.stringify(response.data.user));
 
                 const userDataChangedEvent = new CustomEvent('userDataChanged', {
-                    detail: {user: response.data.user}
+                    detail: { user: response.data.user }
                 });
                 window.dispatchEvent(userDataChangedEvent);
             }
@@ -113,7 +113,7 @@ function UserSettings({onClose, user}) {
             const token = localStorage.getItem("token");
             await axios.put("/api/user/password", {
                 currentPassword: currentPasswordVal, newPassword: newPasswordVal
-            }, {headers: {Authorization: `Bearer ${token}`}});
+            }, { headers: { Authorization: `Bearer ${token}` } });
             return true;
         } catch (error) {
             console.error("Error updating password:", error);
@@ -157,7 +157,7 @@ function UserSettings({onClose, user}) {
 
     return (<div className="settings-overlay">
         <div className="settings-modal">
-            <SettingsHeader onClose={onClose}/>
+            <SettingsHeader onClose={onClose} />
 
             <form onSubmit={handleSubmit}>
                 <AvatarSectionView

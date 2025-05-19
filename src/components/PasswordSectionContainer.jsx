@@ -1,7 +1,7 @@
-import {useState} from "react";
+import { useState } from "react";
 import axios from "axios";
 
-function PasswordSectionContainer({setParentErrors}) {
+function PasswordSectionContainer({ setParentErrors }) {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -29,30 +29,30 @@ function PasswordSectionContainer({setParentErrors}) {
     };
 
     const updatePassword = async () => {
-        if (!newPassword) return {success: true};
+        if (!newPassword) return { success: true };
 
         if (!validatePasswords()) {
-            return {success: false};
+            return { success: false };
         }
 
         try {
             const token = localStorage.getItem("token");
             await axios.put("/api/user/password", {
                 currentPassword, newPassword
-            }, {headers: {Authorization: `Bearer ${token}`}});
-            return {success: true};
+            }, { headers: { Authorization: `Bearer ${token}` } });
+            return { success: true };
         } catch (error) {
             console.error("Error updating password:", error);
             const errorMessage = error.response?.data?.message || "Failed to update password";
 
-            const newError = {currentPassword: errorMessage};
-            setErrors(prev => ({...prev, ...newError}));
+            const newError = { currentPassword: errorMessage };
+            setErrors(prev => ({ ...prev, ...newError }));
 
             if (setParentErrors) {
-                setParentErrors(prev => ({...prev, ...newError}));
+                setParentErrors(prev => ({ ...prev, ...newError }));
             }
 
-            return {success: false};
+            return { success: false };
         }
     };
 

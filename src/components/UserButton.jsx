@@ -1,12 +1,12 @@
-import {useState, useEffect, useRef} from "react";
-import {Settings, LogOut, User, LogIn} from "lucide-react";
-import {useNavigate} from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Settings, LogOut, User, LogIn } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import UserSettings from "./UserSettings.jsx";
 
 import "../styles/sidebar.scss";
 import "../styles/popups.scss";
 
-function UserButton({size, expanded}) {
+function UserButton({ size, expanded }) {
     const [user, setUser] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
@@ -96,34 +96,34 @@ function UserButton({size, expanded}) {
                 {user ? (<>
                     <div className="user-avatar">
                         {user.avatar ? (<img src={user.avatar}
-                                             alt="User Avatar"
-                                             className="avatar-image"/>) : (getInitial())}
+                            alt="User Avatar"
+                            className="avatar-image" />) : (getInitial())}
                     </div>
                     {expanded && (<span className="user-name">
-                                    {user.name.length > 10 ? `${user.name.substring(0, 10)}...` : user.name}
-                                </span>)}
+                        {user.name.length > 10 ? `${user.name.substring(0, 10)}...` : user.name}
+                    </span>)}
                 </>) : (<>
                     <div className="login-avatar">
-                        <LogIn size={20}/>
+                        <LogIn size={20} />
                     </div>
                     {expanded && (<span className="user-name">
-                                    Login
-                                </span>)}
+                        Login
+                    </span>)}
                 </>)}
             </button>
 
             {user && showPopup && (<div className={`user-popup ${!expanded ? "popup-absolute" : ""}`} ref={popupRef}>
                 <div className="popup-item" onClick={handleSettings}>
-                    <Settings size={16}/>
+                    <Settings size={16} />
                     <span>Settings</span>
                 </div>
                 <div className="popup-item" onClick={handleLogout}>
-                    <LogOut size={16}/>
+                    <LogOut size={16} />
                     <span>Logout</span>
                 </div>
             </div>)}
         </div>
-        {showSettings && <UserSettings onClose={handleCloseSettings} user={user}/>}
+        {showSettings && <UserSettings onClose={handleCloseSettings} user={user} />}
     </>);
 }
 

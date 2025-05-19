@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import MessageList from "./MessageList";
 import MessageInput from "./MessageInput";
 
-function ChatInterface({messages, isLoading, onSubmit, onCancel, sidebarExpanded}) {
+function ChatInterface({ messages, isLoading, onSubmit, onCancel, sidebarExpanded }) {
     const [inputValue, setInputValue] = useState("");
 
     const handleSubmit = async (e) => {
@@ -13,21 +13,21 @@ function ChatInterface({messages, isLoading, onSubmit, onCancel, sidebarExpanded
     };
 
     return (<div className="active-chatbox-container">
-            <div className="active-chat-box">
-                <MessageList
-                    messages={messages}
-                    isLoading={isLoading}
-                />
-                <MessageInput
-                    inputValue={inputValue}
-                    setInputValue={setInputValue}
-                    handleSubmit={handleSubmit}
-                    isLoading={isLoading}
-                    handleCancel={onCancel}
-                    sidebarExpanded={sidebarExpanded}
-                />
-            </div>
-        </div>);
+        <div className="active-chat-box">
+            <MessageList
+                messages={messages}
+                isLoading={isLoading}
+            />
+            <MessageInput
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+                handleSubmit={handleSubmit}
+                isLoading={isLoading}
+                handleCancel={onCancel}
+                sidebarExpanded={sidebarExpanded}
+            />
+        </div>
+    </div>);
 }
 
 export default ChatInterface;

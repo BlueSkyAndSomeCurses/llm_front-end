@@ -1,4 +1,4 @@
-import {showToast} from './toastContainer.js';
+import { showToast } from './toastContainer.js';
 
 const useToast = () => {
     const success = (message, duration = 3000) => {

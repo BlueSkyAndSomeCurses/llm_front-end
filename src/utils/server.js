@@ -36,8 +36,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
-app.use(express.json({limit: '10mb'}));
-app.use(express.urlencoded({limit: '10mb', extended: true}));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 app.use(express.json());
 
@@ -389,7 +389,7 @@ app.get("/api/messages/:chatId", authenticateToken, async (req, res) => {
 
 app.get("/api/chat/:chatId/model", authenticateToken, async (req, res) => {
     try {
-        const {chatId} = req.params;
+        const { chatId } = req.params;
         const userId = req.user.id;
 
         const firstMessage = await Message.findOne({
@@ -487,15 +487,15 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
 
 app.put("/api/user/profile", authenticateToken, async (req, res) => {
     try {
-        const {name, avatar} = req.body;
+        const { name, avatar } = req.body;
         const userId = req.user.id;
 
         const updatedUser = await User.findByIdAndUpdate(userId, {
-            ...(name && {name}), ...(avatar !== undefined && {avatar})
-        }, {new: true, select: '-password'});
+            ...(name && { name }), ...(avatar !== undefined && { avatar })
+        }, { new: true, select: '-password' });
 
         if (!updatedUser) {
-            return res.status(404).json({message: "User not found"});
+            return res.status(404).json({ message: "User not found" });
         }
 
         const userResponse = {
@@ -508,7 +508,7 @@ app.put("/api/user/profile", authenticateToken, async (req, res) => {
                 id: updatedUser._id,
                 email: updatedUser.email,
                 name: updatedUser.name
-            }, JWT_SECRET, {expiresIn: "24h"});
+            }, JWT_SECRET, { expiresIn: "24h" });
         }
 
         res.status(200).json({
@@ -516,22 +516,22 @@ app.put("/api/user/profile", authenticateToken, async (req, res) => {
         });
     } catch (error) {
         console.error("Profile update error:", error);
-        res.status(500).json({message: "Failed to update profile"});
+        res.status(500).json({ message: "Failed to update profile" });
     }
 });
 
 app.put("/api/user/password", authenticateToken, async (req, res) => {
     try {
-        const {currentPassword, newPassword} = req.body;
+        const { currentPassword, newPassword } = req.body;
         const userId = req.user.id;
 
         const user = await User.findById(userId);
         if (!user) {
-            return res.status(404).json({message: "User not found"});
+            return res.status(404).json({ message: "User not found" });
         }
 
         if (user.password !== currentPassword) {
-            return res.status(401).json({message: "Current password is incorrect"});
+            return res.status(401).json({ message: "Current password is incorrect" });
         }
 
         if (!strongPasswordRegex.test(newPassword)) {
@@ -548,7 +548,7 @@ app.put("/api/user/password", authenticateToken, async (req, res) => {
         });
     } catch (error) {
         console.error("Password update error:", error);
-        res.status(500).json({message: "Failed to update password"});
+        res.status(500).json({ message: "Failed to update password" });
     }
 });
 

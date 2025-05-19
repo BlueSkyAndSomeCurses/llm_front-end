@@ -1,12 +1,12 @@
-import {useState, useEffect} from "react";
-import {Send} from "lucide-react";
-import {useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Send } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import "../styles/chat.scss";
 import "../styles/sidebar.scss";
 import Sidebar from "./Sidebar.jsx";
 import ModelButton from "./Model.jsx";
 import "../styles/popups.scss";
-import {saveMessage} from "../utils/chatAPI.js";
+import { saveMessage } from "../utils/chatAPI.js";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
@@ -80,7 +80,7 @@ function Chat() {
     };
 
     return (<div className={`chatpage-container`}>
-        <Sidebar/>
+        <Sidebar />
         <div className="chat-container">
             <div className="chatbox-container">
                 <div className="chat-header">
@@ -96,21 +96,21 @@ function Chat() {
                         </div>))}
                     </div>
                     <form className="chat-input" onSubmit={handleSubmit}>
-                            <textarea
-                                className="input-field multiline"
-                                placeholder="Type a message... (Shift+Enter for new line)"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                                onKeyDown={handleKeyDown}
-                                rows={1}
-                            />
+                        <textarea
+                            className="input-field multiline"
+                            placeholder="Type a message... (Shift+Enter for new line)"
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            rows={1}
+                        />
                         <div className="input-utils">
                             <ModelButton
                                 selectedModel={selectedModel}
                                 setSelectedModel={setSelectedModel}
                             />
                             <button type="submit" className="send-button">
-                                <Send size={20}/>
+                                <Send size={20} />
                             </button>
                         </div>
                     </form>

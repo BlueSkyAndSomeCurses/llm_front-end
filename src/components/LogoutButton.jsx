@@ -1,5 +1,5 @@
-import {LogOut} from "lucide-react";
-import {useNavigate} from "react-router-dom";
+import { LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import "../styles/sidebar.scss";
 import axios from "axios";
 
@@ -19,7 +19,7 @@ function LogoutButton() {
     };
 
     return (<button className="sidebar-icon" onClick={handleLogout}>
-        <LogOut size={30}/>
+        <LogOut size={30} />
     </button>);
 }
 

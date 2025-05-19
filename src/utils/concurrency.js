@@ -82,7 +82,7 @@ export const safeStorage = {
     }
 };
 
-export const withRetry = async (fn, {retries = 3, delay = 300, shouldRetry = () => true} = {}) => {
+export const withRetry = async (fn, { retries = 3, delay = 300, shouldRetry = () => true } = {}) => {
     let lastError;
 
     for (let attempt = 0; attempt <= retries; attempt++) {

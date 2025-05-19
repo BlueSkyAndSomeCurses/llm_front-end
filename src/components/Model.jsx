@@ -1,8 +1,8 @@
 import React from "react";
-import {useState} from "react";
+import { useState } from "react";
 import "../styles/model.scss";
 
-const ModelButton = ({selectedModel, setSelectedModel}) => {
+const ModelButton = ({ selectedModel, setSelectedModel }) => {
     const models = ["DeepSeek R1", "QWEN", "LLaMa 4 scout"];
     const [isOpen, setIsOpen] = useState(false);
 

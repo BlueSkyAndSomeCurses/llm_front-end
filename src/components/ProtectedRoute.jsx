@@ -1,9 +1,9 @@
-import {useState, useEffect} from "react";
-import {Navigate} from "react-router-dom";
-import {checkAuthentication} from "../utils/authHelpers";
+import { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
+import { checkAuthentication } from "../utils/authHelpers";
 import "../styles/loading.scss";
 
-function ProtectedRoute({children}) {
+function ProtectedRoute({ children }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -27,7 +27,7 @@ function ProtectedRoute({children}) {
     }
 
     if (!isAuthenticated) {
-        return <Navigate to="/login" replace/>;
+        return <Navigate to="/login" replace />;
     }
 
     return children;

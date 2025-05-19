@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Toast from './Toast';
 import '../styles/toastContainer.scss';
-import {showToast} from '../utils/toastContainer.js';
+import { showToast } from '../utils/toastContainer.js';
 
 function ToastContainer() {
     const [toasts, setToasts] = useState([]);
@@ -10,10 +10,10 @@ function ToastContainer() {
     useEffect(() => {
         const handleToast = (event) => {
             if (event.detail) {
-                const {message, type = 'success', duration = 3000} = event.detail;
+                const { message, type = 'success', duration = 3000 } = event.detail;
                 const id = Date.now().toString();
 
-                setToasts((prevToasts) => [...prevToasts, {id, message, type, duration}]);
+                setToasts((prevToasts) => [...prevToasts, { id, message, type, duration }]);
             }
         };
 
@@ -39,6 +39,6 @@ function ToastContainer() {
     </div>, document.body);
 }
 
-export {showToast};
+export { showToast };
 
 export default ToastContainer;

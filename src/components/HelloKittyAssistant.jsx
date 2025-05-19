@@ -2,7 +2,7 @@ import React from "react";
 import "../styles/helloKittyAssistant.scss";
 import helloKittyLogo from "../assets/hello-kitty.png";
 
-const HelloKittyAssistant = ({isThinking}) => {
+const HelloKittyAssistant = ({ isThinking }) => {
     return (<div className={`hello-kitty-assistant ${isThinking ? 'thinking' : 'idle'}`}>
         <img
             src={helloKittyLogo}

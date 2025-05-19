@@ -1,8 +1,8 @@
-import {useState, useRef} from "react";
-import {Upload, Save, Trash2} from "lucide-react";
+import { useState, useRef } from "react";
+import { Upload, Save, Trash2 } from "lucide-react";
 import axios from "axios";
 
-function AvatarSectionContainer({user, updateUser, onSuccess}) {
+function AvatarSectionContainer({ user, updateUser, onSuccess }) {
     const [avatar, setAvatar] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null);
     const [avatarLoading, setAvatarLoading] = useState(false);
@@ -36,7 +36,7 @@ function AvatarSectionContainer({user, updateUser, onSuccess}) {
         setAvatarPreview(null);
 
         setErrors((prevErrors) => {
-            const newErrors = {...prevErrors};
+            const newErrors = { ...prevErrors };
             delete newErrors.avatar;
             return newErrors;
         });
@@ -56,7 +56,7 @@ function AvatarSectionContainer({user, updateUser, onSuccess}) {
         setAvatarLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.put("/api/user/profile", {avatar: currentAvatarPreview}, {headers: {Authorization: `Bearer ${token}`}});
+            const response = await axios.put("/api/user/profile", { avatar: currentAvatarPreview }, { headers: { Authorization: `Bearer ${token}` } });
 
             try {
                 const currentUser = JSON.parse(localStorage.getItem("user"));
@@ -67,7 +67,7 @@ function AvatarSectionContainer({user, updateUser, onSuccess}) {
                     localStorage.setItem("user", JSON.stringify(updatedUser));
 
                     const userDataChangedEvent = new CustomEvent('userDataChanged', {
-                        detail: {user: updatedUser}
+                        detail: { user: updatedUser }
                     });
                     window.dispatchEvent(userDataChangedEvent);
 
@@ -98,48 +98,48 @@ function AvatarSectionContainer({user, updateUser, onSuccess}) {
     };
 
     return (<div className="avatar-section">
-            <div className="avatar-preview">
-                {avatarPreview ? (<img src={avatarPreview} alt="Avatar preview"/>) : (
-                    <div className="avatar-placeholder">
-                        {user?.name?.charAt(0).toUpperCase() || "U"}
-                    </div>)}
-            </div>
-            <div className="avatar-buttons">
-                <button type="button" className="upload-button" onClick={triggerFileInput}>
-                    <Upload size={16}/>
-                    Select Avatar
+        <div className="avatar-preview">
+            {avatarPreview ? (<img src={avatarPreview} alt="Avatar preview" />) : (
+                <div className="avatar-placeholder">
+                    {user?.name?.charAt(0).toUpperCase() || "U"}
+                </div>)}
+        </div>
+        <div className="avatar-buttons">
+            <button type="button" className="upload-button" onClick={triggerFileInput}>
+                <Upload size={16} />
+                Select Avatar
+            </button>
+            {avatarPreview && (<>
+                <button
+                    type="button"
+                    className="save-avatar-button"
+                    onClick={handleAvatarUpload}
+                    disabled={avatarLoading}
+                >
+                    <Save size={16} />
+                    {avatarLoading ? "Uploading..." : "Upload Avatar"}
                 </button>
-                {avatarPreview && (<>
-                        <button
-                            type="button"
-                            className="save-avatar-button"
-                            onClick={handleAvatarUpload}
-                            disabled={avatarLoading}
-                        >
-                            <Save size={16}/>
-                            {avatarLoading ? "Uploading..." : "Upload Avatar"}
-                        </button>
 
-                        <button
-                            type="button"
-                            className="reset-button"
-                            onClick={handleResetAvatar}
-                            title="Remove avatar"
-                        >
-                            <Trash2 size={16}/>
-                            Reset
-                        </button>
-                    </>)}
-            </div>
-            <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleAvatarChange}
-                accept="image/*"
-                style={{display: 'none'}}
-            />
-            {errors.avatar && <span className="error">{errors.avatar}</span>}
-        </div>);
+                <button
+                    type="button"
+                    className="reset-button"
+                    onClick={handleResetAvatar}
+                    title="Remove avatar"
+                >
+                    <Trash2 size={16} />
+                    Reset
+                </button>
+            </>)}
+        </div>
+        <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleAvatarChange}
+            accept="image/*"
+            style={{ display: 'none' }}
+        />
+        {errors.avatar && <span className="error">{errors.avatar}</span>}
+    </div>);
 }
 
 export default AvatarSectionContainer;
