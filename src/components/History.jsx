@@ -34,17 +34,17 @@ const History = () => {
                 if (!isMounted) return;
 
                 if (error.name === "CanceledError" || error.name === "AbortError") {
-                    console.log("Chat fetch aborted:", error.message);
+                    // console.log("Chat fetch aborted:", error.message);
                     return;
                 }
 
                 if (error.response?.status === 401) {
-                    console.error("Authentication error:", error.message);
+                    // console.error("Authentication error:", error.message);
                     navigate("/login");
                     return;
                 }
 
-                console.error("Error fetching chats:", error);
+                // console.error("Error fetching chats:", error);
             }
         };
 
@@ -87,7 +87,7 @@ const History = () => {
             }
         } catch (error) {
             if (error.name === "CanceledError" || error.name === "AbortError") {
-                console.log("Message fetch aborted:", error.message);
+                // console.log("Message fetch aborted:", error.message);
                 return;
             }
 

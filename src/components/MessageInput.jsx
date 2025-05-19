@@ -19,9 +19,9 @@ function MessageInput({
     };
 
     return (<div className={`form-wrapper ${sidebarExpanded ? "sidebar-expanded" : ""}`}>
-            <form
-                className="active-chat-input"
-                onSubmit={handleSubmit}>
+        <form
+            className="active-chat-input"
+            onSubmit={handleSubmit}>
         <textarea
             ref={textareaRef} className="active-input-field multiline"
             placeholder="Type a message... (Shift+Enter for new line)"
@@ -30,16 +30,16 @@ function MessageInput({
             onKeyDown={handleKeyDown}
             rows={1}
         />
-                <div className="active-input-utils">
-                    <button
-                        type={isLoading ? "button" : "submit"}
-                        onClick={isLoading ? handleCancel : undefined}
-                        className={`active-send-button ${isLoading ? "cancel-button" : ""}`}>
-                        {isLoading ? <XCircle size={20}/> : <Send size={20}/>}
-                    </button>
-                </div>
-            </form>
-        </div>);
+            <div className="active-input-utils">
+                <button
+                    type={isLoading ? "button" : "submit"}
+                    onClick={isLoading ? handleCancel : undefined}
+                    className={`active-send-button ${isLoading ? "cancel-button" : ""}`}>
+                    {isLoading ? <XCircle size={20}/> : <Send size={20}/>}
+                </button>
+            </div>
+        </form>
+    </div>);
 }
 
 export default MessageInput;

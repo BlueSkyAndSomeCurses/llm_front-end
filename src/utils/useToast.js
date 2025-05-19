@@ -10,8 +10,7 @@ const useToast = () => {
     };
 
     return {
-        success,
-        error
+        success, error
     };
 };
 

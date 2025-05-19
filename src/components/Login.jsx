@@ -93,15 +93,15 @@ function Login() {
 
             <form onSubmit={handleSubmit} className="login-form">
                 {!isLogin && (<div className="form-group">
-                        <label htmlFor="name">Name</label>
-                        <input
-                            type="text"
-                            id="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
-                    </div>)}
+                    <label htmlFor="name">Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
+                </div>)}
 
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
@@ -126,17 +126,17 @@ function Login() {
                 </div>
 
                 {!isLogin && (<div className="form-group">
-                        <label htmlFor="confirmPassword">
-                            Confirm Password
-                        </label>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                        />
-                    </div>)}
+                    <label htmlFor="confirmPassword">
+                        Confirm Password
+                    </label>
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                    />
+                </div>)}
 
                 <button type="submit" className="submit-button">
                     {isLogin ? "Login" : "Sign Up"} <Send size={16}/>

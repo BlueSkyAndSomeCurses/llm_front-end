@@ -15,23 +15,23 @@ const ModelButton = ({selectedModel, setSelectedModel}) => {
     };
 
     return (<div className="model-container">
-            <button
-                className="model-button"
-                onClick={() => setIsOpen(!isOpen)}
-                aria-label="AI model"
-                type="button">
-                <span className="model-name">{selectedModel}</span>
-            </button>
+        <button
+            className="model-button"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="AI model"
+            type="button">
+            <span className="model-name">{selectedModel}</span>
+        </button>
 
-            {isOpen && (<div className="model-dropdown">
-                    {models.map((modelName) => (<div
-                            key={modelName}
-                            className={`model-option ${selectedModel === modelName ? "active" : ""}`}
-                            onClick={() => handleModelSelect(modelName)}>
-                            <span>{modelName}</span>
-                        </div>))}
-                </div>)}
-        </div>);
+        {isOpen && (<div className="model-dropdown">
+            {models.map((modelName) => (<div
+                key={modelName}
+                className={`model-option ${selectedModel === modelName ? "active" : ""}`}
+                onClick={() => handleModelSelect(modelName)}>
+                <span>{modelName}</span>
+            </div>))}
+        </div>)}
+    </div>);
 };
 
 export default ModelButton;

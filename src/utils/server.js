@@ -2,8 +2,7 @@ import express, {
     json
 } from "express";
 import {
-    mongoose,
-    connect
+    mongoose, connect
 } from "mongoose";
 import dotenv from "dotenv";
 import User from "../models/user.js";
@@ -21,8 +20,7 @@ const PORT = 3001;
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "your-refresh-secret-key";
 
-const strongPasswordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+={}[\]|\\:;"'<>,.?/~`]).{8,}$/;
+const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+={}[\]|\\:;"'<>,.?/~`]).{8,}$/;
 
 
 const models = {
@@ -32,9 +30,7 @@ const models = {
 };
 
 const corsOptions = {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    origin: "http://localhost:5173", methods: ["GET", "POST", "PUT", "DELETE"], credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -46,9 +42,7 @@ app.use(express.urlencoded({limit: '10mb', extended: true}));
 app.use(express.json());
 
 connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    dbName: "llm-frontend-web-project",
+    useNewUrlParser: true, useUnifiedTopology: true, dbName: "llm-frontend-web-project",
 });
 
 const db = mongoose.connection;
@@ -100,8 +94,7 @@ const handleRefreshToken = (req, res, next) => {
     jwt.verify(refreshToken, JWT_REFRESH_SECRET, async (err, userData) => {
         if (err) {
             return res.status(403).json({
-                message: "Invalid or expired refresh token",
-                tokenExpired: true
+                message: "Invalid or expired refresh token", tokenExpired: true
             });
         }
         try {
@@ -114,9 +107,7 @@ const handleRefreshToken = (req, res, next) => {
             }
 
             const accessToken = jwt.sign({
-                id: user._id,
-                email: user.email,
-                name: user.name,
+                id: user._id, email: user.email, name: user.name,
             }, JWT_SECRET, {
                 expiresIn: "24h"
             });
@@ -124,9 +115,7 @@ const handleRefreshToken = (req, res, next) => {
             res.set("X-New-Access-Token", accessToken);
 
             req.user = {
-                id: user._id,
-                email: user.email,
-                name: user.name
+                id: user._id, email: user.email, name: user.name
             };
 
             next();
@@ -140,8 +129,7 @@ const handleRefreshToken = (req, res, next) => {
 };
 
 const openai = new OpenAI({
-    baseURL: "https://openrouter.ai/api/v1",
-    apiKey: process.env.OPENROUTER_API_KEY,
+    baseURL: "https://openrouter.ai/api/v1", apiKey: process.env.OPENROUTER_API_KEY,
 });
 
 app.get("/", (req, res) => {
@@ -150,8 +138,7 @@ app.get("/", (req, res) => {
 
 app.get("/api/protected", authenticateToken, (req, res) => {
     res.json({
-        message: "This is protected data",
-        user: req.user
+        message: "This is protected data", user: req.user
     });
 });
 
@@ -162,8 +149,7 @@ app.get("/api/check-auth", (req, res) => {
 
     if (!token && !refreshToken) {
         return res.status(401).json({
-            authenticated: false,
-            message: "No authentication tokens found"
+            authenticated: false, message: "No authentication tokens found"
         });
     }
 
@@ -172,19 +158,15 @@ app.get("/api/check-auth", (req, res) => {
             if (err) {
                 if (!refreshToken) {
                     return res.status(403).json({
-                        authenticated: false,
-                        message: "Invalid or expired token"
+                        authenticated: false, message: "Invalid or expired token"
                     });
                 } else {
                     verifyRefreshToken(req, res);
                 }
             } else {
                 return res.status(200).json({
-                    authenticated: true,
-                    user: {
-                        id: user.id,
-                        name: user.name,
-                        email: user.email
+                    authenticated: true, user: {
+                        id: user.id, name: user.name, email: user.email
                     }
                 });
             }
@@ -200,8 +182,7 @@ const verifyRefreshToken = (req, res) => {
     jwt.verify(refreshToken, JWT_REFRESH_SECRET, async (err, userData) => {
         if (err) {
             return res.status(403).json({
-                authenticated: false,
-                message: "Invalid or expired refresh token"
+                authenticated: false, message: "Invalid or expired refresh token"
             });
         }
 
@@ -210,34 +191,25 @@ const verifyRefreshToken = (req, res) => {
 
             if (!user) {
                 return res.status(404).json({
-                    authenticated: false,
-                    message: "User not found"
+                    authenticated: false, message: "User not found"
                 });
             }
 
             const accessToken = jwt.sign({
-                id: user._id,
-                email: user.email,
-                name: user.name,
+                id: user._id, email: user.email, name: user.name,
             }, JWT_SECRET, {
                 expiresIn: "24h"
             });
 
             return res.status(200).json({
-                authenticated: true,
-                newAccessToken: accessToken,
-                user: {
-                    id: user._id,
-                    name: user.name,
-                    email: user.email,
-                    avatar: user.avatar
+                authenticated: true, newAccessToken: accessToken, user: {
+                    id: user._id, name: user.name, email: user.email, avatar: user.avatar
                 }
             });
         } catch (error) {
             console.error("Error during refresh token verification:", error);
             return res.status(500).json({
-                authenticated: false,
-                message: "Error verifying authentication"
+                authenticated: false, message: "Error verifying authentication"
             });
         }
     });
@@ -246,8 +218,7 @@ const verifyRefreshToken = (req, res) => {
 app.post("/api/login", async (req, res) => {
     try {
         const {
-            email,
-            password
+            email, password
         } = req.body;
 
         const user = await User.findOne({
@@ -256,28 +227,23 @@ app.post("/api/login", async (req, res) => {
 
         if (!user) {
             return res.status(401).json({
-                message: "The user does not exist",
-                name: "RejectedCreds"
+                message: "The user does not exist", name: "RejectedCreds"
             });
         }
         if (user.password !== password) {
             return res.status(401).json({
-                message: "Invalid email or password",
-                name: "RejectedCreds"
+                message: "Invalid email or password", name: "RejectedCreds"
 
             });
         }
 
         const accessToken = jwt.sign({
-            id: user._id,
-            email: user.email,
-            name: user.name,
+            id: user._id, email: user.email, name: user.name,
         }, JWT_SECRET, {
             expiresIn: "24h"
         });
         const refreshToken = jwt.sign({
-            id: user._id,
-            email: user.email
+            id: user._id, email: user.email
         }, JWT_REFRESH_SECRET, {
             expiresIn: "30d"
         });
@@ -290,16 +256,11 @@ app.post("/api/login", async (req, res) => {
         });
 
         const userResponse = {
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            avatar: user.avatar
+            _id: user._id, name: user.name, email: user.email, avatar: user.avatar
         };
 
         res.status(200).json({
-            message: "Login successful",
-            user: userResponse,
-            token: accessToken,
+            message: "Login successful", user: userResponse, token: accessToken,
         });
     } catch (error) {
         console.error("Login error:", error);
@@ -320,9 +281,7 @@ app.post("/api/logout", (req, res) => {
 app.post("/api/register", async (req, res) => {
     try {
         const {
-            name,
-            email,
-            password
+            name, email, password
         } = req.body;
 
         const existingUser = await User.findOne({
@@ -332,8 +291,7 @@ app.post("/api/register", async (req, res) => {
             return res
                 .status(400)
                 .json({
-                    message: "User with this email already exists",
-                    errorType: "email_exists"
+                    message: "User with this email already exists", errorType: "email_exists"
                 });
         }
         if (!strongPasswordRegex.test(password)) {
@@ -344,48 +302,32 @@ app.post("/api/register", async (req, res) => {
         }
 
         const newUser = new User({
-            name,
-            email,
-            password,
+            name, email, password,
         });
 
         await newUser.save();
 
         const accessToken = jwt.sign({
-                id: newUser._id,
-                email: newUser.email,
-                name: newUser.name
-            },
-            JWT_SECRET, {
-                expiresIn: "24h"
-            }
-        );
+            id: newUser._id, email: newUser.email, name: newUser.name
+        }, JWT_SECRET, {
+            expiresIn: "24h"
+        });
 
         const refreshToken = jwt.sign({
-                id: newUser._id,
-                email: newUser.email
-            },
-            JWT_SECRET, {
-                expiresIn: "30d"
-            }
-        );
+            id: newUser._id, email: newUser.email
+        }, JWT_SECRET, {
+            expiresIn: "30d"
+        });
         res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: false,
-            sameSite: "strict",
-            maxAge: 30 * 24 * 60 * 60 * 1000
+            httpOnly: true, secure: false, sameSite: "strict", maxAge: 30 * 24 * 60 * 60 * 1000
         });
 
         const userResponse = {
-            _id: newUser._id,
-            name: newUser.name,
-            email: newUser.email,
+            _id: newUser._id, name: newUser.name, email: newUser.email,
         };
 
         res.status(201).json({
-            message: "Registration successful",
-            user: userResponse,
-            token: accessToken,
+            message: "Registration successful", user: userResponse, token: accessToken,
         });
     } catch (error) {
         console.error("Registration error:", error);
@@ -398,28 +340,20 @@ app.post("/api/register", async (req, res) => {
 app.post("/api/messages", authenticateToken, async (req, res) => {
     try {
         const {
-            messageText,
-            chatId,
-            messageType = "question",
-            modelName
+            messageText, chatId, messageType = "question", modelName
         } = req.body;
         const userId = req.user.id;
 
         let selectedModelName = modelName;
 
         const newMessage = new Message({
-            userId,
-            messageText,
-            messageType,
-            chatId,
-            modelName: selectedModelName,
+            userId, messageText, messageType, chatId, modelName: selectedModelName,
         });
 
         await newMessage.save();
 
         res.status(201).json({
-            message: "Message saved successfully",
-            data: newMessage,
+            message: "Message saved successfully", data: newMessage,
         });
     } catch (error) {
         console.error("Message creation error:", error);
@@ -437,8 +371,7 @@ app.get("/api/messages/:chatId", authenticateToken, async (req, res) => {
         const userId = req.user.id;
 
         const messages = await Message.find({
-            userId,
-            chatId,
+            userId, chatId,
         }).sort({
             messageNum: 1
         });
@@ -460,9 +393,7 @@ app.get("/api/chat/:chatId/model", authenticateToken, async (req, res) => {
         const userId = req.user.id;
 
         const firstMessage = await Message.findOne({
-            userId,
-            chatId,
-            messageNum: 0
+            userId, chatId, messageNum: 0
         });
 
         if (!firstMessage) {
@@ -487,8 +418,7 @@ app.get("/api/chats", authenticateToken, async (req, res) => {
         const userId = req.user.id;
 
         const chats = await Message.find({
-            userId,
-            messageNum: 0,
+            userId, messageNum: 0,
         }).sort({
             timestamp: -1
         });
@@ -507,15 +437,13 @@ app.get("/api/chats", authenticateToken, async (req, res) => {
 app.post("/api/chat", authenticateToken, async (req, res) => {
     try {
         const {
-            message,
-            chatId
+            message, chatId
         } = req.body;
         let selectedModel = req.body.model;
 
         if (chatId) {
             const lastMessage = await Message.findOne({
-                userId: req.user.id,
-                chatId
+                userId: req.user.id, chatId
             }, {}, {
                 sort: {
                     messageNum: -1
@@ -530,15 +458,9 @@ app.post("/api/chat", authenticateToken, async (req, res) => {
         selectedModel = models[selectedModel];
 
         const completion = await openai.chat.completions.create({
-            model: selectedModel,
-            messages: [
-                ...req.body.context,
-                {
-                    role: "user",
-                    content: message,
-                },
-            ],
-            stream: true,
+            model: selectedModel, messages: [...req.body.context, {
+                role: "user", content: message,
+            },], stream: true,
         }, {
             responseType: "stream"
         });
@@ -568,39 +490,29 @@ app.put("/api/user/profile", authenticateToken, async (req, res) => {
         const {name, avatar} = req.body;
         const userId = req.user.id;
 
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            {
-                ...(name && {name}),
-                ...(avatar !== undefined && {avatar})
-            },
-            {new: true, select: '-password'}
-        );
+        const updatedUser = await User.findByIdAndUpdate(userId, {
+            ...(name && {name}), ...(avatar !== undefined && {avatar})
+        }, {new: true, select: '-password'});
 
         if (!updatedUser) {
             return res.status(404).json({message: "User not found"});
         }
 
         const userResponse = {
-            _id: updatedUser._id,
-            name: updatedUser.name,
-            email: updatedUser.email,
-            avatar: updatedUser.avatar,
+            _id: updatedUser._id, name: updatedUser.name, email: updatedUser.email, avatar: updatedUser.avatar,
         };
 
         let token = req.headers.authorization.split(" ")[1];
         if (name) {
-            token = jwt.sign(
-                {id: updatedUser._id, email: updatedUser.email, name: updatedUser.name},
-                JWT_SECRET,
-                {expiresIn: "24h"}
-            );
+            token = jwt.sign({
+                id: updatedUser._id,
+                email: updatedUser.email,
+                name: updatedUser.name
+            }, JWT_SECRET, {expiresIn: "24h"});
         }
 
         res.status(200).json({
-            message: "Profile updated successfully",
-            user: userResponse,
-            token: name ? token : undefined
+            message: "Profile updated successfully", user: userResponse, token: name ? token : undefined
         });
     } catch (error) {
         console.error("Profile update error:", error);

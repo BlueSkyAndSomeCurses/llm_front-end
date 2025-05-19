@@ -25,12 +25,12 @@ function MessageList({messages, isLoading}) {
     }, [messages]);
 
     return (<div className="active-messages-area">
-            {messages.map((msg, i) => (<Message key={i} message={msg}/>))}
+        {messages.map((msg, i) => (<Message key={i} message={msg}/>))}
 
-            {(hasAssistantMessage || isLoading) && (<HelloKittyAssistant isThinking={isLoading}/>)}
+        {(hasAssistantMessage || isLoading) && (<HelloKittyAssistant isThinking={isLoading}/>)}
 
-            <div ref={messagesEndRef}/>
-        </div>);
+        <div ref={messagesEndRef}/>
+    </div>);
 }
 
 export default MessageList;

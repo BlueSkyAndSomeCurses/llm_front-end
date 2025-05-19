@@ -5,7 +5,7 @@ function SuccessMessage({message}) {
 
     return (<span className="success-message">
             <CheckCircle size={16}/>
-            {message}
+        {message}
         </span>);
 }
 

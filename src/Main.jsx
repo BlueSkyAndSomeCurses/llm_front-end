@@ -12,29 +12,21 @@ import ToastContainer from "./components/ToastContainer.jsx";
 
 import "./utils/authHelpers.js";
 
-createRoot(document.getElementById("root")).render(
-    <StrictMode>
-        <BrowserRouter>
-            <ToastContainer/>
-            <Routes>
-                <Route path="/" element={<Title/>}/>
-                <Route path="/login" element={<Login/>}/>
-                <Route path="/chat" element={
-                    <ProtectedRoute>
-                        <Chat/>
-                    </ProtectedRoute>
-                }/>
-                <Route path="/chat/:chatId" element={
-                    <ProtectedRoute>
-                        <ActiveChat/>
-                    </ProtectedRoute>
-                }/>
-                <Route path="/history" element={
-                    <ProtectedRoute>
-                        <History/>
-                    </ProtectedRoute>
-                }/>
-            </Routes>
-        </BrowserRouter>
-    </StrictMode>
-);
+createRoot(document.getElementById("root")).render(<StrictMode>
+    <BrowserRouter>
+        <ToastContainer/>
+        <Routes>
+            <Route path="/" element={<Title/>}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/chat" element={<ProtectedRoute>
+                <Chat/>
+            </ProtectedRoute>}/>
+            <Route path="/chat/:chatId" element={<ProtectedRoute>
+                <ActiveChat/>
+            </ProtectedRoute>}/>
+            <Route path="/history" element={<ProtectedRoute>
+                <History/>
+            </ProtectedRoute>}/>
+        </Routes>
+    </BrowserRouter>
+</StrictMode>);

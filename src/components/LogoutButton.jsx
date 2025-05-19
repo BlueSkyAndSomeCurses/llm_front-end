@@ -19,8 +19,8 @@ function LogoutButton() {
     };
 
     return (<button className="sidebar-icon" onClick={handleLogout}>
-            <LogOut size={30}/>
-        </button>);
+        <LogOut size={30}/>
+    </button>);
 }
 
 export default LogoutButton;

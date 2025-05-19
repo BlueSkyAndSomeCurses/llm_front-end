@@ -12,8 +12,7 @@ function ChatInterface({messages, isLoading, onSubmit, onCancel, sidebarExpanded
         await onSubmit(currentInputValue);
     };
 
-    return (
-        <div className="active-chatbox-container">
+    return (<div className="active-chatbox-container">
             <div className="active-chat-box">
                 <MessageList
                     messages={messages}
@@ -28,8 +27,7 @@ function ChatInterface({messages, isLoading, onSubmit, onCancel, sidebarExpanded
                     sidebarExpanded={sidebarExpanded}
                 />
             </div>
-        </div>
-    );
+        </div>);
 }
 
 export default ChatInterface;

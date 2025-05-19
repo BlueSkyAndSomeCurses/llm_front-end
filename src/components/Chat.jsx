@@ -80,22 +80,22 @@ function Chat() {
     };
 
     return (<div className={`chatpage-container`}>
-            <Sidebar/>
-            <div className="chat-container">
-                <div className="chatbox-container">
-                    <div className="chat-header">
-                        <h2>Welcome to Hello Kitty Chat!</h2>
-                        <p>Start a conversation by typing a message below.</p>
+        <Sidebar/>
+        <div className="chat-container">
+            <div className="chatbox-container">
+                <div className="chat-header">
+                    <h2>Welcome to Hello Kitty Chat!</h2>
+                    <p>Start a conversation by typing a message below.</p>
+                </div>
+                <div className="chat-box">
+                    <div className="messages-area">
+                        {messages.map((msg, i) => (<div
+                            key={i}
+                            className={`message ${msg.role}-message`}>
+                            {msg.content}
+                        </div>))}
                     </div>
-                    <div className="chat-box">
-                        <div className="messages-area">
-                            {messages.map((msg, i) => (<div
-                                    key={i}
-                                    className={`message ${msg.role}-message`}>
-                                    {msg.content}
-                                </div>))}
-                        </div>
-                        <form className="chat-input" onSubmit={handleSubmit}>
+                    <form className="chat-input" onSubmit={handleSubmit}>
                             <textarea
                                 className="input-field multiline"
                                 placeholder="Type a message... (Shift+Enter for new line)"
@@ -104,20 +104,20 @@ function Chat() {
                                 onKeyDown={handleKeyDown}
                                 rows={1}
                             />
-                            <div className="input-utils">
-                                <ModelButton
-                                    selectedModel={selectedModel}
-                                    setSelectedModel={setSelectedModel}
-                                />
-                                <button type="submit" className="send-button">
-                                    <Send size={20}/>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                        <div className="input-utils">
+                            <ModelButton
+                                selectedModel={selectedModel}
+                                setSelectedModel={setSelectedModel}
+                            />
+                            <button type="submit" className="send-button">
+                                <Send size={20}/>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </div>);
+        </div>
+    </div>);
 }
 
 export default Chat;

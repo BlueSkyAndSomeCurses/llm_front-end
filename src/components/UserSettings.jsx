@@ -49,7 +49,6 @@ function UserSettings({onClose, user}) {
         const currentNewPassword = newPassword;
         const currentConfirmPassword = confirmPassword;
 
-        console.log(currentName, currentNewPassword, currentConfirmPassword, currentPassword);
         const newErrors = {};
 
         if (!currentName.trim()) {

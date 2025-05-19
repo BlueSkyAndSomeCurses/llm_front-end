@@ -23,10 +23,7 @@ function ProfileSectionContainer({user, updateUser}) {
 
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.put("/api/user/profile",
-                {name: name.trim()},
-                {headers: {Authorization: `Bearer ${token}`}}
-            );
+            const response = await axios.put("/api/user/profile", {name: name.trim()}, {headers: {Authorization: `Bearer ${token}`}});
 
             if (response.data.user) {
                 localStorage.setItem("user", JSON.stringify(response.data.user));
@@ -56,13 +53,7 @@ function ProfileSectionContainer({user, updateUser}) {
     };
 
     return {
-        name,
-        setName,
-        errors,
-        validateName,
-        updateProfile,
-        render: () => (
-            <div className="form-group">
+        name, setName, errors, validateName, updateProfile, render: () => (<div className="form-group">
                 <label htmlFor="name">Name</label>
                 <input
                     type="text"
@@ -72,8 +63,7 @@ function ProfileSectionContainer({user, updateUser}) {
                     placeholder="Your name"
                 />
                 {errors.name && <span className="error">{errors.name}</span>}
-            </div>
-        )
+            </div>)
     };
 }
 

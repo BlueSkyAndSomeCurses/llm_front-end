@@ -56,17 +56,13 @@ function AvatarSectionContainer({user, updateUser, onSuccess}) {
         setAvatarLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.put("/api/user/profile",
-                {avatar: currentAvatarPreview},
-                {headers: {Authorization: `Bearer ${token}`}}
-            );
+            const response = await axios.put("/api/user/profile", {avatar: currentAvatarPreview}, {headers: {Authorization: `Bearer ${token}`}});
 
             try {
                 const currentUser = JSON.parse(localStorage.getItem("user"));
                 if (currentUser) {
                     const updatedUser = {
-                        ...currentUser,
-                        avatar: response.data.avatar || currentAvatarPreview
+                        ...currentUser, avatar: response.data.avatar || currentAvatarPreview
                     };
                     localStorage.setItem("user", JSON.stringify(updatedUser));
 
@@ -101,24 +97,19 @@ function AvatarSectionContainer({user, updateUser, onSuccess}) {
         fileInputRef.current.click();
     };
 
-    return (
-        <div className="avatar-section">
+    return (<div className="avatar-section">
             <div className="avatar-preview">
-                {avatarPreview ? (
-                    <img src={avatarPreview} alt="Avatar preview"/>
-                ) : (
+                {avatarPreview ? (<img src={avatarPreview} alt="Avatar preview"/>) : (
                     <div className="avatar-placeholder">
                         {user?.name?.charAt(0).toUpperCase() || "U"}
-                    </div>
-                )}
+                    </div>)}
             </div>
             <div className="avatar-buttons">
                 <button type="button" className="upload-button" onClick={triggerFileInput}>
                     <Upload size={16}/>
                     Select Avatar
                 </button>
-                {avatarPreview && (
-                    <>
+                {avatarPreview && (<>
                         <button
                             type="button"
                             className="save-avatar-button"
@@ -138,8 +129,7 @@ function AvatarSectionContainer({user, updateUser, onSuccess}) {
                             <Trash2 size={16}/>
                             Reset
                         </button>
-                    </>
-                )}
+                    </>)}
             </div>
             <input
                 type="file"
@@ -149,8 +139,7 @@ function AvatarSectionContainer({user, updateUser, onSuccess}) {
                 style={{display: 'none'}}
             />
             {errors.avatar && <span className="error">{errors.avatar}</span>}
-        </div>
-    );
+        </div>);
 }
 
 export default AvatarSectionContainer;

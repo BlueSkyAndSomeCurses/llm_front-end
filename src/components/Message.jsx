@@ -24,20 +24,20 @@ function Message({message}) {
     };
 
     return (<div className={`active-message ${role}-message`}>
-            {role === "assistant" ? (<div className="markdown-content">
-                    <ReactMarkdown
-                        remarkPlugins={[remarkGfm, [remarkMath, {
-                            inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]
-                        }], remarkBreaks]}
-                        rehypePlugins={[rehypeKatex, [rehypeHighlight, {
-                            detect: true, ignoreMissing: true, subset: false
-                        }]]}
-                        components={components}
-                    >
-                        {content.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$').replace(/\\\(/g, '$').replace(/\\\)/g, '$')}
-                    </ReactMarkdown>
-                </div>) : (<div className="user-content">{content}</div>)}
-        </div>);
+        {role === "assistant" ? (<div className="markdown-content">
+            <ReactMarkdown
+                remarkPlugins={[remarkGfm, [remarkMath, {
+                    inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]
+                }], remarkBreaks]}
+                rehypePlugins={[rehypeKatex, [rehypeHighlight, {
+                    detect: true, ignoreMissing: true, subset: false
+                }]]}
+                components={components}
+            >
+                {content.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$').replace(/\\\(/g, '$').replace(/\\\)/g, '$')}
+            </ReactMarkdown>
+        </div>) : (<div className="user-content">{content}</div>)}
+    </div>);
 }
 
 export default Message;

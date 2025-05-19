@@ -2,11 +2,7 @@ import {useState, useEffect, useRef, useCallback} from "react";
 import {useLocation} from "react-router-dom";
 import axios from "axios";
 import {
-    fetchMessages,
-    fetchModelName,
-    saveMessage,
-    getAssistantResponse,
-    cancelRequest
+    fetchMessages, fetchModelName, saveMessage, getAssistantResponse, cancelRequest
 } from "../utils/chatAPI.js";
 
 export default function useChatMessages(chatId) {
@@ -26,20 +22,14 @@ export default function useChatMessages(chatId) {
 
     useEffect(() => {
         if (prevLocationRef.current.pathname !== location.pathname) {
-            cancelTokenSourceRef.current = cancelRequest(
-                cancelTokenSourceRef.current,
-                "Request cancelled: You navigated away from the page."
-            );
+            cancelTokenSourceRef.current = cancelRequest(cancelTokenSourceRef.current, "Request cancelled: You navigated away from the page.");
         }
         prevLocationRef.current = location;
     }, [location]);
 
     useEffect(() => {
         return () => {
-            cancelTokenSourceRef.current = cancelRequest(
-                cancelTokenSourceRef.current,
-                "Request cancelled: Component unmounted."
-            );
+            cancelTokenSourceRef.current = cancelRequest(cancelTokenSourceRef.current, "Request cancelled: Component unmounted.");
         };
     }, []);
 
@@ -63,13 +53,9 @@ export default function useChatMessages(chatId) {
     };
 
     const initializeAssistantMessage = () => {
-        setMessages((prev) => [
-            ...prev,
-            {
-                content: `Thinking...`,
-                role: "assistant"
-            },
-        ]);
+        setMessages((prev) => [...prev, {
+            content: `Thinking...`, role: "assistant"
+        },]);
     };
 
     const updateAssistantMessage = useCallback((newText) => {
@@ -79,8 +65,7 @@ export default function useChatMessages(chatId) {
 
             if (lastIndex >= 0 && updatedMessages[lastIndex].role === "assistant") {
                 updatedMessages[lastIndex] = {
-                    ...updatedMessages[lastIndex],
-                    content: newText
+                    ...updatedMessages[lastIndex], content: newText
                 };
             }
 
@@ -96,44 +81,35 @@ export default function useChatMessages(chatId) {
             if (lastIndex >= 0 && updatedMessages[lastIndex].role === "assistant") {
                 updatedMessages[lastIndex] = {
                     ...updatedMessages[lastIndex],
-                    content: error.isCancel
-                        ? `There was an error when generating response: ${error.message}`
-                        : "There was an error when generating response."
+                    content: error.isCancel ? `There was an error when generating response: ${error.message}` : "There was an error when generating response."
                 };
             }
             return updatedMessages;
         });
     }, []);
 
-    const handleAssistantResponse = useCallback(
-        async (userMessage) => {
-            cancelTokenSourceRef.current = cancelRequest(cancelTokenSourceRef.current);
-            setIsLoading(true);
+    const handleAssistantResponse = useCallback(async (userMessage) => {
+        cancelTokenSourceRef.current = cancelRequest(cancelTokenSourceRef.current);
+        setIsLoading(true);
 
-            initializeAssistantMessage();
+        initializeAssistantMessage();
 
-            cancelTokenSourceRef.current = axios.CancelToken.source();
+        cancelTokenSourceRef.current = axios.CancelToken.source();
 
-            const {completeMessage, error} = await getAssistantResponse(
-                userMessage,
-                messagesRef.current.slice(0, -1),
-                selectedModel,
-                {
-                    cancelTokenSource: cancelTokenSourceRef.current,
-                    chatId,
-                    onProgress: updateAssistantMessage
-                }
-            );
+        const {
+            completeMessage,
+            error
+        } = await getAssistantResponse(userMessage, messagesRef.current.slice(0, -1), selectedModel, {
+            cancelTokenSource: cancelTokenSourceRef.current, chatId, onProgress: updateAssistantMessage
+        });
 
-            if (error) {
-                handleResponseError(error);
-            }
+        if (error) {
+            handleResponseError(error);
+        }
 
-            setIsLoading(false);
-            cancelTokenSourceRef.current = null;
-        },
-        [chatId, selectedModel, updateAssistantMessage, handleResponseError]
-    );
+        setIsLoading(false);
+        cancelTokenSourceRef.current = null;
+    }, [chatId, selectedModel, updateAssistantMessage, handleResponseError]);
 
     useEffect(() => {
         let isMounted = true;
@@ -149,11 +125,7 @@ export default function useChatMessages(chatId) {
                 if (isMounted) {
                     setMessages(fetchedMessages);
 
-                    if (
-                        fetchedMessages.length === 1 &&
-                        fetchedMessages[0].role === "user" &&
-                        !hasRespondedRef.current
-                    ) {
+                    if (fetchedMessages.length === 1 && fetchedMessages[0].role === "user" && !hasRespondedRef.current) {
                         hasRespondedRef.current = true;
 
                         setTimeout(() => {
@@ -182,8 +154,7 @@ export default function useChatMessages(chatId) {
         if (inputValue.trim() === "") return;
 
         const userMessage = {
-            content: inputValue,
-            role: "user",
+            content: inputValue, role: "user",
         };
 
         setMessages((prevMessages) => {
@@ -197,9 +168,6 @@ export default function useChatMessages(chatId) {
     };
 
     return {
-        messages,
-        isLoading,
-        submitMessage,
-        handleCancel
+        messages, isLoading, submitMessage, handleCancel
     };
 }

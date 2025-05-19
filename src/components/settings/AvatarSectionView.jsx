@@ -36,11 +36,7 @@ const AvatarSectionView = ({user, errors, setErrors}) => {
         setAvatarLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.put(
-                "/api/user/profile", 
-                { avatar: null }, 
-                { headers: { Authorization: `Bearer ${token}` }}
-            );
+            const response = await axios.put("/api/user/profile", {avatar: null}, {headers: {Authorization: `Bearer ${token}`}});
 
             setAvatar(null);
             setAvatarPreview(null);
@@ -49,13 +45,12 @@ const AvatarSectionView = ({user, errors, setErrors}) => {
                 const currentUser = JSON.parse(localStorage.getItem("user"));
                 if (currentUser) {
                     const updatedUser = {
-                        ...currentUser,
-                        avatar: null
+                        ...currentUser, avatar: null
                     };
                     localStorage.setItem("user", JSON.stringify(updatedUser));
 
                     const userDataChangedEvent = new CustomEvent('userDataChanged', {
-                        detail: { user: updatedUser }
+                        detail: {user: updatedUser}
                     });
                     window.dispatchEvent(userDataChangedEvent);
                 }
@@ -64,7 +59,7 @@ const AvatarSectionView = ({user, errors, setErrors}) => {
             }
 
             toast.success("Avatar removed successfully!");
-            
+
             setErrors((prevErrors) => {
                 const newErrors = {...prevErrors};
                 delete newErrors.avatar;
@@ -73,8 +68,7 @@ const AvatarSectionView = ({user, errors, setErrors}) => {
         } catch (error) {
             console.error("Error resetting avatar:", error);
             setErrors((prevErrors) => ({
-                ...prevErrors, 
-                avatar: "Failed to reset avatar. Please try again."
+                ...prevErrors, avatar: "Failed to reset avatar. Please try again."
             }));
             toast.error("Failed to reset avatar. Please try again.");
         } finally {
@@ -139,48 +133,47 @@ const AvatarSectionView = ({user, errors, setErrors}) => {
     };
 
     return (<div className="avatar-section">
-            <div className="avatar-preview">
-                {avatarPreview ? (<img src={avatarPreview} alt="Avatar preview"/>) : (
-                    <div className="avatar-placeholder">
-                        {user?.name?.charAt(0).toUpperCase() || "U"}
-                    </div>)}
-            </div>
-            <div className="avatar-buttons">
-                <button type="button" className="upload-button" onClick={triggerFileInput}>
-                    <Upload size={16}/>
-                    Select Avatar
+        <div className="avatar-preview">
+            {avatarPreview ? (<img src={avatarPreview} alt="Avatar preview"/>) : (<div className="avatar-placeholder">
+                {user?.name?.charAt(0).toUpperCase() || "U"}
+            </div>)}
+        </div>
+        <div className="avatar-buttons">
+            <button type="button" className="upload-button" onClick={triggerFileInput}>
+                <Upload size={16}/>
+                Select Avatar
+            </button>
+            {avatarPreview && (<>
+                <button
+                    type="button"
+                    className="save-avatar-button"
+                    onClick={handleAvatarUpload}
+                    disabled={avatarLoading}
+                >
+                    <Save size={16}/>
+                    {avatarLoading ? "Uploading..." : "Upload Avatar"}
                 </button>
-                {avatarPreview && (<>
-                        <button
-                            type="button"
-                            className="save-avatar-button"
-                            onClick={handleAvatarUpload}
-                            disabled={avatarLoading}
-                        >
-                            <Save size={16}/>
-                            {avatarLoading ? "Uploading..." : "Upload Avatar"}
-                        </button>
 
-                        <button
-                            type="button"
-                            className="reset-button"
-                            onClick={handleResetAvatar}
-                            title="Remove avatar"
-                        >
-                            <Trash2 size={16}/>
-                            Reset
-                        </button>
-                    </>)}
-            </div>
-            <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleAvatarChange}
-                accept="image/*"
-                style={{display: 'none'}}
-            />
-            {errors.avatar && <span className="error">{errors.avatar}</span>}
-        </div>);
+                <button
+                    type="button"
+                    className="reset-button"
+                    onClick={handleResetAvatar}
+                    title="Remove avatar"
+                >
+                    <Trash2 size={16}/>
+                    Reset
+                </button>
+            </>)}
+        </div>
+        <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleAvatarChange}
+            accept="image/*"
+            style={{display: 'none'}}
+        />
+        {errors.avatar && <span className="error">{errors.avatar}</span>}
+    </div>);
 };
 
 export default AvatarSectionView;

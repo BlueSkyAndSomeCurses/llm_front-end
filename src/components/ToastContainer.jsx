@@ -30,12 +30,12 @@ function ToastContainer() {
 
     return ReactDOM.createPortal(<div className="toast-container">
         {toasts.map((toast) => (<Toast
-                key={toast.id}
-                message={toast.message}
-                type={toast.type}
-                duration={toast.duration}
-                onClose={() => removeToast(toast.id)}
-            />))}
+            key={toast.id}
+            message={toast.message}
+            type={toast.type}
+            duration={toast.duration}
+            onClose={() => removeToast(toast.id)}
+        />))}
     </div>, document.body);
 }
 

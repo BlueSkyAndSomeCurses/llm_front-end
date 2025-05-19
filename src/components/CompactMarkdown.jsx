@@ -26,18 +26,18 @@ function CompactMarkdown({content}) {
     };
 
     return (<div className="markdown-content">
-            <ReactMarkdown
-                remarkPlugins={[remarkGfm, [remarkMath, {
-                    inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]
-                }], remarkBreaks]}
-                rehypePlugins={[rehypeKatex, [rehypeHighlight, {
-                    detect: true, ignoreMissing: true, subset: false
-                }]]}
-                components={components}
-            >
-                {processedContent || content}
-            </ReactMarkdown>
-        </div>);
+        <ReactMarkdown
+            remarkPlugins={[remarkGfm, [remarkMath, {
+                inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]
+            }], remarkBreaks]}
+            rehypePlugins={[rehypeKatex, [rehypeHighlight, {
+                detect: true, ignoreMissing: true, subset: false
+            }]]}
+            components={components}
+        >
+            {processedContent || content}
+        </ReactMarkdown>
+    </div>);
 }
 
 export default CompactMarkdown;

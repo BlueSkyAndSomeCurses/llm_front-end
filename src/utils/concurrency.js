@@ -63,8 +63,7 @@ export const safeStorage = {
             console.error(`Error getting item ${key} from localStorage:`, error);
             return defaultValue;
         }
-    },
-    setItem(key, value) {
+    }, setItem(key, value) {
         try {
             localStorage.setItem(key, JSON.stringify(value));
             return true;
@@ -72,8 +71,7 @@ export const safeStorage = {
             console.error(`Error setting item ${key} in localStorage:`, error);
             return false;
         }
-    },
-    removeItem(key) {
+    }, removeItem(key) {
         try {
             localStorage.setItem(key);
             return true;
