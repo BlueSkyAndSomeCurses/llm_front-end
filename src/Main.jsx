@@ -9,38 +9,32 @@ import Title from "./components/Title.jsx";
 import History from "./components/History.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ToastContainer from "./components/ToastContainer.jsx";
-import { UserProvider } from "./contexts/UserContext.jsx";
-import { ToastProvider } from "./contexts/ToastContext.jsx";
 
 import "./utils/authHelpers.js";
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
-        <UserProvider>
-            <ToastProvider>
-                <BrowserRouter>
-                    <ToastContainer/>
-                    <Routes>
-                        <Route path="/" element={<Title/>}/>
-                        <Route path="/login" element={<Login/>}/>
-                        <Route path="/chat" element={
-                            <ProtectedRoute>
-                                <Chat/>
-                            </ProtectedRoute>
-                        }/>
-                        <Route path="/chat/:chatId" element={
-                            <ProtectedRoute>
-                                <ActiveChat/>
-                            </ProtectedRoute>
-                        }/>
-                        <Route path="/history" element={
-                            <ProtectedRoute>
-                                <History/>
-                            </ProtectedRoute>
-                        }/>
-                    </Routes>
-                </BrowserRouter>
-            </ToastProvider>
-        </UserProvider>
+        <BrowserRouter>
+            <ToastContainer/>
+            <Routes>
+                <Route path="/" element={<Title/>}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/chat" element={
+                    <ProtectedRoute>
+                        <Chat/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/chat/:chatId" element={
+                    <ProtectedRoute>
+                        <ActiveChat/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/history" element={
+                    <ProtectedRoute>
+                        <History/>
+                    </ProtectedRoute>
+                }/>
+            </Routes>
+        </BrowserRouter>
     </StrictMode>
 );

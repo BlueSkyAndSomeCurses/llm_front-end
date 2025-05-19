@@ -1,7 +1,6 @@
 import {useState, useRef} from "react";
 import {Upload, Save, Trash2} from "lucide-react";
 import axios from "axios";
-import { useUser } from "../contexts/UserContext.jsx";
 
 function AvatarSection({user, updateUser, onSuccess}) {
     const [avatar, setAvatar] = useState(null);
@@ -63,17 +62,19 @@ function AvatarSection({user, updateUser, onSuccess}) {
             );
 
             try {
-                const { user: currentUser, updateUser: contextUpdateUser } = useUser();
+                const currentUser = JSON.parse(localStorage.getItem("user"));
                 if (currentUser) {
                     const updatedUser = {
                         ...currentUser,
                         avatar: response.data.avatar || currentAvatarPreview
                     };
-                    
-                    // Update context
-                    contextUpdateUser(updatedUser);
-                    
-                    // Also call component's prop if available
+                    localStorage.setItem("user", JSON.stringify(updatedUser));
+
+                    const userDataChangedEvent = new CustomEvent('userDataChanged', {
+                        detail: {user: updatedUser}
+                    });
+                    window.dispatchEvent(userDataChangedEvent);
+
                     if (typeof updateUser === 'function') {
                         updateUser(updatedUser);
                     }

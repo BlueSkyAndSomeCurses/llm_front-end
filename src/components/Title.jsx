@@ -6,14 +6,41 @@ import {useNavigate} from "react-router-dom";
 import helloKittyLogo from "../assets/hello-kitty.png";
 import UserButton from "./UserButton.jsx";
 import UserSettings from "./UserSettings.jsx";
-import { useUser } from "../contexts/UserContext.jsx";
 
 function TitlePage() {
     const navigate = useNavigate();
-    const { user } = useUser();
+    const [user, setUser] = useState(null);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const menuRef = useRef(null);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const loadUserData = () => {
+            const userData = localStorage.getItem("user");
+            if (userData && isMounted) {
+                try {
+                    setUser(JSON.parse(userData));
+                } catch (error) {
+                    console.error("Error parsing user data:", error);
+                }
+            }
+        };
+        loadUserData();
+
+        const handleUserDataChanged = (event) => {
+            if (isMounted && event.detail && event.detail.user) {
+                setUser(event.detail.user);
+            }
+        };
+        window.addEventListener('userDataChanged', handleUserDataChanged);
+
+        return () => {
+            isMounted = false;
+            window.removeEventListener('userDataChanged', handleUserDataChanged);
+        };
+    }, []);
 
 
     useEffect(() => {

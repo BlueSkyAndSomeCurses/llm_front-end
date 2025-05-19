@@ -1,11 +1,35 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import Toast from './Toast';
 import '../styles/toastContainer.scss';
-import { useToast } from '../contexts/ToastContext.jsx';
+import {showToast} from '../utils/toastContainer.js';
 
 function ToastContainer() {
-    const { toasts, removeToast } = useToast();
+    const [toasts, setToasts] = useState([]);
+
+    useEffect(() => {
+        const handleToast = (event) => {
+            if (event.detail) {
+                const {message, type = 'success', duration = 3000} = event.detail;
+                const id = Date.now().toString();
+
+                setToasts((prevToasts) => [
+                    ...prevToasts,
+                    {id, message, type, duration}
+                ]);
+            }
+        };
+
+        window.addEventListener('showToast', handleToast);
+
+        return () => {
+            window.removeEventListener('showToast', handleToast);
+        };
+    }, []);
+
+    const removeToast = (id) => {
+        setToasts((prevToasts) => prevToasts.filter(toast => toast.id !== id));
+    };
 
     return ReactDOM.createPortal(
         <div className="toast-container">
@@ -22,5 +46,7 @@ function ToastContainer() {
         document.body
     );
 }
+
+export {showToast};
 
 export default ToastContainer;

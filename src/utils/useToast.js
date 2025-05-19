@@ -1,8 +1,6 @@
-import { useToast as useToastContext } from '../contexts/ToastContext.jsx';
+import {showToast} from './toastContainer.js';
 
 const useToast = () => {
-    const { showToast } = useToastContext();
-
     const success = (message, duration = 3000) => {
         showToast(message, 'success', duration);
     };

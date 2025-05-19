@@ -1,9 +1,6 @@
-import { useToast } from '../contexts/ToastContext';
-
-export const useToastNotifier = () => {
-    const { showToast } = useToast();
-    
-    return {
-        showToast
-    };
+export const showToast = (message, type = 'success', duration = 3000) => {
+    const event = new CustomEvent('showToast', {
+        detail: {message, type, duration}
+    });
+    window.dispatchEvent(event);
 };

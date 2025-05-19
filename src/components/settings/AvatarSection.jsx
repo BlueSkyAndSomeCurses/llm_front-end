@@ -2,7 +2,6 @@ import {useState, useRef} from "react";
 import {Upload, Save, Trash2} from "lucide-react";
 import axios from "axios";
 import useToast from "../../utils/useToast";
-import { useUser } from "../../contexts/UserContext.jsx";
 
 const AvatarSection = ({user, errors, setErrors}) => {
     const [avatar, setAvatar] = useState(null);
@@ -66,13 +65,18 @@ const AvatarSection = ({user, errors, setErrors}) => {
             );
 
             try {
-                const { user: currentUser, updateUser } = useUser();
+                const currentUser = JSON.parse(localStorage.getItem("user"));
                 if (currentUser) {
                     const updatedUser = {
                         ...currentUser,
                         avatar: response.data.avatar || currentAvatarPreview
                     };
-                    updateUser(updatedUser);
+                    localStorage.setItem("user", JSON.stringify(updatedUser));
+
+                    const userDataChangedEvent = new CustomEvent('userDataChanged', {
+                        detail: {user: updatedUser}
+                    });
+                    window.dispatchEvent(userDataChangedEvent);
                 }
             } catch (storageError) {
                 console.error("Error updating localStorage:", storageError);

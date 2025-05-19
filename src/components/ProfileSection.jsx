@@ -29,6 +29,13 @@ function ProfileSection({user, updateUser}) {
             );
 
             if (response.data.user) {
+                localStorage.setItem("user", JSON.stringify(response.data.user));
+
+                const userDataChangedEvent = new CustomEvent('userDataChanged', {
+                    detail: {user: response.data.user}
+                });
+                window.dispatchEvent(userDataChangedEvent);
+
                 if (typeof updateUser === 'function') {
                     updateUser(response.data.user);
                 }
