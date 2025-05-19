@@ -118,6 +118,7 @@
   svg {
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
+
   .icon-enter {
     opacity: 0;
     transform: scale(0.8) rotate(-90deg) translate(-50%, -50%);
@@ -130,6 +131,7 @@
     opacity: 1;
     transform: scale(1) rotate(0);
   }
+
   .chevron-icon {
     position: absolute;
     top: 50%;
@@ -173,6 +175,7 @@
       transform: scale(0.8);
     }
   }
+
   .chevron-icon {
     position: absolute;
     top: 50%;
@@ -241,6 +244,7 @@
     background-color: rgba(128, 128, 128, 0.5);
     border-radius: 10px;
   }
+
   box-sizing: border-box;
 }
 
@@ -268,6 +272,7 @@
   display: flex;
   align-items: center;
   min-height: 40px;
+
   &:hover {
     background-color: color.adjust($bg-light, $lightness: -5%);
   }
@@ -304,6 +309,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   border-radius: 8px;
+
   &:hover {
     background-color: color.adjust($bg, $lightness: -3%);
   }

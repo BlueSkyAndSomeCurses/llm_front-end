@@ -1,14 +1,13 @@
 const PasswordSectionView = ({
-                             currentPassword,
-                             setCurrentPassword,
-                             newPassword,
-                             setNewPassword,
-                             confirmPassword,
-                             setConfirmPassword,
-                             errors
-                         }) => {
-    return (
-        <div className="password-section">
+                                 currentPassword,
+                                 setCurrentPassword,
+                                 newPassword,
+                                 setNewPassword,
+                                 confirmPassword,
+                                 setConfirmPassword,
+                                 errors
+                             }) => {
+    return (<div className="password-section">
             <h3>Change Password</h3>
             <div className="form-group">
                 <label htmlFor="currentPassword">Current Password</label>
@@ -45,8 +44,7 @@ const PasswordSectionView = ({
                 />
                 {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
             </div>
-        </div>
-    );
+        </div>);
 };
 
 export default PasswordSectionView;

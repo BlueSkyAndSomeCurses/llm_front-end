@@ -11,27 +11,27 @@
   max-width: 350px;
   animation: toast-slide-in 0.3s ease-out forwards;
   transition: all 0.3s ease;
-  
+
   &.success {
     background-color: white;
     border-left: 4px solid $green-accent;
     border-bottom: 1px solid rgba($green-accent, 0.2);
-    
+
     .toast-icon {
       color: $green-accent;
     }
   }
-  
+
   &.error {
     background-color: white;
     border-left: 4px solid $red-accent;
     border-bottom: 1px solid rgba($red-accent, 0.2);
-    
+
     .toast-icon {
       color: $red-accent;
     }
   }
-  
+
   .toast-icon {
     margin-right: 12px;
     display: flex;
@@ -41,7 +41,7 @@
     border-radius: 50%;
     padding: 4px;
   }
-  
+
   .toast-message {
     flex: 1;
     font-size: 14px;
@@ -49,7 +49,7 @@
     font-weight: 500;
     line-height: 1.4;
   }
-  
+
   .toast-close {
     background: transparent;
     border: none;
@@ -62,7 +62,7 @@
     color: $text-muted;
     border-radius: 50%;
     transition: all 0.2s ease;
-    
+
     &:hover {
       background-color: $hover-bg;
       color: $text-dark;

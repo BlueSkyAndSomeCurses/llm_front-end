@@ -3,12 +3,10 @@ import {CheckCircle} from "lucide-react";
 function SuccessMessage({message}) {
     if (!message) return null;
 
-    return (
-        <span className="success-message">
+    return (<span className="success-message">
             <CheckCircle size={16}/>
             {message}
-        </span>
-    );
+        </span>);
 }
 
 export default SuccessMessage;

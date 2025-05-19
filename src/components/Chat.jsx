@@ -51,12 +51,10 @@ function Chat() {
         const currentInputValue = inputValue;
         const currentSelectedModel = selectedModel;
 
-        const chatId =
-            Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        const chatId = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
 
         const initialMessage = {
-            content: currentInputValue,
-            role: "user",
+            content: currentInputValue, role: "user",
         };
 
         try {
@@ -81,8 +79,7 @@ function Chat() {
         }
     };
 
-    return (
-        <div className={`chatpage-container`}>
+    return (<div className={`chatpage-container`}>
             <Sidebar/>
             <div className="chat-container">
                 <div className="chatbox-container">
@@ -92,13 +89,11 @@ function Chat() {
                     </div>
                     <div className="chat-box">
                         <div className="messages-area">
-                            {messages.map((msg, i) => (
-                                <div
+                            {messages.map((msg, i) => (<div
                                     key={i}
                                     className={`message ${msg.role}-message`}>
                                     {msg.content}
-                                </div>
-                            ))}
+                                </div>))}
                         </div>
                         <form className="chat-input" onSubmit={handleSubmit}>
                             <textarea
@@ -122,8 +117,7 @@ function Chat() {
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        </div>);
 }
 
 export default Chat;

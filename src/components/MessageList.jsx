@@ -11,8 +11,7 @@ function MessageList({messages, isLoading}) {
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
             window.scrollTo({
-                top: document.documentElement.scrollHeight,
-                behavior: 'smooth'
+                top: document.documentElement.scrollHeight, behavior: 'smooth'
             });
         }
     };
@@ -25,19 +24,13 @@ function MessageList({messages, isLoading}) {
         return () => clearTimeout(timer);
     }, [messages]);
 
-    return (
-        <div className="active-messages-area">
-            {messages.map((msg, i) => (
-                <Message key={i} message={msg}/>
-            ))}
+    return (<div className="active-messages-area">
+            {messages.map((msg, i) => (<Message key={i} message={msg}/>))}
 
-            {(hasAssistantMessage || isLoading) && (
-                <HelloKittyAssistant isThinking={isLoading}/>
-            )}
+            {(hasAssistantMessage || isLoading) && (<HelloKittyAssistant isThinking={isLoading}/>)}
 
             <div ref={messagesEndRef}/>
-        </div>
-    );
+        </div>);
 }
 
 export default MessageList;

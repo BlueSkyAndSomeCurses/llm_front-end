@@ -18,11 +18,9 @@ function LogoutButton() {
         navigate("/login");
     };
 
-    return (
-        <button className="sidebar-icon" onClick={handleLogout}>
+    return (<button className="sidebar-icon" onClick={handleLogout}>
             <LogOut size={30}/>
-        </button>
-    );
+        </button>);
 }
 
 export default LogoutButton;

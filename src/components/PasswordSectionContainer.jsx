@@ -37,13 +37,9 @@ function PasswordSectionContainer({setParentErrors}) {
 
         try {
             const token = localStorage.getItem("token");
-            await axios.put("/api/user/password",
-                {
-                    currentPassword,
-                    newPassword
-                },
-                {headers: {Authorization: `Bearer ${token}`}}
-            );
+            await axios.put("/api/user/password", {
+                currentPassword, newPassword
+            }, {headers: {Authorization: `Bearer ${token}`}});
             return {success: true};
         } catch (error) {
             console.error("Error updating password:", error);
@@ -69,21 +65,10 @@ function PasswordSectionContainer({setParentErrors}) {
 
     return {
         fields: {
-            currentPassword,
-            newPassword,
-            confirmPassword
-        },
-        setters: {
-            setCurrentPassword,
-            setNewPassword,
-            setConfirmPassword
-        },
-        errors,
-        validatePasswords,
-        updatePassword,
-        clearForm,
-        render: () => (
-            <div className="password-section">
+            currentPassword, newPassword, confirmPassword
+        }, setters: {
+            setCurrentPassword, setNewPassword, setConfirmPassword
+        }, errors, validatePasswords, updatePassword, clearForm, render: () => (<div className="password-section">
                 <h3>Change Password</h3>
                 <div className="form-group">
                     <label htmlFor="currentPassword">Current Password</label>
@@ -120,8 +105,7 @@ function PasswordSectionContainer({setParentErrors}) {
                     />
                     {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
                 </div>
-            </div>
-        )
+            </div>)
     };
 }
 

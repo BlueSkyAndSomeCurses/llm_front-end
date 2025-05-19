@@ -12,41 +12,32 @@ import '../styles/message.scss';
 
 function Message({message}) {
     const {role, content} = message;
-    
+
     const components = {
         code({node, inline, className, children, ...props}) {
             if (inline) {
                 return <code className="inline-code" {...props}>{children}</code>;
             }
-            
+
             return <code className={className} {...props}>{children}</code>;
         }
     };
 
-    return (
-        <div className={`active-message ${role}-message`}>
-            {role === "assistant" ? (
-                <div className="markdown-content">
+    return (<div className={`active-message ${role}-message`}>
+            {role === "assistant" ? (<div className="markdown-content">
                     <ReactMarkdown
                         remarkPlugins={[remarkGfm, [remarkMath, {
-                            inlineMath: [['\\(', '\\)']],
-                            displayMath: [['\\[', '\\]']]
+                            inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]
                         }], remarkBreaks]}
-                        rehypePlugins={[rehypeKatex, [rehypeHighlight, { 
-                            detect: true,
-                            ignoreMissing: true,
-                            subset: false
+                        rehypePlugins={[rehypeKatex, [rehypeHighlight, {
+                            detect: true, ignoreMissing: true, subset: false
                         }]]}
                         components={components}
                     >
                         {content.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$').replace(/\\\(/g, '$').replace(/\\\)/g, '$')}
                     </ReactMarkdown>
-                </div>
-            ) : (
-                <div className="user-content">{content}</div>
-            )}
-        </div>
-    );
+                </div>) : (<div className="user-content">{content}</div>)}
+        </div>);
 }
 
 export default Message;

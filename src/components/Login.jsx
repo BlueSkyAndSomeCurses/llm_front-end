@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { Send } from "lucide-react";
+import {useState} from "react";
+import {Send} from "lucide-react";
 import axios from "axios";
 import bcrypt from "bcryptjs";
 import "../styles/login.scss";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Logo from "./Logo.jsx";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -29,8 +29,7 @@ function Login() {
         try {
             if (currentIsLogin) {
                 const response = await axios.post("/api/login", {
-                    email: currentEmail,
-                    password: currentPassword,
+                    email: currentEmail, password: currentPassword,
                 });
 
                 if (response.data.token) {
@@ -49,9 +48,7 @@ function Login() {
                 }
 
                 const response = await axios.post("/api/register", {
-                    name: currentName,
-                    email: currentEmail,
-                    password: currentPassword,
+                    name: currentName, email: currentEmail, password: currentPassword,
                 });
 
                 if (response.data.token) {
@@ -67,9 +64,7 @@ function Login() {
         } catch (error) {
             if (error.response && error.response.data.name === "RejectedCreds") {
                 setError(error.response.data.message);
-            } else if (error.response.status === 400 &&
-                (error.response.data.errorType === "weak_password" ||
-                    error.response.data.errorType === "email_exists")) {
+            } else if (error.response.status === 400 && (error.response.data.errorType === "weak_password" || error.response.data.errorType === "email_exists")) {
                 setError(error.response.data.message);
             } else {
                 console.error("Error:", error);
@@ -90,15 +85,14 @@ function Login() {
     return (
 
         <div className="login-container">
-            <Logo />
+            <Logo/>
 
             <div className="login-header">
                 <h1>{isLogin ? "Login" : "Sign Up"}</h1>
             </div>
 
             <form onSubmit={handleSubmit} className="login-form">
-                {!isLogin && (
-                    <div className="form-group">
+                {!isLogin && (<div className="form-group">
                         <label htmlFor="name">Name</label>
                         <input
                             type="text"
@@ -107,8 +101,7 @@ function Login() {
                             onChange={(e) => setName(e.target.value)}
                             required
                         />
-                    </div>
-                )}
+                    </div>)}
 
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
@@ -132,8 +125,7 @@ function Login() {
                     />
                 </div>
 
-                {!isLogin && (
-                    <div className="form-group">
+                {!isLogin && (<div className="form-group">
                         <label htmlFor="confirmPassword">
                             Confirm Password
                         </label>
@@ -144,11 +136,10 @@ function Login() {
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             required
                         />
-                    </div>
-                )}
+                    </div>)}
 
                 <button type="submit" className="submit-button">
-                    {isLogin ? "Login" : "Sign Up"} <Send size={16} />
+                    {isLogin ? "Login" : "Sign Up"} <Send size={16}/>
                 </button>
 
                 {error && <div className="error-message">{error}</div>}
@@ -156,16 +147,13 @@ function Login() {
 
             <div className="toggle-mode">
                 <p>
-                    {isLogin
-                        ? "Don't have an account?"
-                        : "Already have an account?"}
+                    {isLogin ? "Don't have an account?" : "Already have an account?"}
                 </p>
                 <button onClick={toggleMode} className="toggle-button">
                     {isLogin ? "Sign Up" : "Login"}
                 </button>
             </div>
-        </div>
-    );
+        </div>);
 }
 
 export default Login;

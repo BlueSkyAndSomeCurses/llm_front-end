@@ -79,10 +79,8 @@ const History = () => {
                     if (prev[currentChatId]) return prev;
 
                     return {
-                        ...prev,
-                        [currentChatId]: {
-                            userMessage: lastUserMessage?.content || "",
-                            response: lastResponse?.content || ""
+                        ...prev, [currentChatId]: {
+                            userMessage: lastUserMessage?.content || "", response: lastResponse?.content || ""
                         }
                     };
                 });
@@ -110,32 +108,25 @@ const History = () => {
         const displayLines = lines.slice(0, 10);
         const hasMoreLines = lines.length > 10;
 
-        return (
-            <>
-                {displayLines.map((line, index) => (
-                    <span key={index}>
+        return (<>
+                {displayLines.map((line, index) => (<span key={index}>
                         {line}
                         {index < displayLines.length - 1 && <br/>}
-                    </span>
-                ))}
+                    </span>))}
                 {hasMoreLines && <span className="more-lines">...</span>}
-            </>
-        );
+            </>);
     };
 
     const handleSidebarStateChange = (isExpanded) => {
         setSidebarExpanded(isExpanded);
     };
 
-    return (
-        <div className={`history-page ${sidebarExpanded ? "sidebar-expanded" : ""}`}>
+    return (<div className={`history-page ${sidebarExpanded ? "sidebar-expanded" : ""}`}>
             <Sidebar onToggle={handleSidebarStateChange}/>
             <div className="history-container">
                 <h1>Chat History</h1>
                 <div className="chats-list">
-                    {chats && chats.length > 0 ? (
-                        chats.map((chat) => (
-                            <div
+                    {chats && chats.length > 0 ? (chats.map((chat) => (<div
                                 key={chat._id}
                                 className="chat-item"
                                 onClick={() => handleChatClick(chat.chatId)}
@@ -147,9 +138,7 @@ const History = () => {
                                             {chat.messageText}
                                         </p>
                                         <span className="chat-date">
-                                            {new Date(
-                                                chat.timestamp
-                                            ).toLocaleDateString()}
+                                            {new Date(chat.timestamp).toLocaleDateString()}
                                         </span>
                                     </div>
                                     {hoveredChatId === chat.chatId && hoverMessages[chat.chatId] && (
@@ -160,18 +149,12 @@ const History = () => {
                                             <div className="preview-message assistant">
                                                 <strong>Kitty:</strong> {formatMessage(hoverMessages[chat.chatId].response)}
                                             </div>
-                                        </div>
-                                    )}
+                                        </div>)}
                                 </div>
-                            </div>
-                        ))
-                    ) : (
-                        <p className="no-chats">No chats found</p>
-                    )}
+                            </div>))) : (<p className="no-chats">No chats found</p>)}
                 </div>
             </div>
-        </div>
-    );
+        </div>);
 };
 
 export default History;

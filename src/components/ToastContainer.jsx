@@ -13,10 +13,7 @@ function ToastContainer() {
                 const {message, type = 'success', duration = 3000} = event.detail;
                 const id = Date.now().toString();
 
-                setToasts((prevToasts) => [
-                    ...prevToasts,
-                    {id, message, type, duration}
-                ]);
+                setToasts((prevToasts) => [...prevToasts, {id, message, type, duration}]);
             }
         };
 
@@ -31,20 +28,15 @@ function ToastContainer() {
         setToasts((prevToasts) => prevToasts.filter(toast => toast.id !== id));
     };
 
-    return ReactDOM.createPortal(
-        <div className="toast-container">
-            {toasts.map((toast) => (
-                <Toast
-                    key={toast.id}
-                    message={toast.message}
-                    type={toast.type}
-                    duration={toast.duration}
-                    onClose={() => removeToast(toast.id)}
-                />
-            ))}
-        </div>,
-        document.body
-    );
+    return ReactDOM.createPortal(<div className="toast-container">
+        {toasts.map((toast) => (<Toast
+                key={toast.id}
+                message={toast.message}
+                type={toast.type}
+                duration={toast.duration}
+                onClose={() => removeToast(toast.id)}
+            />))}
+    </div>, document.body);
 }
 
 export {showToast};

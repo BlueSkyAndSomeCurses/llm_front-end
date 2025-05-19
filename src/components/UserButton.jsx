@@ -90,39 +90,26 @@ function UserButton({size, expanded}) {
         return "U";
     };
 
-    return (
-        <>
+    return (<>
             <div className="user-button-container">
                 <button className="user-button" onClick={togglePopup} title={user ? user.name : "Login"}>
-                    {user ? (
-                        <>
+                    {user ? (<>
                             <div className="user-avatar">
-                                {user.avatar ? (
-                                    <img src={user.avatar}
-                                         alt="User Avatar"
-                                         className="avatar-image"/>
-                                ) : (
-                                    getInitial()
-                                )}
+                                {user.avatar ? (<img src={user.avatar}
+                                                     alt="User Avatar"
+                                                     className="avatar-image"/>) : (getInitial())}
                             </div>
-                            {expanded && (
-                                <span className="user-name">
+                            {expanded && (<span className="user-name">
                                     {user.name.length > 10 ? `${user.name.substring(0, 10)}...` : user.name}
-                                </span>
-                            )}
-                        </>
-                    ) : (
-                        <>
+                                </span>)}
+                        </>) : (<>
                             <div className="login-avatar">
                                 <LogIn size={20}/>
                             </div>
-                            {expanded && (
-                                <span className="user-name">
+                            {expanded && (<span className="user-name">
                                     Login
-                                </span>
-                            )}
-                        </>
-                    )}
+                                </span>)}
+                        </>)}
                 </button>
 
                 {user && showPopup && (
@@ -135,12 +122,10 @@ function UserButton({size, expanded}) {
                             <LogOut size={16}/>
                             <span>Logout</span>
                         </div>
-                    </div>
-                )}
+                    </div>)}
             </div>
             {showSettings && <UserSettings onClose={handleCloseSettings} user={user}/>}
-        </>
-    );
+        </>);
 }
 
 export default UserButton;

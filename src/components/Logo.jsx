@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import "../styles/logo.scss"; 
+import {useNavigate} from "react-router-dom";
+import "../styles/logo.scss";
 
 function Logo() {
     const navigate = useNavigate();
@@ -8,11 +8,9 @@ function Logo() {
         navigate("/");
     };
 
-    return (
-        <span className="logo" onClick={handleLogoClick} role="button">
+    return (<span className="logo" onClick={handleLogoClick} role="button">
             FC Slavuta
-        </span>
-    );
+        </span>);
 }
 
 export default Logo;

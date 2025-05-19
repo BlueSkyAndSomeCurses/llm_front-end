@@ -52,6 +52,7 @@
     background-color: $bg-light;
     color: $illusion;
   }
+
   &:active {
     background-color: color.adjust($bg-light, $lightness: -3%);
   }

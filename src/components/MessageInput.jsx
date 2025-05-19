@@ -3,12 +3,7 @@ import {Send, XCircle} from 'lucide-react';
 import '../styles/messageInput.scss';
 
 function MessageInput({
-                          inputValue,
-                          setInputValue,
-                          handleSubmit,
-                          isLoading,
-                          handleCancel,
-                          sidebarExpanded
+                          inputValue, setInputValue, handleSubmit, isLoading, handleCancel, sidebarExpanded
                       }) {
     const textareaRef = useRef(null);
 
@@ -23,8 +18,7 @@ function MessageInput({
         setInputValue(e.target.value);
     };
 
-    return (
-        <div className={`form-wrapper ${sidebarExpanded ? "sidebar-expanded" : ""}`}>
+    return (<div className={`form-wrapper ${sidebarExpanded ? "sidebar-expanded" : ""}`}>
             <form
                 className="active-chat-input"
                 onSubmit={handleSubmit}>
@@ -45,8 +39,7 @@ function MessageInput({
                     </button>
                 </div>
             </form>
-        </div>
-    );
+        </div>);
 }
 
 export default MessageInput;

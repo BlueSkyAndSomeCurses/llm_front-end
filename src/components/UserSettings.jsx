@@ -79,10 +79,7 @@ function UserSettings({onClose, user}) {
 
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.put("/api/user/profile",
-                {name: currentName},
-                {headers: {Authorization: `Bearer ${token}`}}
-            );
+            const response = await axios.put("/api/user/profile", {name: currentName}, {headers: {Authorization: `Bearer ${token}`}});
 
             if (response.data.user) {
                 localStorage.setItem("user", JSON.stringify(response.data.user));
@@ -101,8 +98,7 @@ function UserSettings({onClose, user}) {
         } catch (error) {
             console.error("Error updating profile:", error);
             setErrors((prevErrors) => ({
-                ...prevErrors,
-                submit: "Failed to update profile. Please try again."
+                ...prevErrors, submit: "Failed to update profile. Please try again."
             }));
             return false;
         }
@@ -116,21 +112,16 @@ function UserSettings({onClose, user}) {
 
         try {
             const token = localStorage.getItem("token");
-            await axios.put("/api/user/password",
-                {
-                    currentPassword: currentPasswordVal,
-                    newPassword: newPasswordVal
-                },
-                {headers: {Authorization: `Bearer ${token}`}}
-            );
+            await axios.put("/api/user/password", {
+                currentPassword: currentPasswordVal, newPassword: newPasswordVal
+            }, {headers: {Authorization: `Bearer ${token}`}});
             return true;
         } catch (error) {
             console.error("Error updating password:", error);
             const errorMessage = error.response?.data?.message || "Failed to update password";
 
             setErrors((prevErrors) => ({
-                ...prevErrors,
-                currentPassword: errorMessage
+                ...prevErrors, currentPassword: errorMessage
             }));
             return false;
         }
@@ -156,8 +147,7 @@ function UserSettings({onClose, user}) {
             } catch (error) {
                 console.error("Error updating user:", error);
                 setErrors((prevErrors) => ({
-                    ...prevErrors,
-                    submit: "An error occurred while saving your settings"
+                    ...prevErrors, submit: "An error occurred while saving your settings"
                 }));
                 toast.error("Failed to update settings");
             } finally {
@@ -166,8 +156,7 @@ function UserSettings({onClose, user}) {
         }
     };
 
-    return (
-        <div className="settings-overlay">
+    return (<div className="settings-overlay">
             <div className="settings-modal">
                 <SettingsHeader onClose={onClose}/>
 
@@ -202,8 +191,7 @@ function UserSettings({onClose, user}) {
                     />
                 </form>
             </div>
-        </div>
-    );
+        </div>);
 };
 
 export default UserSettings;

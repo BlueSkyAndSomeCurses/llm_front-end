@@ -286,7 +286,9 @@
     gap: 8px;
     background-color: $illusion;
     border: none;
-    color: white;    &:hover {
+    color: white;
+
+    &:hover {
       background-color: color.adjust($illusion, $lightness: -5%);
       transform: translateY(-1px);
       box-shadow: 0 2px 8px rgba($illusion, 0.4);
