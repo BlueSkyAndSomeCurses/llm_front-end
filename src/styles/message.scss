@@ -63,22 +63,6 @@
           margin-top: 0;
         }
       }
-      
-      /* Make all line breaks render consistently */
-      br {
-        display: block;
-        content: "";
-        margin: 1em 0;
-      }
-      
-      /* Ensure backtick line breaks are treated the same as soft breaks */
-      code:only-child {
-        &:empty {
-          display: block;
-          content: "";
-          margin: 1em 0;
-        }
-      }
     }
   }
 }
