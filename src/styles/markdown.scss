@@ -126,7 +126,6 @@
     }
   }
   
-  // Ensure inline code elements are properly displayed inline
   code:not(pre code) {
     display: inline !important;
     vertical-align: baseline !important; 
