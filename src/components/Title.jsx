@@ -1,11 +1,12 @@
-import {useState, useEffect, useRef} from "react";
-import {Send, Settings, LogOut} from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Send, Settings, LogOut } from "lucide-react";
 import "../styles/title.scss";
 import "../styles/popups.scss";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import helloKittyLogo from "../assets/hello-kitty.png";
 import UserButton from "./UserButton.jsx";
 import UserSettings from "./UserSettings.jsx";
+import Logo from "./Logo.jsx";
 
 function TitlePage() {
     const navigate = useNavigate();
@@ -98,19 +99,19 @@ function TitlePage() {
     return (
         <div className="title-page">
             {showSettings && user && (
-                <UserSettings onClose={handleCloseSettings} user={user}/>
+                <UserSettings onClose={handleCloseSettings} user={user} />
             )}
 
             <header className="header">
                 <div className="header-content">
-                    <span className="logo" onClick={() => window.open("https://github.com/BlueSkyAndSomeCurses/llm_front-end", "_blank")} role="button">FC Slavuta</span>
+                    <Logo />
                     <div className="header-right">
                         {user ? (
                             <div className="user-header-container" ref={menuRef}>
                                 <button className="user-button" onClick={toggleUserMenu} title={user.name}>
                                     <div className="user-avatar">
                                         {user.avatar ? (
-                                            <img src={user.avatar} alt={user.name} className="avatar-image"/>
+                                            <img src={user.avatar} alt={user.name} className="avatar-image" />
                                         ) : (
                                             getInitial()
                                         )}
@@ -129,11 +130,11 @@ function TitlePage() {
                                         </div>
                                         <div className="menu-items">
                                             <div className="menu-item" onClick={handleSettings}>
-                                                <Settings size={16}/>
+                                                <Settings size={16} />
                                                 <span>Settings</span>
                                             </div>
                                             <div className="menu-item" onClick={handleLogout}>
-                                                <LogOut size={16}/>
+                                                <LogOut size={16} />
                                                 <span>Logout</span>
                                             </div>
                                         </div>
@@ -150,7 +151,7 @@ function TitlePage() {
             </header>
             <section className="title-section">
                 <div className="logo-container">
-                    <img src={helloKittyLogo} alt="Logo" className="logo-image"/>
+                    <img src={helloKittyLogo} alt="Logo" className="logo-image" />
                     <h3 className="logo-text">Kitty Chat</h3>
                 </div>
                 <h1 className="title">Ask smarter. Learn faster. Achieve more.</h1>
@@ -158,7 +159,7 @@ function TitlePage() {
                     Faarenyuk toma toma toma saka saka saka saka. Guys who use our assistnat are quite very sigmas
                     thomases shelbyses. Chicken jockey minecaradt.</p>
                 <button className="try-button" onClick={handleTryNow}>
-                    Try Now <Send size={16}/>
+                    Try Now <Send size={16} />
                 </button>
             </section>
             <section className="features-section">
